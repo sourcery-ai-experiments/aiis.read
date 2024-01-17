@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { Counter } from './features/counter';
+import PersistentDrawerRight from './drawer';
 
 const Content = (): ReactElement => {
   return (
@@ -10,11 +10,9 @@ const Content = (): ReactElement => {
         zIndex: 999,
         bottom: 0,
         right: 0,
-        backgroundColor: 'rgb(0 0 0 / 30%)',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'center' }}>Content Example</div>
-      <Counter />
+      <PersistentDrawerRight />
     </div>
   );
 };
