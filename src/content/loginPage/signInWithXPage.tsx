@@ -1,6 +1,6 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC } from 'react';
 
-import { ColorButton, NextButton } from '../../components/buttons/loginButton';
+import { NextButton } from '../../components/buttons/loginButton';
 
 import '../../tailwind.css';
 
