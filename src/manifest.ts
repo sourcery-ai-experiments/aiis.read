@@ -25,7 +25,7 @@ const manifest: ManifestV3Export = {
         // this file is web accessible; it supports HMR b/c it's declared in `rollupOptions.input`
         'src/welcome/welcome.html',
       ],
-      matches: ['<all_urls>'],
+      matches: ['https://twitter.com/*', 'https://x.com/*'],
     },
   ],
   action: {

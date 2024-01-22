@@ -43,7 +43,7 @@ withProxyStore(<Content />, store).then((component) => {
     });
 
     // 开始观察 thirdElement 的子元素
-    observer.observe(thirdElement, { childList: true });
+    // observer.observe(thirdElement, { childList: true });
 
     // 现有元素的处理逻辑
     const targetElements = thirdElement.querySelectorAll('section > div > div > div');
