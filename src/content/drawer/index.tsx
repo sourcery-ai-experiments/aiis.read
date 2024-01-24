@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
 
@@ -98,7 +99,10 @@ export default function PersistentDrawerRight() {
             <SignInWithXPage handleButtonClick={() => setPageState('invite')} />
           )}
           {pageState === 'invite' && (
-            <InvitePage handleButtonClick={() => setPageState('invite')} />
+            <InvitePage handleButtonClick={() => setPageState('congratulation')} />
+          )}
+          {pageState === 'congratulation' && (
+            <CongratulationPage handleButtonClick={() => setPageState('invite')} />
           )}
         </div>
         <Divider />
