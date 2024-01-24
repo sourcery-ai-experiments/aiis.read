@@ -41,6 +41,39 @@ export const NextButton = styled(Button)({
   },
 });
 
+export const VerifyButton = styled(Button)({
+  boxShadow: 'none',
+  textTransform: 'none',
+  fontSize: 14,
+  height: '25px',
+  width: '54px',
+  fontWeight: 'normal',
+  borderRadius: '27px',
+  lineHeight: 1,
+  backgroundColor: '#2C2A2A',
+  borderColor: '#2C2A2A',
+  fontFamily: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    '"Segoe UI"',
+    'Roboto',
+    '"Helvetica Neue"',
+    'Arial',
+    'sans-serif',
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(','),
+  '&:hover': {
+    backgroundColor: '#2C2A2A',
+    borderColor: '#2C2A2A',
+    boxShadow: 'none',
+  },
+  '&:focus': {
+    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+  },
+});
+
 export const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
   backgroundColor: purple[500],
