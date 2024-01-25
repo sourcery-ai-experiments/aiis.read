@@ -14,7 +14,7 @@ const manifest: ManifestV3Export = {
       js: ['src/content/index.tsx'],
     },
   ],
-  host_permissions: ['<all_urls>'],
+  host_permissions: ['twitter.com/*', 'x.com/*'],
   options_ui: {
     page: 'src/options/options.html',
     open_in_tab: true,
