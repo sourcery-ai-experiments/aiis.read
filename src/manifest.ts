@@ -10,11 +10,11 @@ const manifest: ManifestV3Export = {
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', 'file:///*'],
+      matches: ['https://twitter.com/*'],
       js: ['src/content/index.tsx'],
     },
   ],
-  host_permissions: ['twitter.com/*', 'x.com/*'],
+  host_permissions: ['https://twitter.com/*', 'https://x.com/*'],
   options_ui: {
     page: 'src/options/options.html',
     open_in_tab: true,
