@@ -5,55 +5,59 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 
+import { addPriceComponent, addVoteComponent } from './addToTwitter';
 import Content from './Content';
+
+const addTwitterComponent = () => {
+  const thirdElement = document.querySelectorAll(
+    '#react-root > div > div > div > main > div > div > div > div > div > div > div'
+  )[3];
+
+  // 现有元素的处理逻辑
+  const targetElements = thirdElement.querySelectorAll('section > div > div > div');
+  targetElements.forEach(function (element, index) {
+    const anchorElements = element.querySelectorAll('a');
+    const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
+    const twitterUrlString = hrefs[hrefs.length - 1];
+    if (twitterUrlString !== undefined) {
+      const urlObject = new URL(twitterUrlString);
+      const pathSegments = urlObject.pathname.split('/');
+      const username = pathSegments[1];
+      const tweetId = pathSegments[3];
+
+      // 判断是否存在已经插入的元素
+      const existingPriceElement = document.getElementById('xfans-price-' + tweetId);
+      const existingVoteElement = document.getElementById('xfans-vote-' + tweetId);
+
+      if (!existingPriceElement) {
+        addPriceComponent(element, tweetId);
+      } else {
+        // console.log('Element already exists for tweetId:', tweetId);
+      }
+
+      if (!existingVoteElement) {
+        addVoteComponent(element, tweetId, username);
+      } else {
+        // console.log('Element already exists for tweetId:', tweetId);
+      }
+    }
+  });
+};
 
 withProxyStore(<Content />, store).then((component) => {
   const container = document.createElement('my-extension-root');
   document.body.append(container);
   createRoot(container).render(component);
 
-  // 延迟执行的代码
+  // 延迟执行的代码 3000毫秒后执行，即3秒
   setTimeout(() => {
-    const thirdElement = document.querySelectorAll(
-      '#react-root > div > div > div > main > div > div > div > div > div > div > div'
-    )[3];
+    setInterval(() => {
+      addTwitterComponent();
+    }, 1000); // 每秒执行一次
 
-    // 创建 MutationObserver 实例并传入回调函数
-    // const observer = new MutationObserver((mutationsList, observer) => {
-    //   mutationsList.forEach((mutation) => {
-    //     if (mutation.type === 'childList') {
-    //       mutation.addedNodes.forEach((node) => {
-    //         // 确保 node 是一个 Element 类型
-    //         if (node.nodeType === Node.ELEMENT_NODE) {
-    //           const elementNode = node as Element;
-    //           const newAnchorElements = elementNode.querySelectorAll('a');
-
-    //           // 遍历并获取 href 属性
-    //           const newHrefs = Array.from(newAnchorElements).map((anchor) => {
-    //             // 明确 anchor 是 HTMLAnchorElement 类型
-    //             return (anchor as HTMLAnchorElement).href;
-    //           });
-
-    //           // 处理新的 hrefs
-    //           console.log('New hrefs:', newHrefs);
-    //         }
-    //       });
-    //     }
-    //   });
-    // });
-
-    // 开始观察 thirdElement 的子元素
-    // observer.observe(thirdElement, { childList: true });
-
-    // 现有元素的处理逻辑
-    const targetElements = thirdElement.querySelectorAll('section > div > div > div');
-    targetElements.forEach(function (element, index) {
-      // const htmlElement = element as HTMLElement;
-      const anchorElements = element.querySelectorAll('a');
-      const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
-      console.log('Element ' + (index + 1) + ' links: ', hrefs);
-    });
-  }, 3000); // 3000毫秒后执行，即3秒
+    // 也可以根据需要设置 clearInterval
+    // clearInterval(intervalId);
+  }, 3000);
 });
 
 async function withProxyStore(children: ReactElement, proxyStore: Store): Promise<ReactElement> {
