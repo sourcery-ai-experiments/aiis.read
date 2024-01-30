@@ -1,6 +1,11 @@
 import React from 'react';
+import { Button } from 'antd';
 
 import Avatar from '../assets/avatar.png';
+
+import Deposit from './Deposit';
+import InviteFriends from './InviteFriends';
+import WithDraw from './WithDraw';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -189,12 +194,11 @@ const Wallet = () => {
 
         <div className="mt-10">
           <div className="flex items-center justify-between">
-            <div className="m-w-[170px] flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium">
-              Deposit
-            </div>
-            <div className="m-w-[170px] flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium">
-              Withdraw
-            </div>
+            <InviteFriends />
+          </div>
+          <div className="flex items-center justify-between">
+            <Deposit />
+            <WithDraw />
           </div>
 
           <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium">
