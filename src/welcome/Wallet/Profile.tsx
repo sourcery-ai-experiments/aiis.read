@@ -1,8 +1,11 @@
 import React from 'react';
 import { useToggle } from 'ahooks';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Space } from 'antd';
 
 import Avatar from '../assets/avatar.png';
+
+import BuyModal from './BuyModal';
+import SellModal from './SellModal';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
@@ -35,7 +38,7 @@ const ProfileModal = () => {
           <h2 className="text-[24px] font-medium text-[#2E2E32] mt-[18px]">Profile</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
-          <div className="flex mt-6 items-center justify-between">
+          <div className="flex mt-6 items-center justify-between w-full">
             <div className="flex items-center space-x-[14px]">
               <img src={Avatar} alt="avatar" className="w-[75px] h-[75px] rounded-full" />
               <div className="flex flex-col space-y-[6px]">
@@ -51,7 +54,26 @@ const ProfileModal = () => {
               </div>
             </div>
 
-            <div className=""></div>
+            <div className="flex space-x-3">
+              <BuyModal />
+              <SellModal />
+            </div>
+          </div>
+
+          <div className="mt-3 mb-6 h-[1px] bg-[#EBEEF0] w-full"></div>
+
+          <div className="w-full">
+            <Space size={30}>
+              <Button type="primary" shape="round" className="!h-[34px] !bg-black">
+                Holders (20)
+              </Button>
+              <Button shape="round" className="!h-[34px]">
+                Holders (16)
+              </Button>
+              <Button shape="round" className="!h-[34px]">
+                Tweet Ranking
+              </Button>
+            </Space>
           </div>
         </div>
       </Modal>

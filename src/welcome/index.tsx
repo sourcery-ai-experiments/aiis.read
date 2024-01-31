@@ -22,14 +22,14 @@ createRoot(document.getElementById('root') as HTMLElement).render(
             Input: {
               controlHeight: 56,
             },
-            Button: {
-              colorBorder: '#0F1419',
+            Divider: {
+              colorSplit: '#EBECED',
             },
           },
         }}
       >
-        {/* <Welcome /> */}
-        <Wallet />
+        <Welcome />
+        {/* <Wallet /> */}
       </ConfigProvider>
     </StyleProvider>
   </React.StrictMode>
