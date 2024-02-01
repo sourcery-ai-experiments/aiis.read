@@ -34,117 +34,229 @@ const Explore = () => {
     setValue(newValue);
   };
   return (
-    <TabContext value={value}>
-      <Box>
-        <TabList
+    <div className="px-4">
+      <TabContext value={value}>
+        <Box>
+          <TabList
+            sx={{
+              '& .MuiTabs-indicator': {
+                backgroundColor: '#9A6CF9',
+              },
+              '& .Mui-selected': {
+                fontWeight: 700,
+                color: '#9A6CF9 !important',
+              },
+            }}
+            onChange={handleChange}
+            aria-label="lab API tabs example"
+          >
+            <Tab
+              label="Top"
+              value="1"
+              sx={{
+                width: '25%',
+                fontSize: 15,
+                color: '#919099',
+                fontWeight: 400,
+                textTransform: 'none',
+              }}
+            />
+            <Tab
+              label="New"
+              value="2"
+              sx={{
+                width: '25%',
+                fontSize: 15,
+                color: '#919099',
+                fontWeight: 400,
+                textTransform: 'none',
+              }}
+            />
+            <Tab
+              label="24h %"
+              value="3"
+              sx={{
+                width: '25%',
+                fontSize: 15,
+                color: '#919099',
+                fontWeight: 400,
+                textTransform: 'none',
+              }}
+            />
+            <Tab
+              label="Activites"
+              value="4"
+              sx={{
+                width: '25%',
+                fontSize: 15,
+                color: '#919099',
+                fontWeight: 400,
+                textTransform: 'none',
+              }}
+            />
+          </TabList>
+        </Box>
+        <TabPanel
+          value="1"
           sx={{
-            '& .MuiTabs-indicator': {
-              backgroundColor: '#9A6CF9',
-            },
-            '& .Mui-selected': {
-              fontWeight: 700,
-              color: '#9A6CF9 !important',
-            },
+            padding: 0,
           }}
-          onChange={handleChange}
-          aria-label="lab API tabs example"
         >
-          <Tab
-            label="Top"
-            value="1"
-            sx={{ width: '25%', fontSize: 15, color: '#919099', fontWeight: 400 }}
-          />
-          <Tab
-            label="New"
-            value="2"
-            sx={{ width: '25%', fontSize: 15, color: '#919099', fontWeight: 400 }}
-          />
-          <Tab
-            label="24h %"
-            value="3"
-            sx={{ width: '25%', fontSize: 15, color: '#919099', fontWeight: 400 }}
-          />
-          <Tab
-            label="Activites"
-            value="4"
-            sx={{ width: '25%', fontSize: 15, color: '#919099', fontWeight: 400 }}
-          />
-        </TabList>
-      </Box>
-      <TabPanel
-        value="1"
-        sx={{
-          padding: 0,
-        }}
-      >
-        <ul>
-          {list.map((item, i) => (
-            <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
-              <span className="text-[#0F1419]">1</span>
-              <img src={Avatar} alt="avatar" className="w-[44px] h-[44px] mx-[14px] rounded-full" />
-              <div className="flex-1 flex flex-col space-y-1">
-                <div className="flex items-center space-x-2">
-                  <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
-                  <span className="text-[#5B7083]">@IDOC</span>
-                </div>
+          <ul>
+            {list.map((item, i) => (
+              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
+                <span className="text-[#0F1419]">1</span>
+                <img
+                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                  alt="avatar"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                />
+                <div className="flex-1 flex flex-col space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
+                    <span className="text-[#5B7083]">@IDOC</span>
+                  </div>
 
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="#919099">Price</span>
+                      <Icon />
+                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                    </div>
+
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="text-[#919099]">Tweet Avg Rank:</span>
+                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </TabPanel>
+        <TabPanel
+          value="2"
+          sx={{
+            padding: 0,
+          }}
+        >
+          <ul>
+            {list.map((item, i) => (
+              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
+                <span className="text-[#0F1419]">1</span>
+                <img
+                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                  alt="avatar"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                />
+                <div className="flex-1 flex flex-col space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
+                    <span className="text-[#5B7083]">@IDOC</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="#919099">Price</span>
+                      <Icon />
+                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                    </div>
+
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="text-[#919099]">Tweet Avg Rank:</span>
+                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </TabPanel>
+        <TabPanel
+          value="3"
+          sx={{
+            padding: 0,
+          }}
+        >
+          <ul>
+            {list.map((item, i) => (
+              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
+                <span className="text-[#0F1419]">1</span>
+                <img
+                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                  alt="avatar"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                />
+                <div className="flex-1 flex flex-col space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
+                    <span className="text-[#5B7083]">@IDOC</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="#919099">Price</span>
+                      <Icon />
+                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                    </div>
+
+                    <div className="flex items-center space-x-[6px]">
+                      <span className="text-[#919099]">Tweet Avg Rank:</span>
+                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </TabPanel>
+        <TabPanel
+          value="4"
+          sx={{
+            padding: 0,
+          }}
+        >
+          <ul>
+            {list.map((item, i) => (
+              <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
+                <span className="text-[#A1A1AA]">2024/01/10 12:14</span>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-[6px]">
-                    <span className="#919099">Price</span>
-                    <Icon />
-                    <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                  <div className="flex space-x-5 items-center">
+                    <div className="flex flex-col items-center">
+                      <img
+                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        alt="avatar"
+                        className="w-9 h-9 rounded-full"
+                      />
+                      <span className="text-[#919099]">@Devon</span>
+                    </div>
+
+                    <span className="font-bold">Bought</span>
+
+                    <div className="flex flex-col items-center">
+                      <img
+                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        alt="avatar"
+                        className="w-9 h-9 rounded-full"
+                      />
+                      <span className="text-[#919099]">@Devon</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center space-x-[6px]">
-                    <span className="text-[#919099]">Tweet Avg Rank:</span>
-                    <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                  <div className="flex flex-col items-end">
+                    <span className="text-[#16B364] text-base font-bold">+2 Shares</span>
+                    <div className="space-x-1 flex items-center">
+                      <Icon />
+                      <span className="text-[#16B364] text-xs">- 0.2025</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </TabPanel>
-      <TabPanel value="2">Item Two</TabPanel>
-      <TabPanel value="3">Item Three</TabPanel>
-      <TabPanel
-        value="4"
-        sx={{
-          padding: 0,
-        }}
-      >
-        <ul>
-          {list.map((item, i) => (
-            <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
-              <span className="text-[#A1A1AA]">2024/01/10 12:14</span>
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-5 items-center">
-                  <div className="flex flex-col items-center">
-                    <img src={Avatar} alt="avatar" className="w-9 h-9 rounded-full" />
-                    <span className="text-[#919099]">@Devon</span>
-                  </div>
-
-                  <span className="font-bold">Bought</span>
-
-                  <div className="flex flex-col items-center">
-                    <img src={Avatar} alt="avatar" className="w-9 h-9 rounded-full" />
-                    <span className="text-[#919099]">@Devon</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end">
-                  <span className="text-[#16B364] text-base font-bold">+2 Shares</span>
-                  <div className="space-x-1 flex items-center">
-                    <Icon />
-                    <span className="text-[#16B364] text-xs">- 0.2025</span>
-                  </div>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </TabPanel>
-    </TabContext>
+              </li>
+            ))}
+          </ul>
+        </TabPanel>
+      </TabContext>
+    </div>
   );
 };
 

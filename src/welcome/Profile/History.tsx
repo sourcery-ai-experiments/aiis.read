@@ -1,6 +1,15 @@
 import React from 'react';
+import { Divider } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import { Button, Divider, Modal } from 'antd';
+
+import { BasicButton } from '../../components/Button';
+import Modal from '../../components/Modal';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -20,25 +29,78 @@ const Icon = () => (
   </svg>
 );
 
+const rows = [
+  {
+    date: '2023/02/01',
+    creator: 'Devon Lane',
+    rank: '#2',
+    total: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.234</span>
+      </div>
+    ),
+    reward: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.001</span>
+      </div>
+    ),
+  },
+  {
+    date: '2023/02/01',
+    creator: 'Devon Lane',
+    rank: '#2',
+    total: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.234</span>
+      </div>
+    ),
+    reward: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.001</span>
+      </div>
+    ),
+  },
+  {
+    date: '2023/02/01',
+    creator: 'Devon Lane',
+    rank: '#2',
+    total: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.234</span>
+      </div>
+    ),
+    reward: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">0.001</span>
+      </div>
+    ),
+  },
+];
+
 const History = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
 
   return (
     <>
-      <Button
+      <BasicButton
+        variant="outlined"
+        disableRipple
+        classes={{
+          outlined: '!py-1 !px-3 !w-[90px]',
+        }}
         onClick={open}
-        type="primary"
-        ghost
-        shape="round"
-        className="!text-sm !w-[90px] !h-[28px]"
       >
-        Claim History
-      </Button>
-      <Modal onCancel={close} open={isOpen} width={553} footer={null}>
+        History
+      </BasicButton>
+      <Modal onClose={close} open={isOpen} width={626}>
         <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32] mt-[18px]">
-            Buy Shares of Willaim
-          </h2>
+          <h2 className="text-[24px] font-medium text-[#2E2E32]">Claim History</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
           <div className="mt-6 flex items-center w-full">
@@ -54,7 +116,109 @@ const History = () => {
             </div>
           </div>
 
-          <Divider />
+          <Divider
+            sx={{
+              marginTop: 3,
+              width: '100%',
+              borderColor: '#EBEEF0',
+            }}
+          />
+
+          <TableContainer
+            sx={{
+              marginTop: 0,
+            }}
+          >
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      borderColor: '#EBEEF0',
+                    }}
+                  >
+                    Date
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      borderColor: '#EBEEF0',
+                    }}
+                  >
+                    Creator
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      borderColor: '#EBEEF0',
+                    }}
+                  >
+                    Rank
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      borderColor: '#EBEEF0',
+                    }}
+                  >
+                    Total Reward
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      borderColor: '#EBEEF0',
+                    }}
+                  >
+                    Your Reward
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                    }}
+                  >
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      {row.date}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      {row.creator}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      {row.rank}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      {row.total}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      {row.reward}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </Modal>
     </>

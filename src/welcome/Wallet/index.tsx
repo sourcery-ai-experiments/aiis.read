@@ -132,13 +132,42 @@ const Icon = () => (
   </svg>
 );
 
-const Wallet = () => {
+const GoBack = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+    <path
+      d="M5.95068 14H22.284"
+      stroke="#2E2E32"
+      strokeWidth="2.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.8334 21L5.83337 14L12.8334 7"
+      stroke="#2E2E32"
+      strokeWidth="2.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const Wallet = (props: { handleButtonClick?: () => void }) => {
   return (
     <div className="flex flex-col w-[433px] max-w-[433px]">
+      <div className="pl-4 py-3 space-x-[10px] flex items-center">
+        <div className="cursor-pointer" onClick={() => props.handleButtonClick?.()}>
+          <GoBack />
+        </div>
+        <span className="text-xl font-medium">Home</span>
+      </div>
       <div className="px-3 py-[30px]">
         <div className="flex items-start justify-between">
           <div className="flex space-x-[14px] items-center">
-            <img src={Avatar} alt="avatar" className="w-[70px] h-[70px] rounded-full" />
+            <img
+              src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+              alt="avatar"
+              className="w-[70px] h-[70px] rounded-full"
+            />
             <div className="flex flex-col">
               <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>
               <div className="flex space-x-2 items-center">
@@ -151,14 +180,12 @@ const Wallet = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center px-[14px] py-[10px] border border-[#9A6CF9] rounded-full text-[#9A6CF9] text-[15px] cursor-pointer font-medium">
-            Invite friends
-          </div>
+          <InviteFriends />
         </div>
 
         <div className="mt-10">
           <div className="space-y-[15px]">
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px]">
+            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
               <div className="flex space-x-3 items-center">
                 <WalletIcon />
                 <span className="text-base font-medium">Wallet Balance</span>
@@ -169,7 +196,7 @@ const Wallet = () => {
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px]">
+            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
               <div className="flex space-x-3 items-center">
                 <Fire />
                 <span className="text-base font-medium">Transaction Fee Earned</span>
@@ -180,7 +207,7 @@ const Wallet = () => {
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px]">
+            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
               <div className="flex space-x-3 items-center">
                 <Gift />
                 <span className="text-base font-medium">Reward Earned</span>
@@ -194,16 +221,16 @@ const Wallet = () => {
         </div>
 
         <div className="mt-10">
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <InviteFriends />
             <ProfileModal />
-          </div>
+          </div> */}
           <div className="flex items-center justify-between">
             <Deposit />
             <WithDraw />
           </div>
 
-          <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium">
+          <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]">
             Log Out
           </div>
         </div>
