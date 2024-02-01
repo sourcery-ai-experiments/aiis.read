@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Explore from './Explore';
 import Reward from './Reward';
 
-const Profile = () => {
+const Profile = (props: { handleButtonClick?: () => void }) => {
   const [key, setKey] = useState('explore');
 
   const tapMap = [
@@ -103,7 +103,10 @@ const Profile = () => {
           <span className="ml-1">0.02</span>
         </div>
 
-        <div className="px-4 py-1 flex items-center justify-center rounded-full border border-black text-[15px] font-medium">
+        <div
+          onClick={() => props.handleButtonClick?.()}
+          className="px-4 py-1 flex items-center justify-center rounded-full border border-black text-[15px] font-medium cursor-pointer"
+        >
           Wallet
         </div>
       </div>
@@ -113,7 +116,7 @@ const Profile = () => {
           <div
             key={i}
             onClick={item.onClick}
-            className={`w-[90px] capitalize flex items-center justify-center text-[15px] font-semibold ${
+            className={`w-[100px] capitalize flex items-center justify-center text-[15px] font-semibold ${
               key === item.title
                 ? 'px-[18px] py-[10px] bg-[#2C2A2A] rounded-full text-[#FAFAFA]'
                 : 'text-[#0F1419] cursor-pointer'

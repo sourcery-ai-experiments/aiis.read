@@ -1,5 +1,10 @@
 import React from 'react';
-import { Button, Divider, Tabs } from 'antd';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import { Divider } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 
 import Avatar from '../assets/avatar.png';
 
@@ -26,19 +31,15 @@ const Icon = () => (
 
 const Reward = () => {
   const list = Array(7).fill('');
+  const [value, setValue] = React.useState('1');
 
-  const tabMap = [
-    {
-      title: 'Weekly rank',
-    },
-    {
-      title: 'Your rank',
-    },
-  ];
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   return (
     <>
-      <div className="mx-[10px] flex items-center justify-between">
+      <div className="mx-6 flex items-center justify-between">
         <div className="flex space-x-[34px]">
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
@@ -63,45 +64,127 @@ const Reward = () => {
         </div>
       </div>
 
-      <div className="mt-2 flex items-center justify-around border-y border-y-[#EBEEF0]">
-        <Tabs
-          defaultActiveKey="1"
-          centered
-          tabBarGutter={100}
-          items={tabMap.map((item, i) => {
-            const id = String(i + 1);
-            return {
-              label: item.title,
-              key: id,
-              children: (
-                <ul className="mt-3 py-[10px]">
-                  {list.map((item, i) => (
-                    <li key={i} className="space-y-2 mb-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-[6px]">
-                          <img src={Avatar} alt="" className="w-[30px] rounded-full" />
-                          <div className="flex flex-col space-y-[2px]">
-                            <span className="text-sm font-bold">Devon</span>
-                            <span className="text-xs text-[#919099]">Jan 05 2024, 14:32</span>
-                          </div>
-                        </div>
-
-                        <span className="text-sm font-medium">#3</span>
+      <div className="mt-2 mx-4">
+        <TabContext value={value}>
+          <Box>
+            <TabList
+              sx={{
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#9A6CF9',
+                },
+                '& .Mui-selected': {
+                  fontWeight: 700,
+                  color: '#9A6CF9 !important',
+                },
+              }}
+              onChange={handleChange}
+              aria-label="lab API tabs example"
+            >
+              <Tab
+                label="Weekly rank"
+                value="1"
+                sx={{
+                  width: '50%',
+                  fontSize: 15,
+                  color: '#919099',
+                  fontWeight: 400,
+                  textTransform: 'none',
+                }}
+              />
+              <Tab
+                label="Your rank"
+                value="2"
+                sx={{
+                  width: '50%',
+                  fontSize: 15,
+                  color: '#919099',
+                  fontWeight: 400,
+                  textTransform: 'none',
+                }}
+              />
+            </TabList>
+          </Box>
+          <TabPanel
+            value="1"
+            sx={{
+              padding: 0,
+            }}
+          >
+            <ul className="mt-3 py-[10px]">
+              {list.map((item, i) => (
+                <li key={i} className="space-y-2 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-[6px]">
+                      <img
+                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        alt=""
+                        className="w-[30px] rounded-full"
+                      />
+                      <div className="flex flex-col space-y-[2px]">
+                        <span className="text-sm font-bold">Devon</span>
+                        <span className="text-xs text-[#919099]">Jan 05 2024, 14:32</span>
                       </div>
+                    </div>
 
-                      <p className="text-black text-xs leading-[20px]">
-                        History is always extremely similar bitcoin is the invention of satoshi
-                        nakamoto, Chinese people early to give him dry up ethereum is v god made
-                      </p>
+                    <span className="text-sm font-medium">#3</span>
+                  </div>
 
-                      <Divider />
-                    </li>
-                  ))}
-                </ul>
-              ),
-            };
-          })}
-        />
+                  <p className="text-black text-xs leading-[20px]">
+                    History is always extremely similar bitcoin is the invention of satoshi
+                    nakamoto, Chinese people early to give him dry up ethereum is v god made
+                  </p>
+
+                  <Divider
+                    sx={{
+                      marginTop: 3,
+                      width: '100%',
+                      borderColor: '#EBEEF0',
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </TabPanel>
+          <TabPanel
+            value="2"
+            sx={{
+              padding: 0,
+            }}
+          >
+            <ul className="mt-3 py-[10px]">
+              <li key={0} className="space-y-2 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-[6px]">
+                    <img
+                      src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                      alt=""
+                      className="w-[30px] rounded-full"
+                    />
+                    <div className="flex flex-col space-y-[2px]">
+                      <span className="text-sm font-bold">Devon</span>
+                      <span className="text-xs text-[#919099]">Jan 05 2024, 14:32</span>
+                    </div>
+                  </div>
+
+                  <span className="text-sm font-medium">#3</span>
+                </div>
+
+                <p className="text-black text-xs leading-[20px]">
+                  History is always extremely similar bitcoin is the invention of satoshi nakamoto,
+                  Chinese people early to give him dry up ethereum is v god made
+                </p>
+
+                <Divider
+                  sx={{
+                    marginTop: 3,
+                    width: '100%',
+                    borderColor: '#EBEEF0',
+                  }}
+                />
+              </li>
+            </ul>
+          </TabPanel>
+        </TabContext>
       </div>
     </>
   );

@@ -1,6 +1,9 @@
 import React from 'react';
+import { Divider } from '@mui/material';
 import { useToggle } from 'ahooks';
-import { Button, Divider, Modal } from 'antd';
+
+import { BasicButton, PrimaryButton } from '../../components/Button';
+import Modal from '../../components/Modal';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -44,14 +47,17 @@ const SellModal = () => {
 
   return (
     <>
-      <Button onClick={open} type="primary" ghost shape="round" className="!w-[86px] !h-[46px]">
+      <BasicButton
+        onClick={open}
+        classes={{
+          outlined: '!w-[86px] !px-[30px] !py-[10px]',
+        }}
+      >
         Sell
-      </Button>
-      <Modal onCancel={close} open={isOpen} width={553} footer={null}>
+      </BasicButton>
+      <Modal onClose={close} open={isOpen} width={553}>
         <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32] mt-[18px]">
-            Sell Shares of Willaim
-          </h2>
+          <h2 className="text-[24px] font-medium text-[#2E2E32]">Sell Shares of Willaim</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
           <div className="mt-6 flex items-center w-full justify-between">
@@ -77,7 +83,13 @@ const SellModal = () => {
             <span className="text-sm font-medium">0.1 </span>
           </div>
 
-          <Divider dashed />
+          <Divider
+            sx={{
+              marginTop: 3,
+              width: '100%',
+              borderColor: '#EBEEF0',
+            }}
+          />
 
           <div className="space-y-4 w-full">
             <div className="flex items-center justify-between">
@@ -104,7 +116,13 @@ const SellModal = () => {
             </div>
           </div>
 
-          <Divider dashed />
+          <Divider
+            sx={{
+              marginTop: 3,
+              width: '100%',
+              borderColor: '#EBEEF0',
+            }}
+          />
 
           <div className="space-y-4 w-full">
             <div className="flex items-center justify-between">
@@ -123,16 +141,25 @@ const SellModal = () => {
             </div>
           </div>
 
-          <div className="flex justify-between w-full mt-[30px]">
-            <Button shape="round" className="!w-[184px] !h-[46px]">
+          <div className="flex justify-between w-full my-[30px]">
+            <BasicButton
+              classes={{
+                outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
+              }}
+              onClick={close}
+            >
               <div className="flex space-x-2 items-center justify-center">
                 <Left />
                 <span className="text-[15px] font-medium">Go Back</span>
               </div>
-            </Button>
-            <Button type="primary" shape="round" className="!w-[184px] !h-[46px]">
-              <span className="text-[15px] font-medium">Sell</span>
-            </Button>
+            </BasicButton>
+            <PrimaryButton
+              classes={{
+                contained: '!py-[10px] !px-[38px] !w-[170px]',
+              }}
+            >
+              <span className="text-[15px] font-medium">Buy</span>
+            </PrimaryButton>
           </div>
         </div>
       </Modal>
