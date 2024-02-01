@@ -45,7 +45,7 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-xs">2</span>
+              <span className="text-xs text-[#0F1419] font-medium">2</span>
             </div>
             <span className="text-[#919099] text-[15px] font-medium">Pool</span>
           </div>
@@ -53,7 +53,7 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-xs">0.4</span>
+              <span className="text-xs text-[#0F1419] font-medium">0.4</span>
             </div>
             <span className="text-[#919099] text-[15px] font-medium">Your Reward</span>
           </div>
