@@ -9,7 +9,6 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import Avatar from '../assets/avatar.png';
 
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';

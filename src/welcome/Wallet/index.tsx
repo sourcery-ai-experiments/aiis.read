@@ -1,11 +1,7 @@
 import React from 'react';
-import { Button } from 'antd';
-
-import Avatar from '../assets/avatar.png';
 
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
-import ProfileModal from './Profile';
 import WithDraw from './WithDraw';
 
 const Copy = () => (

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Button, { ButtonProps } from '@mui/material/Button';
-import { purple } from '@mui/material/colors';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
@@ -74,18 +73,9 @@ export const VerifyButton = styled(Button)({
   },
 });
 
-export const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: purple[500],
-  '&:hover': {
-    backgroundColor: purple[700],
-  },
-}));
-
 export default function CustomizedButtons() {
   return (
     <Stack spacing={2} direction="row">
-      <ColorButton variant="contained">Custom CSS</ColorButton>
       <NextButton variant="contained" disableRipple>
         Bootstrap
       </NextButton>

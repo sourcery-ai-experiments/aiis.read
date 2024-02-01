@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from 'react';
 
 import Explore from './Explore';
 import Reward from './Reward';
