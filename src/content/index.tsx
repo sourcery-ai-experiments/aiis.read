@@ -5,54 +5,43 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 
-import { addPriceComponent, addVoteComponent } from './addToTwitter';
+import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
-
-const addTwitterComponent = () => {
-  const thirdElement = document.querySelectorAll(
-    '#react-root > div > div > div > main > div > div > div > div > div > div > div'
-  )[3];
-
-  // 现有元素的处理逻辑
-  const targetElements = thirdElement.querySelectorAll('section > div > div > div');
-  targetElements.forEach(function (element, index) {
-    const anchorElements = element.querySelectorAll('a');
-    const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
-    const twitterUrlString = hrefs[hrefs.length - 1];
-    if (twitterUrlString !== undefined) {
-      const urlObject = new URL(twitterUrlString);
-      const pathSegments = urlObject.pathname.split('/');
-      const username = pathSegments[1];
-      const tweetId = pathSegments[3];
-
-      // 判断是否存在已经插入的元素
-      const existingPriceElement = document.getElementById('xfans-price-' + tweetId);
-      const existingVoteElement = document.getElementById('xfans-vote-' + tweetId);
-
-      if (!existingPriceElement) {
-        addPriceComponent(element, tweetId);
-      } else {
-        // console.log('Element already exists for tweetId:', tweetId);
-      }
-
-      if (!existingVoteElement) {
-        addVoteComponent(element, tweetId, username);
-      } else {
-        // console.log('Element already exists for tweetId:', tweetId);
-      }
-    }
-  });
-};
 
 withProxyStore(<Content />, store).then((component) => {
   const container = document.createElement('my-extension-root');
   document.body.append(container);
   createRoot(container).render(component);
 
+  function whereIsUser(): string {
+    // 获取当前页面的 URL
+    const currentUrl = window.location.href.toLowerCase();
+    const urlWordLength = currentUrl.split('/').length;
+    const lastWord = currentUrl.split('/')[urlWordLength - 1];
+
+    const doNotCheckPathList = ['notifications', 'messages', 'i'];
+    // 判断当前页面的 URL 是否符合一般的用户主页 URL 格式
+    if (currentUrl.includes('https://twitter.com/') && urlWordLength === 4 && lastWord === 'home') {
+      return 'home';
+    } else if (urlWordLength === 4 && !doNotCheckPathList.includes(lastWord)) {
+      return 'userPage';
+    } else {
+      return 'unknown';
+    }
+  }
+
   // 延迟执行的代码 3000毫秒后执行，即3秒
   setTimeout(() => {
     setInterval(() => {
-      addTwitterComponent();
+      // 使用示例
+      const userIsOnProfilePage = whereIsUser();
+
+      if (userIsOnProfilePage === 'home') {
+        addTwitterComponent();
+      } else if (userIsOnProfilePage === 'userPage') {
+        console.log('The user is not on a Twitter user profile page.');
+        addUserPagePriceComponent();
+      }
     }, 1000); // 每秒执行一次
 
     // 也可以根据需要设置 clearInterval
