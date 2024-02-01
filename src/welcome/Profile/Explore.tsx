@@ -5,6 +5,9 @@ import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 
+import useProfileModal from '../../store/useProfileModal';
+import Avatar from '../assets/avatar.png';
+
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
     <g clipPath="url(#clip0_209_9369)">
@@ -25,6 +28,7 @@ const Icon = () => (
 
 const Explore = () => {
   const list = Array(7).fill('');
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
 
   const [value, setValue] = React.useState('1');
 
@@ -105,9 +109,10 @@ const Explore = () => {
               <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
                 <span className="text-[#0F1419]">1</span>
                 <img
+                  onClick={openProfile}
                   src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                   alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
@@ -143,9 +148,10 @@ const Explore = () => {
               <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
                 <span className="text-[#0F1419]">1</span>
                 <img
+                  onClick={openProfile}
                   src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                   alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
@@ -181,9 +187,10 @@ const Explore = () => {
               <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
                 <span className="text-[#0F1419]">1</span>
                 <img
+                  onClick={openProfile}
                   src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                   alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
@@ -222,9 +229,10 @@ const Explore = () => {
                   <div className="flex space-x-5 items-center">
                     <div className="flex flex-col items-center">
                       <img
+                        onClick={openProfile}
                         src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                         alt="avatar"
-                        className="w-9 h-9 rounded-full"
+                        className="w-9 h-9 rounded-full cursor-pointer"
                       />
                       <span className="text-[#919099]">@Devon</span>
                     </div>
@@ -233,9 +241,10 @@ const Explore = () => {
 
                     <div className="flex flex-col items-center">
                       <img
+                        onClick={openProfile}
                         src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                         alt="avatar"
-                        className="w-9 h-9 rounded-full"
+                        className="w-9 h-9 rounded-full cursor-pointer"
                       />
                       <span className="text-[#919099]">@Devon</span>
                     </div>

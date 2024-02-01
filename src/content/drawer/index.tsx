@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
+import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
@@ -58,6 +59,7 @@ export default function PersistentDrawerRight() {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      <ProfileModal />
       <IconButton
         color="inherit"
         aria-label="open drawer"

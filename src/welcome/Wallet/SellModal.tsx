@@ -60,7 +60,7 @@ const SellModal = () => {
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Sell Shares of Willaim</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
-          <div className="mt-6 flex items-center w-full justify-between">
+          <div className="mt-6 flex items-center w-full justify-between text-black">
             <div className="flex items-center space-x-[6px]">
               <span className="text-[#2E2E32] font-bold text-xl">Price:</span>
               <Icon />
@@ -73,12 +73,12 @@ const SellModal = () => {
             </div>
           </div>
 
-          <div className="mt-6 rounded-[8px] border border-[#EBECED] py-5 px-6 flex items-center justify-between w-full">
+          <div className="mt-6 text-black rounded-[8px] border border-[#EBECED] py-5 px-6 flex items-center justify-between w-full">
             <span className="font-medium">Amount</span>
             <span className="font-medium">2</span>
           </div>
 
-          <div className="mt-4 flex items-center space-x-1 self-end">
+          <div className="mt-4 text-black flex items-center space-x-1 self-end">
             <span className="text-sm">Minimum unit: </span>
             <span className="text-sm font-medium">0.1 </span>
           </div>
@@ -88,10 +88,11 @@ const SellModal = () => {
               marginTop: 3,
               width: '100%',
               borderColor: '#EBEEF0',
+              borderStyle: 'dashed',
             }}
           />
 
-          <div className="space-y-4 w-full">
+          <div className="space-y-4 mt-5 text-black w-full">
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">From</span>
               <span className="text-lg font-medium">0x41...64fd</span>
@@ -121,10 +122,11 @@ const SellModal = () => {
               marginTop: 3,
               width: '100%',
               borderColor: '#EBEEF0',
+              borderStyle: 'dashed',
             }}
           />
 
-          <div className="space-y-4 w-full">
+          <div className="space-y-4 mt-5 text-black w-full">
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">You Pay(Including Fees)</span>
               <div className="flex items-center space-x-1">
