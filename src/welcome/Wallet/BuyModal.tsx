@@ -63,15 +63,15 @@ const BuyModal = () => {
           <div className="mt-6 flex items-center self-start space-x-[6px]">
             <span className="text-[#2E2E32] font-bold text-xl">Price:</span>
             <Icon />
-            <span className="text-xl font-medium">0.2</span>
+            <span className="text-xl font-medium text-black">0.2</span>
           </div>
 
-          <div className="mt-6 rounded-[8px] border border-[#EBECED] py-5 px-6 flex items-center justify-between w-full">
+          <div className="mt-6 rounded-[8px] text-black border border-[#EBECED] py-5 px-6 flex items-center justify-between w-full">
             <span className="font-medium">Amount</span>
             <span className="font-medium">2</span>
           </div>
 
-          <div className="mt-4 flex items-center space-x-1 self-end">
+          <div className="mt-4 text-black flex items-center space-x-1 self-end">
             <span className="text-sm">Minimum unit: </span>
             <span className="text-sm font-medium">0.1 </span>
           </div>
@@ -81,10 +81,11 @@ const BuyModal = () => {
               marginTop: 3,
               width: '100%',
               borderColor: '#EBEEF0',
+              borderStyle: 'dashed',
             }}
           />
 
-          <div className="space-y-4 w-full">
+          <div className="space-y-4 mt-5 w-full text-black">
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">From</span>
               <span className="text-lg font-medium">0x41...64fd</span>
@@ -114,10 +115,11 @@ const BuyModal = () => {
               marginTop: 3,
               width: '100%',
               borderColor: '#EBEEF0',
+              borderStyle: 'dashed',
             }}
           />
 
-          <div className="space-y-4 w-full">
+          <div className="space-y-4 w-full mt-5 text-black">
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">You Pay(Including Fees)</span>
               <div className="flex items-center space-x-1">

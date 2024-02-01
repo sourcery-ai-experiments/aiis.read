@@ -33,14 +33,14 @@
     "@material-ui/core": "4.12.4",
     "@material-ui/icons": "4.11.3",
     "@mui/base": "5.0.0-beta.33",
-    "@mui/lab": "5.0.0-alpha.162",
-    "@mui/system": "5.15.6",
-    "ahooks": "3.7.9",
-    "antd": "5.12.0",
     "@mui/icons-material": "5.15.5",
+    "@mui/lab": "5.0.0-alpha.162",
     "@mui/material": "5.15.5",
+    "@mui/system": "5.15.6",
     "@reduxjs/toolkit": "1.8.4",
     "@types/redux-thunk": "2.1.0",
+    "ahooks": "3.7.9",
+    "antd": "5.12.0",
     "clsx": "2.1.0",
     "install": "0.13.0",
     "react": "18.2.0",
@@ -49,7 +49,8 @@
     "redux-persist-webextension-storage": "1.0.2",
     "redux-thunk": "2.4.2",
     "reduxjs-toolkit-persist": "7.2.1",
-    "webextension-polyfill": "0.9.0"
+    "webextension-polyfill": "0.9.0",
+    "zustand": "4.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.0.3",

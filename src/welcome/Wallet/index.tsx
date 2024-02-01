@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 
+import useProfileModal from '../../store/useProfileModal';
 import Avatar from '../assets/avatar.png';
 
 import Deposit from './Deposit';
@@ -152,6 +153,8 @@ const GoBack = () => (
 );
 
 const Wallet = (props: { handleButtonClick?: () => void }) => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+
   return (
     <div className="flex flex-col w-[433px] max-w-[433px]">
       <div className="pl-4 py-3 space-x-[10px] flex items-center">
@@ -164,9 +167,10 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
         <div className="flex items-start justify-between">
           <div className="flex space-x-[14px] items-center">
             <img
+              onClick={openProfile}
               src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
               alt="avatar"
-              className="w-[70px] h-[70px] rounded-full"
+              className="w-[70px] h-[70px] rounded-full cursor-pointer"
             />
             <div className="flex flex-col">
               <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>

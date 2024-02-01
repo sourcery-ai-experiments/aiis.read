@@ -6,6 +6,7 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 
+import useProfileModal from '../../store/useProfileModal';
 import Avatar from '../assets/avatar.png';
 
 import Claim from './Claim';
@@ -30,6 +31,7 @@ const Icon = () => (
 );
 
 const Reward = () => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
   const [value, setValue] = React.useState('1');
 
@@ -116,9 +118,10 @@ const Reward = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
                       <img
+                        onClick={openProfile}
                         src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                         alt=""
-                        className="w-[30px] rounded-full"
+                        className="w-[30px] rounded-full cursor-pointer"
                       />
                       <div className="flex flex-col space-y-[2px]">
                         <span className="text-sm font-bold">Devon</span>
@@ -156,9 +159,10 @@ const Reward = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-[6px]">
                     <img
+                      onClick={openProfile}
                       src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                       alt=""
-                      className="w-[30px] rounded-full"
+                      className="w-[30px] rounded-full cursor-pointer"
                     />
                     <div className="flex flex-col space-y-[2px]">
                       <span className="text-sm font-bold">Devon</span>

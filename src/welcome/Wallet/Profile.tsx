@@ -5,11 +5,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useToggle } from 'ahooks';
 
-import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import Avatar from '../assets/avatar.png';
+import useProfileModal from '../../store/useProfileModal';
 
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';
@@ -32,68 +30,71 @@ const Icon = () => (
   </svg>
 );
 
-const rows = [
-  {
-    holder: (
-      <div className="flex items-center space-x-1">
-        <img
-          src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-          alt=""
-          className="w-5 rounded-full"
-        />
-        <span className="text-[#0F1419] text-xs">Devon Lane</span>
-      </div>
-    ),
-    shares: 1,
-    value: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.002</span>
-      </div>
-    ),
-  },
-  {
-    holder: (
-      <div className="flex items-center space-x-1">
-        <img
-          src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-          alt=""
-          className="w-5 rounded-full"
-        />
-        <span className="text-[#0F1419] text-xs">Devon Lane</span>
-      </div>
-    ),
-    shares: 1,
-    value: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.002</span>
-      </div>
-    ),
-  },
-  {
-    holder: (
-      <div className="flex items-center space-x-1">
-        <img
-          src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-          alt=""
-          className="w-5 rounded-full"
-        />
-        <span className="text-[#0F1419] text-xs">Devon Lane</span>
-      </div>
-    ),
-    shares: 1,
-    value: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.002</span>
-      </div>
-    ),
-  },
-];
-
 const ProfileModal = () => {
-  const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const rows = [
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+        </div>
+      ),
+      shares: 1,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">0.002</span>
+        </div>
+      ),
+    },
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+        </div>
+      ),
+      shares: 1,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">0.002</span>
+        </div>
+      ),
+    },
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+        </div>
+      ),
+      shares: 1,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">0.002</span>
+        </div>
+      ),
+    },
+  ];
+  const { open, closeProfile } = useProfileModal((state) => ({ ...state }));
   const [key, setKey] = useState(0);
   const list = [
     {
@@ -109,15 +110,7 @@ const ProfileModal = () => {
 
   return (
     <>
-      <BasicButton
-        classes={{
-          outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
-        }}
-        onClick={open}
-      >
-        Profile
-      </BasicButton>
-      <Modal onClose={close} open={isOpen} width={626}>
+      <Modal onClose={closeProfile} open={open} width={626}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Profile</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
@@ -125,9 +118,10 @@ const ProfileModal = () => {
           <div className="flex mt-6 items-center justify-between w-full">
             <div className="flex items-center space-x-[14px]">
               <img
+                onClick={openProfile}
                 src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
                 alt="avatar"
-                className="w-[75px] h-[75px] rounded-full"
+                className="w-[75px] h-[75px] rounded-full cursor-pointer"
               />
               <div className="flex flex-col space-y-[6px]">
                 <span className="text-[#0F1419] text-[20px] leading-[20px] font-bold">
