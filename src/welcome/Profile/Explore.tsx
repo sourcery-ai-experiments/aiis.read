@@ -25,6 +25,25 @@ const Icon = () => (
   </svg>
 );
 
+const Up = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path
+      d="M1 9.9173L3.82845 7.08885L6.02245 9.2777L11.2801 4"
+      stroke="#16B364"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.28027 4H11.2803V8"
+      stroke="#16B364"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
@@ -106,7 +125,7 @@ const Explore = () => {
           <ul>
             {list.map((item, i) => (
               <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
-                <span className="text-[#0F1419]">1</span>
+                <span className="text-[#0F1419]">{i + 1}</span>
                 <img
                   onClick={openProfile}
                   src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
@@ -121,14 +140,14 @@ const Explore = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
-                      <span className="#919099">Price</span>
+                      <span className="text-[#919099]">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                      <span className="text-[#919099] text-[15px]">2.34</span>
                     </div>
 
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099]">Tweet Avg Rank:</span>
-                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                      <span className="text-[#919099] text-[15px]">#3</span>
                     </div>
                   </div>
                 </div>
@@ -160,15 +179,12 @@ const Explore = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
-                      <span className="#919099">Price</span>
+                      <span className="text-[#919099]">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                      <span className="text-[#919099] text-[15px]">2.34</span>
                     </div>
 
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Tweet Avg Rank:</span>
-                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
-                    </div>
+                    <span className="text-[#919099] text-sm">2m ago</span>
                   </div>
                 </div>
               </li>
@@ -199,14 +215,14 @@ const Explore = () => {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
-                      <span className="#919099">Price</span>
+                      <span className="text-[#919099]">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px] font-medium">2.34</span>
+                      <span className="text-[#919099] text-[15px]">2.34</span>
                     </div>
 
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Tweet Avg Rank:</span>
-                      <span className="text-[#919099] text-[15px] font-medium">#3</span>
+                    <div className="flex items-center space-x-1">
+                      <Up />
+                      <span className="text-[#16B364] text-[15px]">24.3%</span>
                     </div>
                   </div>
                 </div>
