@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 
+import Community from './Community';
 import Explore from './Explore';
 import Reward from './Reward';
 
@@ -24,6 +25,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
 
   const componentMap: Record<string, any> = {
     explore: <Explore />,
+    community: <Community />,
     reward: <Reward />,
   };
 
