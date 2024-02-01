@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 
 import useProfileModal from '../../store/useProfileModal';
-import Avatar from '../assets/avatar.png';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
