@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button } from 'antd';
 
 import useProfileModal from '../../store/useProfileModal';
-import Avatar from '../assets/avatar.png';
 
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
