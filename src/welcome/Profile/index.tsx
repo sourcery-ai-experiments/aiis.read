@@ -33,21 +33,11 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
     <div className="flex flex-col w-[433px] max-w-[433px]">
       <div className="px-[15px] py-[10px] flex items-center justify-between">
         <div className="space-x-2 flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-          >
-            <circle cx="15.9824" cy="15.9824" r="15.9824" fill="#9A6CF9" />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M13.1978 14.8942C12.6034 17.1092 13.028 19.0334 15.5978 21.695C18.823 24.9202 19.6196 25.928 20.1172 26.5575C20.1624 26.6147 20.2051 26.6687 20.247 26.7211L25.5243 21.695L20.247 16.5433L25.5243 11.266L19.2417 5.7373L15.9328 10.0389C14.7915 11.5225 13.6829 13.0864 13.1978 14.8942ZM4.91748 11.266L9.56658 6.36562L14.3413 10.6378C12.7497 12.732 10.5215 17.9004 14.3413 21.8207L9.56658 26.7211L4.91748 21.8207L9.56658 16.1664L4.91748 11.266Z"
-              fill="white"
-            />
-          </svg>
+          <img
+            src="https://cdn.oasiscircle.xyz/circle/980181F4-9AF2-4CA3-82E7-B713B80A2D17.1706801989931.0xA0B5B5"
+            alt="logo"
+            className="w-[32px] rounded-full"
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="34"
