@@ -7,6 +7,8 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import Profile from '../../welcome/Profile';
+import Wallet from '../../welcome/Wallet';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
@@ -41,15 +43,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   position: 'relative',
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-start',
-}));
-
 export default function PersistentDrawerRight() {
   const [open, setOpen] = React.useState(false);
 
@@ -75,9 +68,7 @@ export default function PersistentDrawerRight() {
       >
         <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" />
       </IconButton>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
+      <Main open={open}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -102,8 +93,10 @@ export default function PersistentDrawerRight() {
             <InvitePage handleButtonClick={() => setPageState('congratulation')} />
           )}
           {pageState === 'congratulation' && (
-            <CongratulationPage handleButtonClick={() => setPageState('invite')} />
+            <CongratulationPage handleButtonClick={() => setPageState('profile')} />
           )}
+          {pageState === 'profile' && <Profile handleButtonClick={() => setPageState('wallet')} />}
+          {pageState === 'wallet' && <Wallet handleButtonClick={() => setPageState('profile')} />}
         </div>
         <Divider />
       </Drawer>

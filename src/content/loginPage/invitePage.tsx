@@ -57,7 +57,7 @@ const InvitePage: FC<InvitePageProps> = ({ handleButtonClick }) => {
       </p>
       <InviteCodeInput
         value={inviteCode}
-        onChange={(e) => setInviteCode(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInviteCode(e.target.value)}
         label="Please enter the invitation code"
         id="custom-css-outlined-input"
       />
