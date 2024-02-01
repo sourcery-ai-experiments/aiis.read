@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-
-import useProfileModal from '../../../store/useProfileModal';
+import clsx from 'clsx';
 
 import '../../../tailwind.css';
 
@@ -40,12 +39,10 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
   console.log(elementWidth);
 
   const useWidth = elementWidth != null ? elementWidth : 0;
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
 
   return (
     <span
       id={id}
-      onClick={openProfile}
       style={{ left: `${useWidth + 12}px` }}
       className="absolute top-[-1px] flex w-[110px] h-[25px] grow-0 justify-center items-center text-center cursor-pointer !px-[17px] bg-[#9A6CF9] rounded-full"
     >
@@ -74,7 +71,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
         </defs>
       </svg>
 
-      <p className="font-medium text-[12px] text-white ml-[4px]">{price}</p>
+      <p className="font-medium text-[12px] text-white ml-[4px]">221{price}</p>
     </span>
   );
 };
