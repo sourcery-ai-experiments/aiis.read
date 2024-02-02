@@ -14,6 +14,8 @@ import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
 
+import LogoButton from './logoButton';
+
 import '../../tailwind.css';
 
 const drawerWidth = 463;
@@ -68,7 +70,8 @@ export default function PersistentDrawerRight() {
         disableRipple
         sx={{ ...(open && { display: 'none' }) }}
       >
-        <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" />
+        {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
+        <LogoButton />
       </IconButton>
       <Main open={open}></Main>
       <Drawer
