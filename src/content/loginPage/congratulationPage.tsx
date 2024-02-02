@@ -12,7 +12,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ handleButtonClick }) 
   return (
     <div className="w-full justify-center text-center items-center">
       <p className="text-[#0F1419] text-[24px] leading-[38px] font-bold text-center mt-[81px] mb-[44px]">
-        Congration！
+        Congratulations!
       </p>
       <p className="text-[#5B7083] text-[14px] leading-[24px] font-normal text-center mb-[21px]">
         Complete the following tasks to activate your account
@@ -31,7 +31,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ handleButtonClick }) 
           />
         </svg>
         <p className="text-[#5B7083] text-[14px] w-[207px] mx-[16px] leading-[24px] font-normal text-center mb-[21px]">
-          Follow @Letsmeme on Twitter
+          Follow @xFans on X
         </p>
         <VerifyButton variant="contained" disableElevation onClick={() => undefined}>
           verify
@@ -55,7 +55,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ handleButtonClick }) 
         </svg>
 
         <p className="text-[#5B7083] text-[14px] w-[207px] mx-[16px] leading-[24px] font-normal text-center mb-[21px]">
-          Follow @Letsmeme on Twitter
+          Like tweets on X
         </p>
         <VerifyButton variant="contained" disableElevation onClick={() => undefined}>
           GO
