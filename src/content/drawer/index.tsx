@@ -102,7 +102,6 @@ export default function PersistentDrawerRight() {
           {pageState === 'profile' && <Profile handleButtonClick={() => setPageState('wallet')} />}
           {pageState === 'wallet' && <Wallet handleButtonClick={() => setPageState('profile')} />}
         </div>
-        <Divider />
       </Drawer>
     </Box>
   );
