@@ -94,7 +94,7 @@ const WithDraw = () => {
             <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-[#0F1419] font-medium text-sm">0.02</span>
+              <span className="text-[#0F1419] font-medium text-sm">30.24</span>
             </div>
           </div>
           <div className="flex justify-between w-full my-[30px]">

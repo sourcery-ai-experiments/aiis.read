@@ -49,8 +49,8 @@ const Up = () => (
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  console.log(mockData);
   const newList = [...topList];
+  const timeList = [...topList];
 
   const [value, setValue] = React.useState('1');
 
@@ -210,39 +210,41 @@ const Explore = () => {
           }}
         >
           <ul>
-            {topList.map((item, i) => (
-              <li
-                key={item.id}
-                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
-              >
-                <span className="text-[#0F1419]">{i + 1}</span>
-                <img
-                  onClick={openProfile}
-                  src={item.avatar}
-                  alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
-                />
-                <div className="flex-1 flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold text-sm">{item.name}</span>
-                    <span className="text-[#5B7083]">@{item.nickname}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099] text-sm">Price</span>
-                      <Icon />
-                      <span className="text-[#919099] text-[15px]">{item.price}</span>
+            {timeList
+              .sort((a, b) => b.top - a.top)
+              .map((item, i) => (
+                <li
+                  key={item.id}
+                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+                >
+                  <span className="text-[#0F1419]">{i + 1}</span>
+                  <img
+                    onClick={openProfile}
+                    src={item.avatar}
+                    alt="avatar"
+                    className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
+                  />
+                  <div className="flex-1 flex flex-col space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[#0F1419] font-bold text-sm">{item.name}</span>
+                      <span className="text-[#5B7083]">@{item.nickname}</span>
                     </div>
 
-                    <div className="flex items-center space-x-1">
-                      <Up />
-                      <span className="text-[#16B364] text-[15px]">{item.top}%</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-[6px]">
+                        <span className="text-[#919099] text-sm">Price</span>
+                        <Icon />
+                        <span className="text-[#919099] text-[15px]">{item.price}</span>
+                      </div>
+
+                      <div className="flex items-center space-x-1">
+                        <Up />
+                        <span className="text-[#16B364] text-[15px]">{item.top}%</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              ))}
           </ul>
         </TabPanel>
         <TabPanel
@@ -267,7 +269,7 @@ const Explore = () => {
                       <span className="text-[#919099] text-sm">{item.nickname}</span>
                     </div>
 
-                    <span className="font-bold w-10 text-center text-sm">{item.type}</span>
+                    <span className="font-bold w-12 text-center text-sm">{item.type}</span>
 
                     <div className="flex flex-col items-center w-9">
                       <img

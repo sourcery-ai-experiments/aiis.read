@@ -130,7 +130,7 @@ const Reward = () => {
                         onClick={openProfile}
                         src={item.avatar}
                         alt=""
-                        className="w-[30px] rounded-full cursor-pointer"
+                        className="w-[44px] rounded-full cursor-pointer"
                       />
                       <div className="flex flex-col space-y-[2px]">
                         <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
@@ -175,7 +175,7 @@ const Reward = () => {
                       onClick={openProfile}
                       src={reward[0].avatar}
                       alt=""
-                      className="w-[30px] rounded-full cursor-pointer"
+                      className="w-[44px] rounded-full cursor-pointer"
                     />
                     <div className="flex flex-col space-y-[2px]">
                       <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>

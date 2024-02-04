@@ -193,7 +193,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">390</span>
+                <span className="text-base text-[#9A6CF9] font-bold">30.24</span>
               </div>
             </div>
 
