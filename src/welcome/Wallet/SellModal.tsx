@@ -23,6 +23,24 @@ const Icon = () => (
   </svg>
 );
 
+const Icon1 = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+    <g clipPath="url(#clip0_365_21061)">
+      <path d="M5.00032 17.4065V13.1882L0.142578 10.1367L5.00032 17.4065Z" fill="#C7C7E0" />
+      <path d="M5.0166 17.4065V13.1882L9.87443 10.1367L5.01669 17.4065H5.0166Z" fill="#A3A3D2" />
+      <path d="M5.00048 12.1404V6.75684L0.0869141 9.12012L5.00048 12.1404Z" fill="#C7C7E0" />
+      <path d="M5.0166 12.1404V6.75684L9.93017 9.12021L5.0166 12.1404Z" fill="#A3A3D2" />
+      <path d="M0.0869141 9.12L5.00039 0.59375V6.75662L0.0869141 9.12Z" fill="#C7C7E0" />
+      <path d="M9.93008 9.12L5.0166 0.59375V6.75662L9.93008 9.12Z" fill="#A3A3D2" />
+    </g>
+    <defs>
+      <clipPath id="clip0_365_21061">
+        <rect width="10" height="17" fill="white" transform="translate(0 0.5)" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
 const Left = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path
@@ -104,15 +122,15 @@ const SellModal = () => {
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Transaction Fee</span>
               <div className="flex items-center space-x-1">
-                <Icon />
-                <span className="text-lg font-medium">4.14</span>
+                <Icon1 />
+                <span className="text-lg font-medium">0.002</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Est. Gas Fee</span>
               <div className="flex items-center space-x-1">
-                <Icon />
-                <span className="text-lg font-medium">0.163</span>
+                <Icon1 />
+                <span className="text-lg font-medium">0.001</span>
               </div>
             </div>
           </div>
@@ -130,15 +148,15 @@ const SellModal = () => {
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">You Pay(Including Fees)</span>
               <div className="flex items-center space-x-1">
-                <Icon />
+                <Icon1 />
                 <span className="text-2xl font-bold">0.052</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
               <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
-                <Icon />
-                <span className="text-lg font-medium">20.2928</span>
+                <Icon1 />
+                <span className="text-lg font-medium">30.24</span>
               </div>
             </div>
           </div>
@@ -160,7 +178,7 @@ const SellModal = () => {
                 contained: '!py-[10px] !px-[38px] !w-[170px]',
               }}
             >
-              <span className="text-[15px] font-medium">Buy</span>
+              <span className="text-[15px] font-medium">Sell</span>
             </PrimaryButton>
           </div>
         </div>

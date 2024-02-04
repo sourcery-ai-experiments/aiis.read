@@ -4,7 +4,7 @@ const LogoButton = () => {
   return (
     <div className="absolute right-0 rounded-full m-0 w-[50px] h-[50px] cursor-pointer">
       <img
-        src="https://ik.imagekit.io/pqilkfzt7wb/xfans/logo_SPGs-kd5v.png?updatedAt=1706859358184"
+        src="https://cdn.oasiscircle.xyz/circle/D35FD9C2-12D4-4DBA-8BEC-F8DDD64B8C07.1707035452972.0xA0B5B5"
         className="mx-0 p-0 mt-[120px] w-[50px] h-[50px]"
         alt="Logo"
       />

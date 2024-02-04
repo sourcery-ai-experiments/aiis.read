@@ -32,17 +32,17 @@ const rows = [
   {
     time: 'Jan 05 2024, 14:32',
     user: 'Cody Fisher',
-    value: 12.87,
+    value: 2,
   },
   {
     time: 'Apr 06 2023, 20:13',
     user: 'Cody Fisher',
-    value: 10.03,
+    value: 2,
   },
   {
     time: 'Jan 12 2023, 13:42',
     user: 'Cody Fisher',
-    value: 15.12,
+    value: 2,
   },
 ];
 
@@ -79,7 +79,7 @@ const InviteFriends = () => {
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
                   <span className="text-[#919099] text-sm font-medium">Invite Points</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">10.05</span>
+                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">10</span>
                 </div>
               </div>
             </div>
