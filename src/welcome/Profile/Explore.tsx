@@ -7,6 +7,8 @@ import Tab from '@mui/material/Tab';
 
 import useProfileModal from '../../store/useProfileModal';
 
+import mockData, { activites, topList } from './mock';
+
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
     <g clipPath="url(#clip0_209_9369)">
@@ -47,6 +49,8 @@ const Up = () => (
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
+  console.log(mockData);
+  const newList = [...topList];
 
   const [value, setValue] = React.useState('1');
 
@@ -123,31 +127,34 @@ const Explore = () => {
           }}
         >
           <ul>
-            {list.map((item, i) => (
-              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
+            {topList.map((item: any, i: any) => (
+              <li
+                key={item.id}
+                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+              >
                 <span className="text-[#0F1419]">{i + 1}</span>
                 <img
                   onClick={openProfile}
-                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                  src={item.avatar}
                   alt="avatar"
                   className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
-                    <span className="text-[#5B7083]">@IDOC</span>
+                    <span className="text-[#0F1419] font-bold text-sm">{item.name}</span>
+                    <span className="text-[#5B7083]">@{item.nickname}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Price</span>
+                      <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">2.34</span>
+                      <span className="text-[#919099] text-[15px]">{item.price}</span>
                     </div>
 
                     <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Tweet Avg Rank:</span>
-                      <span className="text-[#919099] text-[15px]">#3</span>
+                      <span className="text-[#919099] text-sm">Tweet Avg Rank:</span>
+                      <span className="text-[#919099] text-[15px]">#{item.rank}</span>
                     </div>
                   </div>
                 </div>
@@ -162,33 +169,38 @@ const Explore = () => {
           }}
         >
           <ul>
-            {list.map((item, i) => (
-              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
-                <span className="text-[#0F1419]">1</span>
-                <img
-                  onClick={openProfile}
-                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-                  alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
-                />
-                <div className="flex-1 flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
-                    <span className="text-[#5B7083]">@IDOC</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Price</span>
-                      <Icon />
-                      <span className="text-[#919099] text-[15px]">2.34</span>
+            {newList
+              .sort((a: any, b: any) => a.time - b.time)
+              .map((item: any, i: any) => (
+                <li
+                  key={item.id}
+                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+                >
+                  <span className="text-[#0F1419]">{i + 1}</span>
+                  <img
+                    onClick={openProfile}
+                    src={item.avatar}
+                    alt="avatar"
+                    className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
+                  />
+                  <div className="flex-1 flex flex-col space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[#0F1419] font-bold text-sm">{item.name}</span>
+                      <span className="text-[#5B7083]">@{item.nickname}</span>
                     </div>
 
-                    <span className="text-[#919099] text-sm">2m ago</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-[6px]">
+                        <span className="text-[#919099] text-sm">Price</span>
+                        <Icon />
+                        <span className="text-[#919099] text-[15px]">{item.price}</span>
+                      </div>
+
+                      <span className="text-[#919099] text-sm">{item.time}m ago</span>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              ))}
           </ul>
         </TabPanel>
         <TabPanel
@@ -198,31 +210,34 @@ const Explore = () => {
           }}
         >
           <ul>
-            {list.map((item, i) => (
-              <li key={i} className="pt-5 pb-2 flex items-center border-t border-t-[#EBEEF0]">
-                <span className="text-[#0F1419]">1</span>
+            {topList.map((item, i) => (
+              <li
+                key={item.id}
+                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+              >
+                <span className="text-[#0F1419]">{i + 1}</span>
                 <img
                   onClick={openProfile}
-                  src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                  src={item.avatar}
                   alt="avatar"
                   className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold">JamesXYC@MAP Protocol -Bitcoin</span>
-                    <span className="text-[#5B7083]">@IDOC</span>
+                    <span className="text-[#0F1419] font-bold text-sm">{item.name}</span>
+                    <span className="text-[#5B7083]">@{item.nickname}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099]">Price</span>
+                      <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">2.34</span>
+                      <span className="text-[#919099] text-[15px]">{item.price}</span>
                     </div>
 
                     <div className="flex items-center space-x-1">
                       <Up />
-                      <span className="text-[#16B364] text-[15px]">24.3%</span>
+                      <span className="text-[#16B364] text-[15px]">{item.top}%</span>
                     </div>
                   </div>
                 </div>
@@ -237,39 +252,51 @@ const Explore = () => {
           }}
         >
           <ul>
-            {list.map((item, i) => (
+            {activites.map((item: any, i: any) => (
               <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
-                <span className="text-[#A1A1AA]">2024/01/10 12:14</span>
+                <span className="text-[#A1A1AA] text-sm">{item.time}</span>
                 <div className="flex items-center justify-between">
                   <div className="flex space-x-5 items-center">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center w-9">
                       <img
                         onClick={openProfile}
-                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        src={item.avatar}
                         alt="avatar"
                         className="w-9 h-9 rounded-full cursor-pointer"
                       />
-                      <span className="text-[#919099]">@Devon</span>
+                      <span className="text-[#919099] text-sm">{item.nickname}</span>
                     </div>
 
-                    <span className="font-bold">Bought</span>
+                    <span className="font-bold w-10 text-center text-sm">{item.type}</span>
 
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center w-9">
                       <img
                         onClick={openProfile}
-                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        src={item.avatar1}
                         alt="avatar"
                         className="w-9 h-9 rounded-full cursor-pointer"
                       />
-                      <span className="text-[#919099]">@Devon</span>
+                      <span className="text-[#919099] text-sm">{item.nickname1}</span>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-end">
-                    <span className="text-[#16B364] text-base font-bold">+2 Shares</span>
+                    <span
+                      className={`text-base font-bold ${
+                        item.share > 0 ? 'text-[#16B364]' : 'text-[#FF2E00]'
+                      }`}
+                    >
+                      {item.share} Shares
+                    </span>
                     <div className="space-x-1 flex items-center">
                       <Icon />
-                      <span className="text-[#16B364] text-xs">- 0.2025</span>
+                      <span
+                        className={`text-xs ${
+                          item.price > 0 ? 'text-[#FF2E00]' : 'text-[#16B364]'
+                        }`}
+                      >
+                        {item.price}
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -45,11 +45,11 @@ const ProfileModal = () => {
           <span className="text-[#0F1419] text-xs">Devon Lane</span>
         </div>
       ),
-      shares: 1,
+      shares: 3,
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">0.002</span>
+          <span className="text-[#0F1419] text-xs">1.002</span>
         </div>
       ),
     },
@@ -58,18 +58,18 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            src="https://s3-alpha-sig.figma.com/img/5884/a9a3/850993a22ae68a1d928237508e713a95?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PUVlmyDBuGd4II7wipQawCSRUyyoxBtJyqdfXBhpYqcPag4kTlvgyDWZ-2IvcF~5kFNqNsf24923sNWKZ8nZL8WxOggJXrejcARhkzwh7G4DCpGN6PpPsbojbKJ3Qv4ZJqd~w6x7vVdcVi1dxsZtNpVzV7M47B9EatTp7nSzXRnMxVhYesCQ02PmC5UvV5TdvYdjQ0jQaNS3mQpebF1tg6UzD6A42UGZFkCZIgcdmekThAWPGexCCjfup9PRWQnQdf~0rdKewsn7LAwxPpR2IwSgivX2O~s46UKJjcVWy9wogq7QX9NAzQIUoV29DVzD18qR7AjB-byeBtuafKvGvg__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
-          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+          <span className="text-[#0F1419] text-xs">Betty Moore</span>
         </div>
       ),
-      shares: 1,
+      shares: 12,
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">0.002</span>
+          <span className="text-[#0F1419] text-xs">2.012</span>
         </div>
       ),
     },
@@ -78,18 +78,18 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            src="https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=J4zCtFmv0fiKRy1eD5~KtUJtyMMPY3KXydDxoe8jWJNN2V6tq1WDqUEvzwyiqW3~ixWv~tcoT3NWC3THoBYywjfv5NPYqarNyPGLmsajnMc-PdMc5IqFU8vAIrmmE2qXtY1ypEoIIcDo3G-IKKFilCN4M45XdYd6SGsnYTrqs-zVbb7K8cASTy-cwQK~eXjY7SSoGkT5EY1wF4XR7KXQzxn7zAI0pGRk46j75-yloV0oGlU3Z3uOnfF0Ol1DzvJKMZ-Lp-j2hOTwCDkCOZG5Ue-X1oviqzH~00fuDVD1QeToOhqBolzZ-BqyDz2BC-yBP2mvvcXtAE4sSQnY5ff3EA__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
-          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+          <span className="text-[#0F1419] text-xs">William Miller</span>
         </div>
       ),
-      shares: 1,
+      shares: 43,
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">0.002</span>
+          <span className="text-[#0F1419] text-xs">7.126</span>
         </div>
       ),
     },
@@ -129,9 +129,9 @@ const ProfileModal = () => {
                 </span>
                 <span className="text-[#919099] text-[16px] leading-[16px] font-medium">@Idoc</span>
                 <div className="flex items-center space-x-1">
-                  <span className="text-[#2E2E32] text-sm font-bold">Floor Price:</span>
+                  <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-sm">0.2</span>
+                  <span className="text-[14px]">0.2</span>
                 </div>
               </div>
             </div>
