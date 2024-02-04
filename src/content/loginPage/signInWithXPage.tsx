@@ -10,7 +10,7 @@ interface SignInWithXPageProps {
 
 const SignInWithXPage: FC<SignInWithXPageProps> = ({ handleButtonClick }) => {
   return (
-    <div className="w-full justify-center text-center items-center">
+    <div className="w-full justify-center text-center items-center min-h-screen">
       <img
         className="mx-auto mt-[81px] mb-[32px] w-[120px] h-[120px]"
         src="https://ik.imagekit.io/pqilkfzt7wb/xfans/logo_SPGs-kd5v.png?updatedAt=1706859358184"

@@ -153,7 +153,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
 
   return (
-    <div className="flex flex-col w-[433px] max-w-[433px]">
+    <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
       <div className="pl-4 py-3 space-x-[10px] flex items-center">
         <div className="cursor-pointer" onClick={() => props.handleButtonClick?.()}>
           <GoBack />
