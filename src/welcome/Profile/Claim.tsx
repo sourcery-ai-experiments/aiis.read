@@ -12,18 +12,18 @@ import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 
 const Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
-    <g clipPath="url(#clip0_365_20589)">
-      <path d="M7.50072 23.8686V17.9135L0.214111 13.6055L7.50072 23.8686Z" fill="#C7C7E0" />
-      <path d="M7.52466 23.8686V17.9135L14.8114 13.6055L7.52479 23.8686H7.52466Z" fill="#A3A3D2" />
-      <path d="M7.50084 16.4334V8.83301L0.130493 12.1694L7.50084 16.4334Z" fill="#C7C7E0" />
-      <path d="M7.52466 16.4334V8.83301L14.895 12.1695L7.52466 16.4334Z" fill="#A3A3D2" />
-      <path d="M0.130493 12.1689L7.50071 0.131836V8.83236L0.130493 12.1689Z" fill="#C7C7E0" />
-      <path d="M14.8951 12.1689L7.5249 0.131836V8.83236L14.8951 12.1689Z" fill="#A3A3D2" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
+    <g clipPath="url(#clip0_975_31820)">
+      <path d="M5.00044 15.9124V11.9423L0.1427 9.07031L5.00044 15.9124Z" fill="#C7C7E0" />
+      <path d="M5.01648 15.9124V11.9423L9.87431 9.07031L5.01657 15.9124H5.01648Z" fill="#A3A3D2" />
+      <path d="M5.0006 10.9556V5.88867L0.0870361 8.11294L5.0006 10.9556Z" fill="#C7C7E0" />
+      <path d="M5.01648 10.9556V5.88867L9.93004 8.11302L5.01648 10.9556Z" fill="#A3A3D2" />
+      <path d="M0.0870361 8.11259L5.00051 0.0878906V5.88824L0.0870361 8.11259Z" fill="#C7C7E0" />
+      <path d="M9.93008 8.11259L5.0166 0.0878906V5.88824L9.93008 8.11259Z" fill="#A3A3D2" />
     </g>
     <defs>
-      <clipPath id="clip0_365_20589">
-        <rect width="15" height="24" fill="white" />
+      <clipPath id="clip0_975_31820">
+        <rect width="10" height="16" fill="white" />
       </clipPath>
     </defs>
   </svg>
@@ -48,36 +48,36 @@ const rows = [
     ),
   },
   {
-    date: '2023/02/01',
-    creator: 'Devon Lane',
-    rank: '#2',
+    date: '2023/01/18',
+    creator: 'Steven Garcia',
+    rank: '#45',
     total: (
       <div className="flex items-center space-x-1">
         <Icon />
-        <span className="text-[#0F1419] text-xs">0.234</span>
+        <span className="text-[#0F1419] text-xs">1.452</span>
       </div>
     ),
     reward: (
       <div className="flex items-center space-x-1">
         <Icon />
-        <span className="text-[#0F1419] text-xs">0.001</span>
+        <span className="text-[#0F1419] text-xs">5.01</span>
       </div>
     ),
   },
   {
-    date: '2023/02/01',
-    creator: 'Devon Lane',
+    date: '2022/12/25',
+    creator: 'Patricia Smith',
     rank: '#2',
     total: (
       <div className="flex items-center space-x-1">
         <Icon />
-        <span className="text-[#0F1419] text-xs">0.234</span>
+        <span className="text-[#0F1419] text-xs">3.24</span>
       </div>
     ),
     reward: (
       <div className="flex items-center space-x-1">
         <Icon />
-        <span className="text-[#0F1419] text-xs">0.001</span>
+        <span className="text-[#0F1419] text-xs">1.35</span>
       </div>
     ),
   },
@@ -103,7 +103,9 @@ const Claim = () => {
 
           <div className="mt-6 flex items-center justify-between w-full">
             <div className="flex items-center space-x-[10px]">
-              <span className="text-[#2E2E32] text-xl font-bold">Reward:</span>
+              <span className="text-[#2E2E32] text-xl font-bold" style={{ letterSpacing: 1 }}>
+                Reward:
+              </span>
               <div className="flex flex-col space-y-2">
                 <span className="text-xl leading-[20px] font-medium">$294.3</span>
                 <div className="flex items-center space-x-1">

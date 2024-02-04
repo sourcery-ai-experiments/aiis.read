@@ -10,20 +10,21 @@ import useProfileModal from '../../store/useProfileModal';
 
 import Claim from './Claim';
 import History from './History';
+import { reward } from './mock';
 
 const Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
-    <g clipPath="url(#clip0_365_20589)">
-      <path d="M7.50072 23.8686V17.9135L0.214111 13.6055L7.50072 23.8686Z" fill="#C7C7E0" />
-      <path d="M7.52466 23.8686V17.9135L14.8114 13.6055L7.52479 23.8686H7.52466Z" fill="#A3A3D2" />
-      <path d="M7.50084 16.4334V8.83301L0.130493 12.1694L7.50084 16.4334Z" fill="#C7C7E0" />
-      <path d="M7.52466 16.4334V8.83301L14.895 12.1695L7.52466 16.4334Z" fill="#A3A3D2" />
-      <path d="M0.130493 12.1689L7.50071 0.131836V8.83236L0.130493 12.1689Z" fill="#C7C7E0" />
-      <path d="M14.8951 12.1689L7.5249 0.131836V8.83236L14.8951 12.1689Z" fill="#A3A3D2" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none">
+    <g clipPath="url(#clip0_467_29546)">
+      <path d="M4.50041 11.9338V8.95625L0.728516 6.80225L4.50041 11.9338Z" fill="#C7C7E0" />
+      <path d="M4.5127 11.9338V8.95625L8.28465 6.80225L4.51276 11.9338H4.5127Z" fill="#A3A3D2" />
+      <path d="M4.49981 8.21619V4.41602L0.68457 6.08421L4.49981 8.21619Z" fill="#C7C7E0" />
+      <path d="M4.5127 8.21619V4.41602L8.32793 6.08428L4.5127 8.21619Z" fill="#A3A3D2" />
+      <path d="M0.68457 6.08493L4.49974 0.0664062V4.41667L0.68457 6.08493Z" fill="#C7C7E0" />
+      <path d="M8.32787 6.08493L4.5127 0.0664062V4.41667L8.32787 6.08493Z" fill="#A3A3D2" />
     </g>
     <defs>
-      <clipPath id="clip0_365_20589">
-        <rect width="15" height="24" fill="white" />
+      <clipPath id="clip0_467_29546">
+        <rect width="7.76471" height="12" fill="white" transform="translate(0.617188)" />
       </clipPath>
     </defs>
   </svg>
@@ -65,7 +66,16 @@ const Reward = () => {
         </div>
       </div>
 
-      <div className="mt-2 mx-4">
+      <Divider
+        sx={{
+          marginTop: 2,
+          marginLeft: 2,
+          marginRight: 2,
+          borderColor: '#EBEEF0',
+        }}
+      />
+
+      <div className="mx-4">
         <TabContext value={value}>
           <Box>
             <TabList
@@ -111,30 +121,34 @@ const Reward = () => {
               padding: 0,
             }}
           >
-            <ul className="mt-3 py-[10px]">
-              {list.map((item, i) => (
+            <ul className="py-[22px] border-t border-t-[#EBEEF0]">
+              {reward.map((item, i) => (
                 <li key={i} className="space-y-2 mb-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
                       <img
                         onClick={openProfile}
-                        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                        src={item.avatar}
                         alt=""
                         className="w-[30px] rounded-full cursor-pointer"
                       />
                       <div className="flex flex-col space-y-[2px]">
-                        <span className="text-sm font-bold">Devon</span>
-                        <span className="text-xs text-[#919099]">Jan 05 2024, 14:32</span>
+                        <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
+                          {item.nickname}
+                        </span>
+                        <span
+                          className="text-xs text-[#919099]"
+                          style={{ fontVariant: 'small-caps' }}
+                        >
+                          {item.time}
+                        </span>
                       </div>
                     </div>
 
-                    <span className="text-sm font-medium">#3</span>
+                    <span className="text-sm font-medium">#{item.rank}</span>
                   </div>
 
-                  <p className="text-black text-xs leading-[20px]">
-                    History is always extremely similar bitcoin is the invention of satoshi
-                    nakamoto, Chinese people early to give him dry up ethereum is v god made
-                  </p>
+                  <p className="text-black text-xs leading-[20px]">{item.text}</p>
 
                   <Divider
                     sx={{
@@ -153,29 +167,33 @@ const Reward = () => {
               padding: 0,
             }}
           >
-            <ul className="mt-3 py-[10px]">
+            <ul className="py-[22px] border-t border-t-[#EBEEF0]">
               <li key={0} className="space-y-2 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-[6px]">
                     <img
                       onClick={openProfile}
-                      src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                      src={reward[0].avatar}
                       alt=""
                       className="w-[30px] rounded-full cursor-pointer"
                     />
                     <div className="flex flex-col space-y-[2px]">
-                      <span className="text-sm font-bold">Devon</span>
-                      <span className="text-xs text-[#919099]">Jan 05 2024, 14:32</span>
+                      <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
+                        {reward[0].nickname}
+                      </span>
+                      <span
+                        className="text-xs text-[#919099]"
+                        style={{ fontVariant: 'small-caps' }}
+                      >
+                        {reward[0].time}
+                      </span>
                     </div>
                   </div>
 
-                  <span className="text-sm font-medium">#3</span>
+                  <span className="text-sm font-medium">#{reward[0].rank}</span>
                 </div>
 
-                <p className="text-black text-xs leading-[20px]">
-                  History is always extremely similar bitcoin is the invention of satoshi nakamoto,
-                  Chinese people early to give him dry up ethereum is v god made
-                </p>
+                <p className="text-black text-xs leading-[20px]">{reward[0].text}</p>
 
                 <Divider
                   sx={{

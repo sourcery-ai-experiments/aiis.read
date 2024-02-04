@@ -41,6 +41,9 @@ dependencies:
   '@reduxjs/toolkit':
     specifier: 1.8.4
     version: 1.8.4(react-redux@7.2.8)(react@18.2.0)
+  '@types/mockjs':
+    specifier: 1.0.10
+    version: 1.0.10
   '@types/redux-thunk':
     specifier: 2.1.0
     version: 2.1.0(redux@4.2.1)
@@ -53,6 +56,9 @@ dependencies:
   install:
     specifier: 0.13.0
     version: 0.13.0
+  mockjs:
+    specifier: 1.1.0
+    version: 1.1.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -3899,6 +3905,13 @@ packages:
       }
     dev: true
 
+  /@types/mockjs@1.0.10:
+    resolution:
+      {
+        integrity: sha512-SXgrhajHG7boLv6oU93CcmdDm0HYRiceuz6b+7z+/2lCJPTWDv0V5YiwFHT2ejE4bQqgSXQiVPQYPWv7LGsK1g==,
+      }
+    dev: false
+
   /@types/node@20.4.5:
     resolution:
       {
@@ -5372,6 +5385,14 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
     dev: true
+
+  /commander@11.1.0:
+    resolution:
+      {
+        integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==,
+      }
+    engines: { node: '>=16' }
+    dev: false
 
   /compare-func@2.0.0:
     resolution:
@@ -9580,6 +9601,16 @@ packages:
         integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==,
       }
     dev: true
+
+  /mockjs@1.1.0:
+    resolution:
+      {
+        integrity: sha512-eQsKcWzIaZzEZ07NuEyO4Nw65g0hdWAyurVol1IPl1gahRwY+svqzfgfey8U8dahLwG44d6/RwEzuK52rSa/JQ==,
+      }
+    hasBin: true
+    dependencies:
+      commander: 11.1.0
+    dev: false
 
   /ms@2.0.0:
     resolution:
