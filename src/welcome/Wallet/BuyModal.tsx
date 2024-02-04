@@ -92,20 +92,20 @@ const BuyModal = () => {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">To</span>
-              <span className="text-lg font-medium">0x41...64fd</span>
+              <span className="text-lg font-medium">0x32...85fs</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Transaction Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon />
-                <span className="text-lg font-medium">0.002</span>
+                <span className="text-lg font-medium">5.002</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Est. Gas Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon />
-                <span className="text-lg font-medium">0.002</span>
+                <span className="text-lg font-medium">0.014</span>
               </div>
             </div>
           </div>

@@ -95,24 +95,24 @@ const SellModal = () => {
           <div className="space-y-4 mt-5 text-black w-full">
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">From</span>
-              <span className="text-lg font-medium">0x41...64fd</span>
+              <span className="text-lg font-medium">0x53...63re</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">To</span>
-              <span className="text-lg font-medium">0x41...64fd</span>
+              <span className="text-lg font-medium">0x25...52fd</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Transaction Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon />
-                <span className="text-lg font-medium">0.002</span>
+                <span className="text-lg font-medium">4.14</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Est. Gas Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon />
-                <span className="text-lg font-medium">0.002</span>
+                <span className="text-lg font-medium">0.163</span>
               </div>
             </div>
           </div>

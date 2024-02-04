@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf');
+
+  /* src: url('./welcome/assets/SF-Pro-Display-Thin.otf'); */
+
+  /* src: url('./welcome/assets/SF-Pro-Display-Medium.otf'); */
+}
+
+html,
+body {
+  font-family: 'SF Pro Display', sans-serif;
+  font-size: 16px !important;
+}

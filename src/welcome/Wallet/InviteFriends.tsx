@@ -32,17 +32,17 @@ const rows = [
   {
     time: 'Jan 05 2024, 14:32',
     user: 'Cody Fisher',
-    value: 0.001,
+    value: 12.87,
   },
   {
-    time: 'Jan 05 2024, 14:32',
+    time: 'Apr 06 2023, 20:13',
     user: 'Cody Fisher',
-    value: 0.001,
+    value: 10.03,
   },
   {
-    time: 'Jan 05 2024, 14:32',
+    time: 'Jan 12 2023, 13:42',
     user: 'Cody Fisher',
-    value: 0.001,
+    value: 15.12,
   },
 ];
 
@@ -79,7 +79,7 @@ const InviteFriends = () => {
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
                   <span className="text-[#919099] text-sm font-medium">Invite Points</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">0.05</span>
+                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">10.05</span>
                 </div>
               </div>
             </div>
@@ -105,9 +105,9 @@ const InviteFriends = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Holder</TableCell>
-                  <TableCell>Hold shares</TableCell>
-                  <TableCell>Shares Value</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>User</TableCell>
+                  <TableCell>invite Points</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

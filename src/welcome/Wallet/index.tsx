@@ -172,7 +172,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
             <div className="flex flex-col">
               <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>
               <div className="flex space-x-2 items-center">
-                <span className="font-medium text-base text-[#919099]">#919099</span>
+                <span className="font-medium text-base text-[#919099]">0x41...64fd</span>
                 <Copy />
               </div>
               <div className="flex space-x-1 items-center">
