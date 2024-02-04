@@ -95,17 +95,80 @@ const ProfileModal = () => {
     },
   ];
 
+  const holder16 = [
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://s3-alpha-sig.figma.com/img/b0e6/1e6e/9e0b10bc7df7f8b016a4a4b14a72390c?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jnbGI97jQAvsSduElyoEwhWDBy3ytk-UwcwPR4fNFQEGeEQV~28hanQuhf5r6umsnzldxFhwhONJyKMjTNU2r2st4byQ6livJ7w6D6wI6ZbYfm7MZIMfy5JnzMqplGZ5CWHjnzw84MCz8NlIHKnNlWjWKZajIc6izKmEAz9pMrPxCdOSFT~BTODNdLX9X8cQ52IVybWUQyDjieMs3g69nQrGSufNTGiAjlfO6ZOJj1-R5C7zpMmozB5NCDRCpyQjHuwK6bpVYKF3UomzKKTgts6gX1OcJFyLDoqdugwOiVUuz8GBT6AMunwKhFjIYWTewHsEJiM2evEe8ST1BAX5Yw__"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Patricia Smith</span>
+        </div>
+      ),
+      shares: 4,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">2.132</span>
+        </div>
+      ),
+    },
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://s3-alpha-sig.figma.com/img/a943/c456/1554d0938e310067d530a29ef6ff1664?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=pJNMzft~d6XupbZFvcLHyodBsjJTxF7efO9NOhhuM3umsQ6eQgcuugzffRuin4KDl7fOI4dSwu64XS5i2UcBXCCr~jiUsqf8afYa-rcLlTkS8mIC-p2N~OxV9bK1qPFhdGEbLF6Bv8r5KtXSeK5eWnmyUjDVLKjOM-2t7uPL8Z~Uc83MuZGGWiTiF2a16x~sKBwqSuOm7cFI85vzwB2xz1zOzn~dL7fwVVm52zbOuoqMg0v-oRi238IkEOgEt0Yup4Huk47ApntDZRzENu3devBDz~fqIBwQANqBXEG1Gq0lHdl7JgDem9oUTAUZjnHHqoOYIhmvDPPt~aVS0MXnpg__"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Brenda Wilson</span>
+        </div>
+      ),
+      shares: 16,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">3.612</span>
+        </div>
+      ),
+    },
+    {
+      holder: (
+        <div className="flex items-center space-x-1">
+          <img
+            onClick={openProfile}
+            src="https://s3-alpha-sig.figma.com/img/80e2/698e/d168cf144ccafa1e4ed54123a0b6d7a3?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ErPGgBW-siAsqlC7hQjIGBFbEXMKzHwZmAQKXuUYt4KlYYnkKwryJpoI~CnKN6AKqjiIyzZUP84Bmmq~qFcXDMor3hAQo6KdioyETNQeLJg3LxoKN~T3E4FeUStL99qDsUu334PMVTqgroF13-8esW7Dx3GqdnU7Dnj-lFIA0VwcfeBHZSm22qXp8Fb0Yha8PHC4XOZ2Z7jj0i1mfcxQXfMG~JU0SC-pRT2z2S19p06HUgFfKSYNemsAMVav-0hFLliWyMq5ed8uvoYlfe8XaURtDtnk59gz8cEX8nBaG-QNbCiWaDlXFqY5Kkl3XseFaRPZBacF2whoYMQfLpjFuA__"
+            alt=""
+            className="w-5 rounded-full cursor-pointer"
+          />
+          <span className="text-[#0F1419] text-xs">Laura Lewis</span>
+        </div>
+      ),
+      shares: 23,
+      value: (
+        <div className="flex items-center space-x-1">
+          <Icon />
+          <span className="text-[#0F1419] text-xs">3.191</span>
+        </div>
+      ),
+    },
+  ];
+
   const ranking = [
     {
       data: (
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+            src="https://s3-alpha-sig.figma.com/img/d138/c800/8678b73810e3250021201b1c109dfd71?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=B8kiFsfkEy6OxlDBABAKQ9SbzMCUFr1hJz9YucH2N69g-btcYP97j~lPyoYJC6fVOQGGXyr7G7OFMtS1hozUMvkuEsSvyV9f7ysmt6R4WggMeXVhVaEAvfQRqcOvaLvRvt831tVU-B1YR-7R7upWuuIH3B4iUmz6ot4evXmUEInB-NH~zVmkWl5E~kVKKXcX~uxgD8uV0ayHbjFsoxAlZMWbHuTQ2ai9nbBqTTXZfzlon6kOSIc1WVeKWK8qozVpvkp77GHQ1F3nM1HZbMTJZrNNMy8-G3vEJjQLTWHsNZt-3bUgRR5y4-fcPqkP1NHIZ1ezoko3YGY2HndqnzLMWw__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
-          <span className="text-[#0F1419] text-xs">Devon Lane</span>
+          <span className="text-[#0F1419] text-xs">Laura Lewis</span>
         </div>
       ),
       post: 'Autonomous Worlds Ecosystem',
@@ -113,7 +176,7 @@ const ProfileModal = () => {
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">1.002</span>
+          <span className="text-[#0F1419] text-xs">2.102</span>
         </div>
       ),
     },
@@ -122,11 +185,11 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/5884/a9a3/850993a22ae68a1d928237508e713a95?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PUVlmyDBuGd4II7wipQawCSRUyyoxBtJyqdfXBhpYqcPag4kTlvgyDWZ-2IvcF~5kFNqNsf24923sNWKZ8nZL8WxOggJXrejcARhkzwh7G4DCpGN6PpPsbojbKJ3Qv4ZJqd~w6x7vVdcVi1dxsZtNpVzV7M47B9EatTp7nSzXRnMxVhYesCQ02PmC5UvV5TdvYdjQ0jQaNS3mQpebF1tg6UzD6A42UGZFkCZIgcdmekThAWPGexCCjfup9PRWQnQdf~0rdKewsn7LAwxPpR2IwSgivX2O~s46UKJjcVWy9wogq7QX9NAzQIUoV29DVzD18qR7AjB-byeBtuafKvGvg__"
+            src="https://s3-alpha-sig.figma.com/img/1203/cf03/bb9345489f0ac2959e0b644729346c7e?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QsTTmZc0rLNJgBCpuHWLL5loeEOW6QmPzmNTyrl4bSellvqIS1ieS8bF5kVdkTSeFIi7g1n4rt5WO9xoPLawO71FBgjEbc368XmOSf4jkv3~46VYjLGBvoS3q2~VFMqmU-dK5bVBFk0Y8ayggsqIC4o90qCslk8nfmG2sggPPaeqfDM3fmTFd3sehCELMUEQIBooyeIsUJmU6kxGM-53QxtMrLYJQp774tDSGA9W4rQVtztpPWWqLOOtuXN4lZZMezMcP2WQZyJMOb2zdCY5VoNen6dUeXLqK9~JrfWP8DEqEbGSqbv86QQ1NR8SF-HZ-07kzznXDMP-Th47PJSaQw__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
-          <span className="text-[#0F1419] text-xs">Betty Moore</span>
+          <span className="text-[#0F1419] text-xs">Brenda Wilson</span>
         </div>
       ),
       post: 'Autonomous Worlds Ecosystem',
@@ -134,7 +197,7 @@ const ProfileModal = () => {
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">2.012</span>
+          <span className="text-[#0F1419] text-xs">1.034</span>
         </div>
       ),
     },
@@ -147,7 +210,7 @@ const ProfileModal = () => {
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
-          <span className="text-[#0F1419] text-xs">William Miller</span>
+          <span className="text-[#0F1419] text-xs">Steven Garcia</span>
         </div>
       ),
       post: 'Autonomous Worlds Ecosystem',
@@ -155,7 +218,7 @@ const ProfileModal = () => {
       value: (
         <div className="flex items-center space-x-1">
           <Icon />
-          <span className="text-[#0F1419] text-xs">7.126</span>
+          <span className="text-[#0F1419] text-xs">1.126</span>
         </div>
       ),
     },
@@ -269,7 +332,7 @@ const ProfileModal = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, i) => (
+                  {holder16.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
                         {row.holder}

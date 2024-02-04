@@ -145,7 +145,7 @@ const Reward = () => {
                       </div>
                     </div>
 
-                    <span className="text-sm font-medium">#{item.rank}</span>
+                    <span className="text-sm font-medium">#{i + 1}</span>
                   </div>
 
                   <p className="text-black text-xs leading-[20px]">{item.text}</p>

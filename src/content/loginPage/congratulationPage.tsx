@@ -10,7 +10,7 @@ interface CongratulationPageProps {
 
 const CongratulationPage: FC<CongratulationPageProps> = ({ handleButtonClick }) => {
   return (
-    <div className="w-full justify-center text-center items-center">
+    <div className="w-full justify-center text-center items-center min-h-screen">
       <p className="text-[#0F1419] text-[24px] leading-[38px] font-bold text-center mt-[81px] mb-[44px]">
         Congratulations!
       </p>
