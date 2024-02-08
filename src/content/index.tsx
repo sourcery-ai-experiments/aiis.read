@@ -5,6 +5,7 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 
+import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
 
 withProxyStore(<Content />, store).then((component) => {
@@ -12,48 +13,40 @@ withProxyStore(<Content />, store).then((component) => {
   document.body.append(container);
   createRoot(container).render(component);
 
-  // 延迟执行的代码
+  function whereIsUser(): string {
+    // 获取当前页面的 URL
+    const currentUrl = window.location.href.toLowerCase();
+    const urlWordLength = currentUrl.split('/').length;
+    const lastWord = currentUrl.split('/')[urlWordLength - 1];
+
+    const doNotCheckPathList = ['notifications', 'messages', 'i'];
+    // 判断当前页面的 URL 是否符合一般的用户主页 URL 格式
+    if (currentUrl.includes('https://twitter.com/') && urlWordLength === 4 && lastWord === 'home') {
+      return 'home';
+    } else if (urlWordLength === 4 && !doNotCheckPathList.includes(lastWord)) {
+      return 'userPage';
+    } else {
+      return 'unknown';
+    }
+  }
+
+  // 延迟执行的代码 3000毫秒后执行，即3秒
   setTimeout(() => {
-    const thirdElement = document.querySelectorAll(
-      '#react-root > div > div > div > main > div > div > div > div > div > div > div'
-    )[3];
+    setInterval(() => {
+      // 使用示例
+      const userIsOnProfilePage = whereIsUser();
 
-    // 创建 MutationObserver 实例并传入回调函数
-    const observer = new MutationObserver((mutationsList, observer) => {
-      mutationsList.forEach((mutation) => {
-        if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => {
-            // 确保 node 是一个 Element 类型
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const elementNode = node as Element;
-              const newAnchorElements = elementNode.querySelectorAll('a');
+      if (userIsOnProfilePage === 'home') {
+        addTwitterComponent();
+      } else if (userIsOnProfilePage === 'userPage') {
+        console.log('The user is not on a Twitter user profile page.');
+        addUserPagePriceComponent();
+      }
+    }, 1000); // 每秒执行一次
 
-              // 遍历并获取 href 属性
-              const newHrefs = Array.from(newAnchorElements).map((anchor) => {
-                // 明确 anchor 是 HTMLAnchorElement 类型
-                return (anchor as HTMLAnchorElement).href;
-              });
-
-              // 处理新的 hrefs
-              console.log('New hrefs:', newHrefs);
-            }
-          });
-        }
-      });
-    });
-
-    // 开始观察 thirdElement 的子元素
-    observer.observe(thirdElement, { childList: true });
-
-    // 现有元素的处理逻辑
-    const targetElements = thirdElement.querySelectorAll('section > div > div > div');
-    targetElements.forEach(function (element, index) {
-      // const htmlElement = element as HTMLElement;
-      const anchorElements = element.querySelectorAll('a');
-      const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
-      console.log('Element ' + (index + 1) + ' links: ', hrefs);
-    });
-  }, 3000); // 3000毫秒后执行，即3秒
+    // 也可以根据需要设置 clearInterval
+    // clearInterval(intervalId);
+  }, 3000);
 });
 
 async function withProxyStore(children: ReactElement, proxyStore: Store): Promise<ReactElement> {

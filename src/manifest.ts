@@ -10,11 +10,11 @@ const manifest: ManifestV3Export = {
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', 'file:///*'],
+      matches: ['https://twitter.com/*'],
       js: ['src/content/index.tsx'],
     },
   ],
-  host_permissions: ['<all_urls>'],
+  host_permissions: ['https://twitter.com/*', 'https://x.com/*'],
   options_ui: {
     page: 'src/options/options.html',
     open_in_tab: true,
@@ -25,7 +25,7 @@ const manifest: ManifestV3Export = {
         // this file is web accessible; it supports HMR b/c it's declared in `rollupOptions.input`
         'src/welcome/welcome.html',
       ],
-      matches: ['<all_urls>'],
+      matches: ['https://twitter.com/*', 'https://x.com/*'],
     },
   ],
   action: {
