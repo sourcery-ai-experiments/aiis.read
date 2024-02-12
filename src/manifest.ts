@@ -14,7 +14,11 @@ const manifest: ManifestV3Export = {
       js: ['src/content/index.tsx'],
     },
   ],
-  host_permissions: ['https://twitter.com/*', 'https://x.com/*'],
+  host_permissions: [
+    'https://twitter.com/*',
+    'https://x.com/*',
+    'https://fanyi-api.baidu.com/*', // 添加对百度翻译API的访问权限
+  ],
   options_ui: {
     page: 'src/options/options.html',
     open_in_tab: true,

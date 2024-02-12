@@ -5,7 +5,11 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 
-import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
+import {
+  addTranslations,
+  addTwitterComponent,
+  addUserPagePriceComponent,
+} from './addToTwitterHome';
 import Content from './Content';
 
 withProxyStore(<Content />, store).then((component) => {
@@ -46,7 +50,7 @@ withProxyStore(<Content />, store).then((component) => {
 
     // 也可以根据需要设置 clearInterval
     // clearInterval(intervalId);
-  }, 3000);
+  }, 5000);
 });
 
 async function withProxyStore(children: ReactElement, proxyStore: Store): Promise<ReactElement> {

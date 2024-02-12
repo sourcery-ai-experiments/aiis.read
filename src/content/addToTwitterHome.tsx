@@ -1,6 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import browser from 'webextension-polyfill';
 
+import { translateBaiduAPI } from '../../utils/plugins/baiduTranslate';
+import { detectLanguage } from '../../utils/plugins/checkLanguage';
+import { translateGoogleAPI } from '../../utils/plugins/googleTranslate';
 import { FriendPrice } from '../components/twitterAdded/feedsPage/ethIcon';
 import { VoteTwitter } from '../components/twitterAdded/feedsPage/voteIcon';
 import { UserPagePrice } from '../components/twitterAdded/twitterPage/userEthIcon';
@@ -65,6 +69,8 @@ export const addTwitterComponent = () => {
     const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
     const twitterUrlString = hrefs[hrefs.length - 1];
     if (twitterUrlString !== undefined) {
+      const sholdTranslateElements = element.querySelectorAll('article > div');
+      addTranslations(sholdTranslateElements[0], [], String(index));
       const urlObject = new URL(twitterUrlString);
       const pathSegments = urlObject.pathname.split('/');
       const username = pathSegments[1];
@@ -121,4 +127,155 @@ export const addUserPagePriceComponent = () => {
     // root.render();
     specificElement.appendChild(priceContainer);
   }
+};
+
+// 发送翻译请求
+function requestTranslation(text: string, fromLang: string, toLang: string): void {
+  browser.runtime
+    .sendMessage({
+      action: 'translate',
+      payload: {
+        text: text,
+        from: fromLang,
+        to: toLang,
+      },
+    })
+    .then((response) => console.log(response));
+}
+
+function getTextNodes(node: Node, nodes: Node[] = []): Node[] {
+  if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+    nodes.push(node);
+  } else {
+    for (const child of Array.from(node.childNodes)) {
+      getTextNodes(child, nodes);
+    }
+  }
+  return nodes;
+}
+
+export const addTranslations = (node: Node, nodes?: Node[], initId?: string): string[] => {
+  function isNumeric(str: string): boolean {
+    return /^\d+$/.test(str);
+  }
+
+  function checkString(input: string): boolean {
+    const regex = /^[\d.,!?;:-\s]+$/;
+    return regex.test(input);
+  }
+
+  const textNodes = getTextNodes(node, nodes);
+
+  let index = 0;
+  const nodeTexts: string[] = [];
+  const nodeTextsIdList: string[] = [];
+
+  // 找到所有节点中的文字并插入 node 新节点
+  for (const textNode of textNodes) {
+    const textContent = textNode.textContent || '';
+    const text = textContent.trim();
+    const translatedText = 'eaf-translated-node-' + index;
+    const translatedTextId = `translate-${initId}-${String(index)}`;
+    nodeTextsIdList.push(translatedTextId);
+
+    // 检查是否已添加过相同 id 的节点
+    if (document.getElementById(translatedTextId)) {
+      continue;
+    }
+
+    if (
+      text.length === 0 ||
+      text.length === 1 ||
+      checkString(textContent) ||
+      ['nil'].includes(text) ||
+      (textNode.parentNode instanceof Element && textNode.parentNode.tagName === 'BUTTON')
+    ) {
+      continue;
+    }
+
+    if (
+      isNumeric(textContent) ||
+      textContent.startsWith('/r/') ||
+      textContent.startsWith('/u/') ||
+      textContent.startsWith('r/') ||
+      textContent.startsWith('u/') ||
+      textContent.startsWith('level ') ||
+      textContent.endsWith(' ago') ||
+      [
+        'give award',
+        'award',
+        'share',
+        'reply',
+        'cc',
+        'comment as',
+        'posted by',
+        'op',
+        'report',
+        'save',
+        'follow',
+      ].includes(text.toLowerCase()) ||
+      textContent.length < 5 ||
+      textContent.split(' ').length < 5 ||
+      (textNode.parentNode instanceof Element &&
+        textNode.parentNode.classList.contains('button')) ||
+      (textNode.parentNode instanceof Element &&
+        textNode.parentNode.classList.contains('icon-comment'))
+    ) {
+      continue;
+    }
+
+    if (detectLanguage(textContent) === 'zh') {
+      continue;
+    }
+
+    const translatedTextNode = document.createTextNode('translated-code');
+    let translatedNode: HTMLElement;
+
+    if (textContent.length < 18) {
+      translatedNode = document.createElement('span');
+    } else {
+      translatedNode = document.createElement('div');
+    }
+
+    // 设置节点的 id
+    translatedNode.id = translatedTextId;
+
+    translatedNode.appendChild(translatedTextNode);
+    translatedNode.classList.add('eaf-translated');
+    translatedNode.classList.add(translatedText);
+
+    if (textNode.parentNode) {
+      textNode.parentNode.insertBefore(translatedNode, textNode.nextSibling);
+    }
+
+    nodeTexts.push(textContent);
+
+    index++;
+  }
+  // console.log(nodeTexts);
+  // translateBaiduAPI('hello world', 'en', 'zh');
+  requestTranslation('hello world', 'en', 'zh');
+
+  // translateGoogleAPI('hello world', 'en', 'zh');
+  // 翻译 nodeTexts 并获取列表
+  // const useTranslatedText = nodeTexts.join(' ||||| ');
+  // translateBaiduAPI(useTranslatedText, 'en', 'zh').then((res) => {
+  //   if (!res) return;
+  //   const translatesList = res.split('|||||');
+  //   // 检查是否已添加过相同 id 的节点
+  //   // 找到所有节点中的文字并插入 node 新节点
+  //   for (let i = 0; i < nodeTextsIdList.length; i++) {
+  //     const translatedTextId = nodeTextsIdList[i];
+  //     const translatedIdNode = document.getElementById(translatedTextId);
+  //     if (translatedIdNode) {
+  //       if (translatedIdNode.innerText !== '' && translatedIdNode.innerText !== 'translated-code') {
+  //         continue;
+  //       } else {
+  //         translatedIdNode.innerHTML = translatesList[index];
+  //       }
+  //     }
+  //   }
+  // });
+
+  return nodeTexts;
 };

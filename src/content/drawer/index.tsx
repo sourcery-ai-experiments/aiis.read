@@ -6,9 +6,6 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
-import Profile from '../../welcome/Profile';
-import Wallet from '../../welcome/Wallet';
-import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
@@ -60,7 +57,6 @@ export default function PersistentDrawerRight() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <ProfileModal />
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -99,8 +95,6 @@ export default function PersistentDrawerRight() {
           {pageState === 'congratulation' && (
             <CongratulationPage handleButtonClick={() => setPageState('profile')} />
           )}
-          {pageState === 'profile' && <Profile handleButtonClick={() => setPageState('wallet')} />}
-          {pageState === 'wallet' && <Wallet handleButtonClick={() => setPageState('profile')} />}
         </div>
       </Drawer>
     </Box>
