@@ -130,14 +130,14 @@ const Explore = () => {
             {topList.map((item: any, i: any) => (
               <li
                 key={item.id}
-                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                onClick={openProfile}
               >
                 <span className="text-[#0F1419]">{i + 1}</span>
                 <img
-                  onClick={openProfile}
                   src={item.avatar}
                   alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
+                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
                 />
                 <div className="flex-1 flex flex-col space-y-1">
                   <div className="flex items-center space-x-2">
@@ -174,14 +174,14 @@ const Explore = () => {
               .map((item: any, i: any) => (
                 <li
                   key={item.id}
-                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                  onClick={openProfile}
                 >
                   <span className="text-[#0F1419]">{i + 1}</span>
                   <img
-                    onClick={openProfile}
                     src={item.avatar}
                     alt="avatar"
-                    className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
+                    className="w-[44px] h-[44px] mx-[14px] rounded-full"
                   />
                   <div className="flex-1 flex flex-col space-y-1">
                     <div className="flex items-center space-x-2">
@@ -215,14 +215,14 @@ const Explore = () => {
               .map((item, i) => (
                 <li
                   key={item.id}
-                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0]"
+                  className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                  onClick={openProfile}
                 >
                   <span className="text-[#0F1419]">{i + 1}</span>
                   <img
-                    onClick={openProfile}
                     src={item.avatar}
                     alt="avatar"
-                    className="w-[44px] h-[44px] mx-[14px] rounded-full cursor-pointer"
+                    className="w-[44px] h-[44px] mx-[14px] rounded-full"
                   />
                   <div className="flex-1 flex flex-col space-y-1">
                     <div className="flex items-center space-x-2">

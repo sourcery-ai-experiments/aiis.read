@@ -46,7 +46,7 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-xs text-[#0F1419] font-medium">2</span>
+              <span className="text-xs text-[#0F1419] font-medium">12.4</span>
             </div>
             <span className="text-[#919099] text-[15px] font-medium">Pool</span>
           </div>
@@ -173,27 +173,33 @@ const Reward = () => {
                   <div className="flex items-center space-x-[6px]">
                     <img
                       onClick={openProfile}
-                      src={reward[0].avatar}
+                      src={
+                        'https://s3-alpha-sig.figma.com/img/16a6/12ee/d2ba2a61114ee6dbdd48253fd9de078b?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnXDr~Ua225X4bghxl0KjbFys6HMq9bP0iG1w-usKrPP9f3BWWRseeyK7J4FzeBMq7Ck8vkQC1Flo8l5cyyRaIxQT1hdQC4Yeu3m7~U4iRQzi7DHIQAaZuETvYkkk5fQ~jKvXdkh8GtmHnzSMfn~5PT7lMAoHheVGkrxPQLUNuNGGiwTGvLGVIZEzRve~pJGKLEUtBjTl1QsR8SQCE6VL1nEz-ij2T2R~bmU6u7awqTCGeqxNiaGSi-a-zgE-df4pQplYGqxEGiHLl8V8~x8dG~87WjkIP3X5Qr-QMFIZWCfRF9upxYm0H1zeYWJzO-ihcIwmD34oP~2j~9BePw0Lw__'
+                      }
                       alt=""
                       className="w-[44px] rounded-full cursor-pointer"
                     />
                     <div className="flex flex-col space-y-[2px]">
                       <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                        {reward[0].nickname}
+                        {reward[2].nickname}
                       </span>
                       <span
                         className="text-xs text-[#919099]"
                         style={{ fontVariant: 'small-caps' }}
                       >
-                        {reward[0].time}
+                        {reward[3].time}
                       </span>
                     </div>
                   </div>
 
-                  <span className="text-sm font-medium">#{reward[0].rank}</span>
+                  <span className="text-sm font-medium">#{reward[2].rank}</span>
                 </div>
 
-                <p className="text-black text-xs leading-[20px]">{reward[0].text}</p>
+                <p className="text-black text-xs leading-[20px]">
+                  This is one of the most incredible experiences in my investment life: reuniting
+                  with a team after 7 years and backed them again as anon founders unknowingly 🥹
+                  witnessed their tremendous growth across various domains
+                </p>
 
                 <Divider
                   sx={{

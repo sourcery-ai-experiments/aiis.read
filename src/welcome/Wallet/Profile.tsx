@@ -58,7 +58,7 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/5884/a9a3/850993a22ae68a1d928237508e713a95?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=PUVlmyDBuGd4II7wipQawCSRUyyoxBtJyqdfXBhpYqcPag4kTlvgyDWZ-2IvcF~5kFNqNsf24923sNWKZ8nZL8WxOggJXrejcARhkzwh7G4DCpGN6PpPsbojbKJ3Qv4ZJqd~w6x7vVdcVi1dxsZtNpVzV7M47B9EatTp7nSzXRnMxVhYesCQ02PmC5UvV5TdvYdjQ0jQaNS3mQpebF1tg6UzD6A42UGZFkCZIgcdmekThAWPGexCCjfup9PRWQnQdf~0rdKewsn7LAwxPpR2IwSgivX2O~s46UKJjcVWy9wogq7QX9NAzQIUoV29DVzD18qR7AjB-byeBtuafKvGvg__"
+            src="https://s3-alpha-sig.figma.com/img/5884/a9a3/850993a22ae68a1d928237508e713a95?Expires=1708905600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T9lsT36Y6ti1wCGtYr6VAfuk0ThZ7zfLtIfDr75p2Ub0-1iUrD0mrbgjWIwnfmtfh06F8OuNjfd-NJzXTrKuwYqkOhcCQie5y4mchDi1rf4l9F55ETTo7ybPESnOV17zRxKa9GCh6Sre8W5vu4-YZZwupSiOvT9A7Fi-g6WJjSVQgRkPyvBG~xvFGn6ssDX6Ez0mG4pB9sOt~uy~1r5T6SOLrnVKBz3Qv1a9dt5aUyCHjHZ~wFyn4NAYWwfybQQ5fY51cOwmg6X6YnglsE0JnwsFY08fma2IUkLVLYpIMIUBqbwMhAip73a0GG9TL0wlNozEE5mYKteeC2W95RPxHQ__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
@@ -78,7 +78,7 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=J4zCtFmv0fiKRy1eD5~KtUJtyMMPY3KXydDxoe8jWJNN2V6tq1WDqUEvzwyiqW3~ixWv~tcoT3NWC3THoBYywjfv5NPYqarNyPGLmsajnMc-PdMc5IqFU8vAIrmmE2qXtY1ypEoIIcDo3G-IKKFilCN4M45XdYd6SGsnYTrqs-zVbb7K8cASTy-cwQK~eXjY7SSoGkT5EY1wF4XR7KXQzxn7zAI0pGRk46j75-yloV0oGlU3Z3uOnfF0Ol1DzvJKMZ-Lp-j2hOTwCDkCOZG5Ue-X1oviqzH~00fuDVD1QeToOhqBolzZ-BqyDz2BC-yBP2mvvcXtAE4sSQnY5ff3EA__"
+            src="https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1708905600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=e-PgtVkxH~VWHERF-owLSsC09jwWzMlIA83MuTKmxyxS0w6ezHeIHqYwP0n8LqDeteDXcg-h4ZCt1ibsO4wVXYQxboIeWRgDK6YI2NwqLF8UzGHHqJmJmjMs332gN0-RjCeIc01wnO0fQgKQziYRKDtNY4RGZIlEYa3kV03sXdKGBEkm-KsLgnEAwFdcqbTc-m1i-ZxFoVpc3vM9SG6~uo-CWBL5xxyPQme5OqMkmPUw~xvjW620aQaMpiQ-onAwQxeWXRPvPL0c4zXwq3NuTh5Omob8mbOowM9-Enna2-QqUhwuifzMxCsizIY6S-iBu0uVBWfO388p-5Y9ZK0kaw__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
@@ -101,7 +101,7 @@ const ProfileModal = () => {
         <div className="flex items-center space-x-1">
           <img
             onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/b0e6/1e6e/9e0b10bc7df7f8b016a4a4b14a72390c?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jnbGI97jQAvsSduElyoEwhWDBy3ytk-UwcwPR4fNFQEGeEQV~28hanQuhf5r6umsnzldxFhwhONJyKMjTNU2r2st4byQ6livJ7w6D6wI6ZbYfm7MZIMfy5JnzMqplGZ5CWHjnzw84MCz8NlIHKnNlWjWKZajIc6izKmEAz9pMrPxCdOSFT~BTODNdLX9X8cQ52IVybWUQyDjieMs3g69nQrGSufNTGiAjlfO6ZOJj1-R5C7zpMmozB5NCDRCpyQjHuwK6bpVYKF3UomzKKTgts6gX1OcJFyLDoqdugwOiVUuz8GBT6AMunwKhFjIYWTewHsEJiM2evEe8ST1BAX5Yw__"
+            src="https://s3-alpha-sig.figma.com/img/b0e6/1e6e/9e0b10bc7df7f8b016a4a4b14a72390c?Expires=1708905600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QbzfTy62BKZoEECa3NIt1~o1YdznKeE79nKfwJ2eLXuw2csMXa8DSL~AjX2hqfXcV5CaSKQgqPk0nBDdaH1QMzoyApx~2GZyLzYidWjfL~4mAjmWIyAls4NVpTdwgcLmlzONayjLLIiUCmZPGSCLRRr2uGxX1vFBf0A27xQPXL-6Em0g~ufRsv0YMPtBaOTxGxRI35ifobRhI2H7BK3fPHbXojr4L9OMRT3OAoG9FEAVYD0ik7uLeJO5FYCeFS2jb3Yswp6VoYiPKY8EbVSYEQPK-bzVvDzkS6r-lb6vEQq5TOnuvvcDVUncy3wAUSwSXj1fQA15XJhcVVA5qban9w__"
             alt=""
             className="w-5 rounded-full cursor-pointer"
           />
@@ -160,18 +160,8 @@ const ProfileModal = () => {
 
   const ranking = [
     {
-      data: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/d138/c800/8678b73810e3250021201b1c109dfd71?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=B8kiFsfkEy6OxlDBABAKQ9SbzMCUFr1hJz9YucH2N69g-btcYP97j~lPyoYJC6fVOQGGXyr7G7OFMtS1hozUMvkuEsSvyV9f7ysmt6R4WggMeXVhVaEAvfQRqcOvaLvRvt831tVU-B1YR-7R7upWuuIH3B4iUmz6ot4evXmUEInB-NH~zVmkWl5E~kVKKXcX~uxgD8uV0ayHbjFsoxAlZMWbHuTQ2ai9nbBqTTXZfzlon6kOSIc1WVeKWK8qozVpvkp77GHQ1F3nM1HZbMTJZrNNMy8-G3vEJjQLTWHsNZt-3bUgRR5y4-fcPqkP1NHIZ1ezoko3YGY2HndqnzLMWw__"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">Laura Lewis</span>
-        </div>
-      ),
-      post: 'Autonomous Worlds Ecosystem',
+      data: 'Jan 05 2023, 14:32',
+      post: 'Introducing Blast: The only Ethereum L2 with native yield for ETH and stablecoins.',
       rank: 17,
       value: (
         <div className="flex items-center space-x-1">
@@ -181,18 +171,8 @@ const ProfileModal = () => {
       ),
     },
     {
-      data: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/1203/cf03/bb9345489f0ac2959e0b644729346c7e?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QsTTmZc0rLNJgBCpuHWLL5loeEOW6QmPzmNTyrl4bSellvqIS1ieS8bF5kVdkTSeFIi7g1n4rt5WO9xoPLawO71FBgjEbc368XmOSf4jkv3~46VYjLGBvoS3q2~VFMqmU-dK5bVBFk0Y8ayggsqIC4o90qCslk8nfmG2sggPPaeqfDM3fmTFd3sehCELMUEQIBooyeIsUJmU6kxGM-53QxtMrLYJQp774tDSGA9W4rQVtztpPWWqLOOtuXN4lZZMezMcP2WQZyJMOb2zdCY5VoNen6dUeXLqK9~JrfWP8DEqEbGSqbv86QQ1NR8SF-HZ-07kzznXDMP-Th47PJSaQw__"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">Brenda Wilson</span>
-        </div>
-      ),
-      post: 'Autonomous Worlds Ecosystem',
+      data: 'Dec 07 2023, 21:36',
+      post: 'Much like mastering the force of gravity in snowboarding, reflexivity serves as the gravitational force in the capital market',
       rank: 23,
       value: (
         <div className="flex items-center space-x-1">
@@ -202,18 +182,8 @@ const ProfileModal = () => {
       ),
     },
     {
-      data: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1707696000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=J4zCtFmv0fiKRy1eD5~KtUJtyMMPY3KXydDxoe8jWJNN2V6tq1WDqUEvzwyiqW3~ixWv~tcoT3NWC3THoBYywjfv5NPYqarNyPGLmsajnMc-PdMc5IqFU8vAIrmmE2qXtY1ypEoIIcDo3G-IKKFilCN4M45XdYd6SGsnYTrqs-zVbb7K8cASTy-cwQK~eXjY7SSoGkT5EY1wF4XR7KXQzxn7zAI0pGRk46j75-yloV0oGlU3Z3uOnfF0Ol1DzvJKMZ-Lp-j2hOTwCDkCOZG5Ue-X1oviqzH~00fuDVD1QeToOhqBolzZ-BqyDz2BC-yBP2mvvcXtAE4sSQnY5ff3EA__"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">Steven Garcia</span>
-        </div>
-      ),
-      post: 'Autonomous Worlds Ecosystem',
+      data: 'Apr 10 2023, 17:36',
+      post: 'Singapore crypto chads wanting to work with a team, def check out the role open at Primitive- Dovey and the crew are always on the cutting edge of developments.',
       rank: 45,
       value: (
         <div className="flex items-center space-x-1">
@@ -231,7 +201,7 @@ const ProfileModal = () => {
       text: 'Holders (20)',
     },
     {
-      text: 'Holders (16)',
+      text: 'Holding',
     },
     {
       text: ' Tweet Ranking',
@@ -355,7 +325,7 @@ const ProfileModal = () => {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Data</TableCell>
+                    <TableCell>Date</TableCell>
                     <TableCell>Post</TableCell>
                     <TableCell>Rank</TableCell>
                     <TableCell>Reward</TableCell>
@@ -364,7 +334,7 @@ const ProfileModal = () => {
                 <TableBody>
                   {ranking.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">
+                      <TableCell component="th" scope="row" width={180}>
                         {row.data}
                       </TableCell>
                       <TableCell>{row.post}</TableCell>
