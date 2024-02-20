@@ -12,7 +12,11 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   return (
     <div
       className="justify-center items-center text-center w-auto ml-[55px] !cursor-pointer !z-[999]"
-      onClick={() => setVoted(!voted)}
+      onClick={(e) => {
+        setVoted(!voted);
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       {!voted ? (
         <svg

@@ -8,7 +8,13 @@ interface FriendPriceProps {
 
 export const FriendPrice: FC<FriendPriceProps> = ({ price }) => {
   return (
-    <div className="justify-center items-center text-center w-auto">
+    <div
+      className="justify-center items-center text-center w-auto"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <svg
         className="mx-auto mt-[10px] mb-[4px]"
         width="12"
