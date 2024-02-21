@@ -1,5 +1,6 @@
 import React from 'react';
 
+import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 
 import Deposit from './Deposit';
@@ -234,6 +235,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
           <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]">
             Log Out
           </div>
+          <div onClick={() => useGlobalStore.setState({ messageOpen: true })}>123</div>
         </div>
       </div>
     </div>
