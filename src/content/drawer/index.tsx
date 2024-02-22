@@ -6,6 +6,10 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import { ProfileData } from '../../service/login/me';
+import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
+import http, { ResultData } from '../../service/request';
+import useGlobalStore from '../../store/useGlobalStore';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
 import ProfileModal from '../../welcome/Wallet/Profile';
@@ -47,6 +51,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 
 export default function PersistentDrawerRight() {
   const [open, setOpen] = React.useState(false);
+  const [loginLoading, setLoginLoading] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -57,6 +62,87 @@ export default function PersistentDrawerRight() {
   };
 
   const [pageState, setPageState] = React.useState('login');
+
+  React.useEffect(() => {
+    // 获取当前 URL 中的参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const xfansToken = urlParams.get('xfans_token');
+
+    console.log(xfansToken);
+
+    // 获取 xfans_token 参数的值
+    const localStorageToken = localStorage.getItem('xfans-token');
+
+    const loginState = localStorage.getItem('xfans-login-state');
+    const shouldOpenStateList: string[] = ['waitingRedirect', 'waitingInvite'];
+
+    if (shouldOpenStateList.includes(String(loginState))) {
+      setOpen(true);
+    }
+    if (localStorageToken && localStorageToken.length > 0) {
+      // 已经有 token 的情况，登录判断 invite 状态
+      useGlobalStore.setState({ token: localStorageToken });
+      checkProfileData();
+    } else {
+      // 没有 token 的状态，检查 url 是否存在 token
+      if (xfansToken) {
+        // 登录看是否有效，拿到 invite 状态
+        useGlobalStore.setState({ token: xfansToken });
+        localStorage.setItem('xfans-token', xfansToken);
+        clickLogin();
+      }
+    }
+  }, []);
+
+  const checkProfileData = async () => {
+    // https://test-xfans-api.d.buidlerdao.xyz/api/user/me
+    const profileData = (await http.get(`/api/user/me`)) as ResultData<ProfileData>;
+    if (profileData.code === 0) {
+      if (profileData.data.isActive) {
+        setPageState('profile');
+        return 'active';
+      } else {
+        setPageState('invite');
+        return 'waiting invite';
+      }
+    } else {
+      return profileData.message;
+    }
+  };
+
+  const clickLogin = async () => {
+    setLoginLoading(true);
+    // 设置 waiting redirect 缓存
+    localStorage.setItem('xfans-login-state', 'waitingRedirect');
+
+    // 跳转 login link https://test-xfans-api.d.buidlerdao.xyz/api/user/twitter-oauth2
+    const link = (await http.get(`/api/user/twitter-oauth2`)) as ResultData<TwitterOauth2Data>;
+    console.log(link);
+    if (link.code === 0) {
+      window.location.href = link.data.authorizationUrl;
+    }
+  };
+
+  const clickActivate = async (inviteCode: string) => {
+    // https://test-xfans-api.d.buidlerdao.xyz/api/user/activate
+    const activateData = (await http.post(`api/user/activate`, {
+      inviteCode: inviteCode,
+    })) as ResultData;
+    if (activateData.code === 0) {
+      useGlobalStore.setState({
+        message: 'congratulation!',
+        messageType: 'success',
+        messageOpen: true,
+      });
+      setPageState('congratulation');
+    } else {
+      useGlobalStore.setState({
+        message: 'invite code error',
+        messageType: 'error',
+        messageOpen: true,
+      });
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -91,10 +177,10 @@ export default function PersistentDrawerRight() {
           </div>
           <Divider orientation="vertical" flexItem />
           {pageState === 'login' && (
-            <SignInWithXPage handleButtonClick={() => setPageState('invite')} />
+            <SignInWithXPage showLoading={loginLoading} handleButtonClick={() => clickLogin()} />
           )}
           {pageState === 'invite' && (
-            <InvitePage handleButtonClick={() => setPageState('congratulation')} />
+            <InvitePage handleButtonClick={(inviteCode) => clickActivate(inviteCode)} />
           )}
           {pageState === 'congratulation' && (
             <CongratulationPage handleButtonClick={() => setPageState('profile')} />
