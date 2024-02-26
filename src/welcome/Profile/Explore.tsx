@@ -5,7 +5,9 @@ import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 
+import { useShareList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
+import useShareStore from '../../store/useShareStore';
 
 import mockData, { activites, topList } from './mock';
 
@@ -49,14 +51,26 @@ const Up = () => (
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const { run: getShareList } = useShareList();
+  const { shareList } = useShareStore((state) => ({ ...state }));
   const newList = [...topList];
   const timeList = [...topList];
 
   const [value, setValue] = React.useState('1');
 
+  const fetchMap: Record<any, any> = {
+    1: () => {
+      console.log();
+    },
+    4: getShareList,
+  };
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    fetchMap[newValue]();
   };
+
+  console.log(shareList);
   return (
     <div className="px-4">
       <TabContext value={value}>
@@ -254,7 +268,7 @@ const Explore = () => {
           }}
         >
           <ul>
-            {activites.map((item: any, i: any) => (
+            {shareList?.map((item: any, i: any) => (
               <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
                 <span className="text-[#A1A1AA] text-sm">{item.time}</span>
                 <div className="flex items-center justify-between">

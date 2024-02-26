@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -6,7 +6,9 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 
+import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
+import useTweetStore from '../../store/useTweetStore';
 
 import Claim from './Claim';
 import History from './History';
@@ -34,10 +36,28 @@ const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
   const [value, setValue] = React.useState('1');
+  const { run: getTweet } = useTweetList();
+  const { tweetList } = useTweetStore((state) => ({ ...state }));
+
+  const fetchMap: Record<any, any> = {
+    1: getTweet,
+    2: () => {
+      console.log();
+    },
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    fetchMap[newValue]();
   };
+
+  console.log(tweetList);
+
+  useEffect(() => {
+    if (value === '1') {
+      getTweet();
+    }
+  }, []);
 
   return (
     <>
