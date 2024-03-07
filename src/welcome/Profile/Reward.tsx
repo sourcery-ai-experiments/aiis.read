@@ -5,10 +5,13 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import BigNumber from 'bignumber.js';
+import dayjs from 'dayjs';
 
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
 import useTweetStore from '../../store/useTweetStore';
+import useUserStore from '../../store/useUserStore';
 
 import Claim from './Claim';
 import History from './History';
@@ -38,6 +41,10 @@ const Reward = () => {
   const [value, setValue] = React.useState('1');
   const { run: getTweet } = useTweetList();
   const { tweetList } = useTweetStore((state) => ({ ...state }));
+  const { userInfo } = useUserStore((state) => ({ ...state }));
+  const currentIndex = tweetList
+    ? tweetList?.findIndex((item) => item.author?.id === userInfo?.id)
+    : -1;
 
   const fetchMap: Record<any, any> = {
     1: getTweet,
@@ -50,8 +57,6 @@ const Reward = () => {
     setValue(newValue);
     fetchMap[newValue]();
   };
-
-  console.log(tweetList);
 
   useEffect(() => {
     if (value === '1') {
@@ -74,7 +79,12 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-xs text-[#0F1419] font-medium">0.4</span>
+              <span className="text-xs text-[#0F1419] font-medium">
+                {new BigNumber(Number(userInfo?.rewardEarned))
+                  .dividedBy(new BigNumber(Math.pow(10, 18)))
+                  .toNumber()
+                  .toLocaleString(undefined, { maximumFractionDigits: 20 })}
+              </span>
             </div>
             <span className="text-[#919099] text-[15px] font-medium">Your Reward</span>
           </div>
@@ -142,30 +152,33 @@ const Reward = () => {
             }}
           >
             <ul className="py-[22px] border-t border-t-[#EBEEF0]">
-              {reward.map((item, i) => (
+              {tweetList?.map((item, i) => (
                 <li key={i} className="space-y-2 mb-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-[6px]">
                       <img
-                        onClick={openProfile}
-                        src={item.avatar}
+                        onClick={() => {
+                          console.log(item.author);
+                          openProfile(item.author);
+                        }}
+                        src={item.author?.avatar}
                         alt=""
                         className="w-[44px] rounded-full cursor-pointer"
                       />
                       <div className="flex flex-col space-y-[2px]">
                         <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                          {item.nickname}
+                          {item.author?.username}
                         </span>
                         <span
                           className="text-xs text-[#919099]"
                           style={{ fontVariant: 'small-caps' }}
                         >
-                          {item.time}
+                          {dayjs(item.createdAt).locale('en').format('MMM DD YYYY, HH:mm')}
                         </span>
                       </div>
                     </div>
 
-                    <span className="text-sm font-medium">#{i + 1}</span>
+                    <span className="text-sm font-medium">#{item.rank}</span>
                   </div>
 
                   <p className="text-black text-xs leading-[20px]">{item.text}</p>
@@ -188,47 +201,47 @@ const Reward = () => {
             }}
           >
             <ul className="py-[22px] border-t border-t-[#EBEEF0]">
-              <li key={0} className="space-y-2 mb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-[6px]">
-                    <img
-                      onClick={openProfile}
-                      src={
-                        'https://s3-alpha-sig.figma.com/img/16a6/12ee/d2ba2a61114ee6dbdd48253fd9de078b?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnXDr~Ua225X4bghxl0KjbFys6HMq9bP0iG1w-usKrPP9f3BWWRseeyK7J4FzeBMq7Ck8vkQC1Flo8l5cyyRaIxQT1hdQC4Yeu3m7~U4iRQzi7DHIQAaZuETvYkkk5fQ~jKvXdkh8GtmHnzSMfn~5PT7lMAoHheVGkrxPQLUNuNGGiwTGvLGVIZEzRve~pJGKLEUtBjTl1QsR8SQCE6VL1nEz-ij2T2R~bmU6u7awqTCGeqxNiaGSi-a-zgE-df4pQplYGqxEGiHLl8V8~x8dG~87WjkIP3X5Qr-QMFIZWCfRF9upxYm0H1zeYWJzO-ihcIwmD34oP~2j~9BePw0Lw__'
-                      }
-                      alt=""
-                      className="w-[44px] rounded-full cursor-pointer"
-                    />
-                    <div className="flex flex-col space-y-[2px]">
-                      <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                        {reward[2].nickname}
-                      </span>
-                      <span
-                        className="text-xs text-[#919099]"
-                        style={{ fontVariant: 'small-caps' }}
-                      >
-                        {reward[3].time}
-                      </span>
+              {currentIndex >= 0 ? (
+                <li key={0} className="space-y-2 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-[6px]">
+                      <img
+                        onClick={() => openProfile(tweetList?.[currentIndex].author)}
+                        src={tweetList?.[currentIndex].author?.avatar}
+                        alt=""
+                        className="w-[44px] rounded-full cursor-pointer"
+                      />
+                      <div className="flex flex-col space-y-[2px]">
+                        <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
+                          {tweetList?.[currentIndex].author?.username}
+                        </span>
+                        <span
+                          className="text-xs text-[#919099]"
+                          style={{ fontVariant: 'small-caps' }}
+                        >
+                          {dayjs(tweetList?.[currentIndex].createdAt)
+                            .locale('en')
+                            .format('MMM DD YYYY, HH:mm')}
+                        </span>
+                      </div>
                     </div>
+
+                    <span className="text-sm font-medium">#{tweetList?.[currentIndex].rank}</span>
                   </div>
 
-                  <span className="text-sm font-medium">#{reward[2].rank}</span>
-                </div>
+                  <p className="text-black text-xs leading-[20px]">
+                    {tweetList?.[currentIndex].text}
+                  </p>
 
-                <p className="text-black text-xs leading-[20px]">
-                  This is one of the most incredible experiences in my investment life: reuniting
-                  with a team after 7 years and backed them again as anon founders unknowingly 🥹
-                  witnessed their tremendous growth across various domains
-                </p>
-
-                <Divider
-                  sx={{
-                    marginTop: 3,
-                    width: '100%',
-                    borderColor: '#EBEEF0',
-                  }}
-                />
-              </li>
+                  <Divider
+                    sx={{
+                      marginTop: 3,
+                      width: '100%',
+                      borderColor: '#EBEEF0',
+                    }}
+                  />
+                </li>
+              ) : null}
             </ul>
           </TabPanel>
         </TabContext>
