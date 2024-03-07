@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Divider } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,9 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
+import dayjs from 'dayjs';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { useTweetRewardHistory } from '../../service/tweet';
+import useTweetStore from '../../store/useTweetStore';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -85,6 +88,13 @@ const rows = [
 
 const History = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { rewardHistoryList } = useTweetStore((state) => ({ ...state }));
+
+  const { run: getRewardHistory } = useTweetRewardHistory();
+
+  useEffect(() => {
+    getRewardHistory();
+  }, []);
 
   return (
     <>
@@ -109,7 +119,7 @@ const History = () => {
                 Reward claimed:
               </span>
               <div className="flex flex-col space-y-[6px]">
-                <span className="text-xl leading-[20px] font-medium">$294.3</span>
+                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">$294.3</span>
                 <div className="flex items-center space-x-1">
                   <Icon />
                   <span className="text-[#919099] text-sm font-medium">0.2</span>
@@ -172,7 +182,7 @@ const History = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row, i) => (
+                {rewardHistoryList?.map((row, i) => (
                   <TableRow
                     key={i}
                     sx={{
@@ -186,7 +196,7 @@ const History = () => {
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.date}
+                      {dayjs(row.claimedAt).format('YYYY/MM/DD HH:mm')}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -207,14 +217,20 @@ const History = () => {
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.total}
+                      <div className="flex items-center space-x-1">
+                        <Icon />
+                        <span className="text-[#0F1419] text-xs">{row.totalRewardAmount}</span>
+                      </div>
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.reward}
+                      <div className="flex items-center space-x-1">
+                        <Icon />
+                        <span className="text-[#0F1419] text-xs">{row.rewardAmount}</span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,6 +10,9 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { useUserInvite } from '../../service/user';
+import useGlobalStore from '../../store/useGlobalStore';
+import useUserStore from '../../store/useUserStore';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -49,6 +53,13 @@ const rows = [
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
 
+  const { run: getInvite } = useUserInvite();
+  const { inviteInfo } = useUserStore((state) => ({ ...state }));
+
+  useEffect(() => {
+    getInvite();
+  }, []);
+
   return (
     <>
       <BasicButton
@@ -72,14 +83,18 @@ const InviteFriends = () => {
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
                   <span className="text-[#919099] text-sm font-medium">Your Invite</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">5</span>
+                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">
+                    {inviteInfo?.inviteCount}
+                  </span>
                 </div>
               </div>
               <div className="h-[50px] w-[1px] bg-[#EBECED] absolute left-1/2 top-[12px]"></div>
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
                   <span className="text-[#919099] text-sm font-medium">Invite Points</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">10</span>
+                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">
+                    {inviteInfo?.earnedPoints}
+                  </span>
                 </div>
               </div>
             </div>
@@ -89,12 +104,23 @@ const InviteFriends = () => {
             <div className="pl-[26px] text-[#1A1D1F] font-medium flex-1 flex items-center">
               0x415eB....c2764fd
             </div>
-            <div className="flex items-center justify-center bg-[#9A6CF9] w-[186px] cursor-pointer">
-              <div className="flex space-x-2 items-center">
-                <span className="text-white">Copy Invite Code</span>
-                <Copy />
+            <CopyToClipboard
+              text="0x41...64fd"
+              onCopy={() => {
+                useGlobalStore.setState({
+                  messageOpen: true,
+                  messageType: 'succes',
+                  message: 'copy successfully',
+                });
+              }}
+            >
+              <div className="flex items-center justify-center bg-[#9A6CF9] w-[186px] cursor-pointer">
+                <div className="flex space-x-2 items-center">
+                  <span className="text-white">Copy Invite Code</span>
+                  <Copy />
+                </div>
               </div>
-            </div>
+            </CopyToClipboard>
           </div>
 
           <TableContainer
@@ -111,13 +137,13 @@ const InviteFriends = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row, i) => (
+                {inviteInfo?.items?.map((row, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
-                      {row.time}
+                      {row.invitedAt}
                     </TableCell>
-                    <TableCell>{row.user}</TableCell>
-                    <TableCell>{row.value}</TableCell>
+                    <TableCell>{row.invitedUsername}</TableCell>
+                    <TableCell>{row.points}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

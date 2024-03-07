@@ -2,14 +2,18 @@ import { create } from 'zustand';
 
 interface ProfileModalProps {
   open: boolean;
-  openProfile: () => void;
+  openProfile: (userInfo?: any) => void;
   closeProfile: () => void;
+  currentInfo: TopUserProps | null;
 }
 
 const useProfileModal = create<ProfileModalProps>((set) => ({
   open: false,
-  openProfile: () => set({ open: true }),
+  openProfile: (userInfo?: any) => {
+    set({ open: true, currentInfo: userInfo });
+  },
   closeProfile: () => set({ open: false }),
+  currentInfo: null,
 }));
 
 export default useProfileModal;
