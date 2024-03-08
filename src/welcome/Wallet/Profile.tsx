@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import Modal from '../../components/Modal';
@@ -327,7 +328,17 @@ const ProfileModal = () => {
                         <span className="truncate max-w-[200px] inline-block">{row.text}</span>
                       </TableCell>
                       <TableCell>#{row.rank}</TableCell>
-                      <TableCell>{row.reward}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-1">
+                          <Icon />
+                          <span>
+                            {new BigNumber(Number(row.reward))
+                              .dividedBy(new BigNumber(Math.pow(10, 18)))
+                              .toNumber()
+                              .toLocaleString(undefined, { maximumFractionDigits: 20 })}
+                          </span>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

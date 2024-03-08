@@ -219,7 +219,7 @@ const Explore = () => {
                     </div>
 
                     <span className="text-[#919099] text-sm">
-                      {getTimeDistanceFromDate(item.updatedAt)} ago
+                      {getTimeDistanceFromDate(item.createdAt)} ago
                     </span>
                   </div>
                 </div>
