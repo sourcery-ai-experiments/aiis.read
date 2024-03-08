@@ -4,7 +4,7 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
+
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
     <g clipPath="url(#clip0_365_20589)">
@@ -63,8 +63,6 @@ const Left = () => (
 const BuyModal = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
 
-  const getFormattedAddress = useGlobalUserStore((state) => state.getFormattedAddress);
-
   return (
     <>
       <PrimaryButton
@@ -108,7 +106,7 @@ const BuyModal = () => {
           <div className="space-y-4 mt-5 w-full text-black">
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">From</span>
-              <span className="text-lg font-medium">{getFormattedAddress()}</span>
+              <span className="text-lg font-medium">0x41...64fd</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">To</span>
@@ -151,7 +149,7 @@ const BuyModal = () => {
               <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
               <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
                 <Icon1 />
-                <span className="text-lg font-medium">{getFormattedAddress()}</span>
+                <span className="text-lg font-medium">30.24</span>
               </div>
             </div>
           </div>
