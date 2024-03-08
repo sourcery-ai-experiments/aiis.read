@@ -1,9 +1,21 @@
-import React from 'react';
-import { Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Divider, TextField } from '@mui/material';
 import { useToggle } from 'ahooks';
+import BigNumber from 'bignumber.js';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import TruncateText from '../../components/TruncateText';
+import useWallet from '../../hooks/useWallet';
+import {
+  buyShares,
+  getBuyPrice,
+  getBuyPriceAfterFee,
+  getSharesBalance,
+} from '../../service/contract/shares';
+import useGlobalStore from '../../store/useGlobalStore';
+import useProfileModal from '../../store/useProfileModal';
+import { getBigNumberString } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -62,6 +74,57 @@ const Left = () => (
 
 const BuyModal = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { currentInfo } = useProfileModal();
+  const wallet = useWallet();
+  const [price, setPrice] = useState<string>('0');
+  const [transactionFee, setTransactionFee] = useState<string>('0');
+  const [gasFee, setGasFee] = useState<string>('0');
+  const [amount, setAmount] = useState<number>(0);
+  const [priceAfterFee, setPriceAfterFee] = useState('0');
+  const [total, setTotal] = useState('0');
+  const [balance, setBalance] = useState('0');
+  useEffect(() => {
+    if (amount !== 0) {
+      getBuyPrice(amount).then(({ gasFee, price }) => {
+        setGasFee(gasFee);
+        setPrice(price);
+      });
+      getBuyPriceAfterFee(amount).then(setPriceAfterFee);
+    }
+  }, [amount, price]);
+
+  // Transaction fee
+  useEffect(() => {
+    if (price !== '0' && priceAfterFee !== '0') {
+      const _transactionFee = new BigNumber(priceAfterFee).minus(new BigNumber(price));
+      setTransactionFee(_transactionFee.toString());
+    }
+  }, [price, priceAfterFee, transactionFee]);
+
+  useEffect(() => {
+    if (priceAfterFee !== '0' && gasFee !== '0') {
+      const _total = new BigNumber(priceAfterFee).plus(new BigNumber(gasFee));
+      setTotal(_total.toString());
+    }
+  }, [gasFee, priceAfterFee]);
+
+  useEffect(() => {
+    if (currentInfo?.walletAddress) {
+      getSharesBalance(currentInfo?.walletAddress).then((balance) => {
+        setBalance(balance);
+      });
+    }
+  }, [currentInfo?.walletAddress]);
+
+  function handleBuyClick() {
+    buyShares(amount).then(() => {
+      useGlobalStore.setState({
+        message: '购买成功！',
+        messageType: 'succes',
+        messageOpen: true,
+      });
+    });
+  }
 
   return (
     <>
@@ -75,23 +138,33 @@ const BuyModal = () => {
       </PrimaryButton>
       <Modal onClose={close} open={isOpen} width={553}>
         <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32]">Buy Shares of Willaim</h2>
+          <h2 className="text-[24px] font-medium text-[#2E2E32]">Buy {currentInfo?.username}</h2>
           <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
           <div className="mt-6 flex items-center self-start space-x-[6px]">
             <span className="text-[#2E2E32] font-bold text-xl">Price:</span>
             <Icon />
-            <span className="text-xl font-medium text-black">0.2</span>
+            <span className="text-xl font-medium text-black">{getBigNumberString(price)}</span>
           </div>
 
-          <div className="mt-6 rounded-[8px] text-black border border-[#EBECED] py-5 px-6 flex items-center justify-between w-full">
-            <span className="font-medium">Amount</span>
-            <span className="font-medium">2</span>
-          </div>
+          <TextField
+            className="!mt-6 w-full"
+            type="number"
+            label="Amount"
+            onChange={(event) => {
+              const onlyNums = event.target.value.replace(/[^0-9]/g, '');
+              if (onlyNums.length < 10) {
+                setAmount(+onlyNums);
+              } else if (onlyNums.length === 10) {
+                const number = onlyNums.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+                setAmount(+number);
+              }
+            }}
+          />
 
           <div className="mt-4 text-black flex items-center space-x-1 self-end">
             <span className="text-sm">Minimum unit: </span>
-            <span className="text-sm font-medium">0.1 </span>
+            <span className="text-sm font-medium">0.01 </span>
           </div>
 
           <Divider
@@ -106,24 +179,28 @@ const BuyModal = () => {
           <div className="space-y-4 mt-5 w-full text-black">
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">From</span>
-              <span className="text-lg font-medium">0x41...64fd</span>
+              <span className="text-lg font-medium">
+                {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">To</span>
-              <span className="text-lg font-medium">0x32...85fs</span>
+              <span className="text-lg font-medium">
+                {wallet && <TruncateText text={wallet} />}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Transaction Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon1 />
-                <span className="text-lg font-medium">0.002</span>
+                <span className="text-lg font-medium">{getBigNumberString(transactionFee)}</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Est. Gas Fee</span>
               <div className="flex items-center space-x-1">
                 <Icon1 />
-                <span className="text-lg font-medium">0.001</span>
+                <span className="text-lg font-medium">{getBigNumberString(gasFee)}</span>
               </div>
             </div>
           </div>
@@ -142,14 +219,14 @@ const BuyModal = () => {
               <span className="text-lg font-medium">You Pay(Including Fees)</span>
               <div className="flex items-center space-x-1">
                 <Icon1 />
-                <span className="text-2xl font-bold">0.052</span>
+                <span className="text-2xl font-bold">{getBigNumberString(total)}</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
               <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
                 <Icon1 />
-                <span className="text-lg font-medium">30.24</span>
+                <span className="text-lg font-medium">{balance}</span>
               </div>
             </div>
           </div>
@@ -166,10 +243,12 @@ const BuyModal = () => {
                 <span className="text-[15px] font-medium">Go Back</span>
               </div>
             </BasicButton>
+            {/* TODO loading */}
             <PrimaryButton
               classes={{
                 contained: '!py-[10px] !px-[38px] !w-[170px]',
               }}
+              onClick={handleBuyClick}
             >
               <span className="text-[15px] font-medium">Buy</span>
             </PrimaryButton>
