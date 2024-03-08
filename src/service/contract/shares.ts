@@ -14,16 +14,18 @@ export async function getBuyPriceAfterFee(amount: number) {
   return data;
 }
 
-export async function getSellPrice(amount: number) {
+export async function getSellPrice(address: string, amount: number) {
   const data = await http.get<{ gasFee: string; price: string }>('/xfans/api/shares/getSellPrice', {
     amount,
+    address,
   });
   return data;
 }
 
-export async function getSellPriceAfterFee(amount: number) {
+export async function getSellPriceAfterFee(address: string, amount: number) {
   const data = await http.get<string>('/xfans/api/shares/getSellPriceAfterFee', {
     amount,
+    address,
   });
   return data;
 }
@@ -46,7 +48,7 @@ export async function buyShares(amount: number) {
 }
 
 export async function sellShares(amount: number) {
-  http.post<null>('/xfans/api/shares/buy', {
+  http.post<null>('/xfans/api/shares/sell', {
     amount,
   });
 }

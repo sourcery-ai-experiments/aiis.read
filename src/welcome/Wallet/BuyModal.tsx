@@ -7,12 +7,8 @@ import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import TruncateText from '../../components/TruncateText';
 import useWallet from '../../hooks/useWallet';
-import {
-  buyShares,
-  getBuyPrice,
-  getBuyPriceAfterFee,
-  getSharesBalance,
-} from '../../service/contract/shares';
+import { buyShares, getBuyPrice, getBuyPriceAfterFee } from '../../service/contract/shares';
+import { getBalance } from '../../service/contract/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import { getBigNumberString } from '../../utils';
@@ -109,12 +105,12 @@ const BuyModal = () => {
   }, [gasFee, priceAfterFee]);
 
   useEffect(() => {
-    if (currentInfo?.walletAddress) {
-      getSharesBalance(currentInfo?.walletAddress).then((balance) => {
+    if (wallet) {
+      getBalance().then((balance) => {
         setBalance(balance);
       });
     }
-  }, [currentInfo?.walletAddress]);
+  }, [wallet]);
 
   function handleBuyClick() {
     buyShares(amount).then(() => {

@@ -12,7 +12,9 @@ import {
   getSellPrice,
   getSellPriceAfterFee,
   getSharesBalance,
+  sellShares,
 } from '../../service/contract/shares';
+import { getBalance } from '../../service/contract/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import { getBigNumberString } from '../../utils';
@@ -83,15 +85,16 @@ const SellModal = () => {
   const [priceAfterFee, setPriceAfterFee] = useState('0');
   const [total, setTotal] = useState('0');
   const [balance, setBalance] = useState('0');
+  const [shareBalance, setShareBalance] = useState('0');
   useEffect(() => {
-    if (amount !== 0) {
-      getSellPrice(amount).then(({ gasFee, price }) => {
+    if (amount !== 0 && currentInfo?.walletAddress != null) {
+      getSellPrice(currentInfo?.walletAddress, amount).then(({ gasFee, price }) => {
         setGasFee(gasFee);
         setPrice(price);
       });
-      getSellPriceAfterFee(amount).then(setPriceAfterFee);
+      getSellPriceAfterFee(currentInfo?.walletAddress, amount).then(setPriceAfterFee);
     }
-  }, [amount, price]);
+  }, [amount, currentInfo?.walletAddress, price]);
 
   // Transaction fee
   useEffect(() => {
@@ -116,8 +119,16 @@ const SellModal = () => {
     }
   }, [currentInfo?.walletAddress]);
 
+  useEffect(() => {
+    if (wallet) {
+      getBalance().then((balance) => {
+        setBalance(balance);
+      });
+    }
+  }, [wallet]);
+
   function handleSellClick() {
-    buyShares(amount).then(() => {
+    sellShares(amount).then(() => {
       useGlobalStore.setState({
         message: '出售成功！',
         messageType: 'succes',
@@ -152,7 +163,7 @@ const SellModal = () => {
 
             <div className="flex items-center space-x-[6px]">
               <span className="text-[#2E2E32] font-bold text-xl">You Own:</span>
-              <span className="text-xl font-medium">5</span>
+              <span className="text-xl font-medium">{shareBalance}</span>
             </div>
           </div>
 
