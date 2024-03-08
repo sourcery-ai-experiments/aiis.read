@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { useUserInfo } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import useUserStore from '../../store/useUserStore';
 
 import http from '../../service/request';
 import Deposit from './Deposit';
@@ -154,6 +158,12 @@ const GoBack = () => (
 
 const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const { userInfo } = useUserStore((state) => ({ ...state }));
+  const { run: getUserInfo } = useUserInfo();
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   const { balance, getFormattedAddress } = useGlobalUserStore((state) => ({
     ...state,
@@ -184,19 +194,32 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
         <div className="flex items-start justify-between">
           <div className="flex space-x-[14px] items-center">
             <img
-              onClick={openProfile}
-              src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+              onClick={() => openProfile(userInfo)}
+              src={userInfo?.avatar}
               alt="avatar"
               className="w-[70px] h-[70px] rounded-full cursor-pointer"
             />
             <div className="flex flex-col">
-              <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>
-              <div className="flex space-x-2 items-center">
-                <span className="font-medium text-base text-[#919099]">
-                  {getFormattedAddress()}
-                </span>
-                <Copy />
-              </div>
+
+              <span className="#0F1419 text-[20px] leading-[20px] font-bold">
+                @{userInfo?.twitterUsername}
+              </span>
+              <CopyToClipboard
+                text="0x41...64fd"
+                onCopy={() => {
+                  useGlobalStore.setState({
+                    messageOpen: true,
+                    messageType: 'succes',
+                    message: 'copy successfully',
+                  });
+                }}
+              >
+                <div className="flex space-x-2 items-center cursor-pointer">
+                  <span className="font-medium text-base text-[#919099]">0x41...64fd</span>
+                  <Copy />
+                </div>
+              </CopyToClipboard>
+
               <div className="flex space-x-1 items-center">
                 <span className="text-[#919099]">Network:Blast</span>
                 <Network />
@@ -215,7 +238,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">{balance}</span>
+                <span className="text-base text-[#9A6CF9] font-bold">{userInfo?.price}</span>
               </div>
             </div>
 
@@ -226,7 +249,9 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">0.289</span>
+                <span className="text-base text-[#9A6CF9] font-bold">
+                  {userInfo?.tradingFeeEarned}
+                </span>
               </div>
             </div>
 
@@ -237,7 +262,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">22.9092</span>
+                <span className="text-base text-[#9A6CF9] font-bold">{userInfo?.rewardEarned}</span>
               </div>
             </div>
           </div>

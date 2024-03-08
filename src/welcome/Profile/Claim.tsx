@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Divider } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,9 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
+import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { useTweetReward } from '../../service/tweet';
+import useTweetStore from '../../store/useTweetStore';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -85,6 +88,13 @@ const rows = [
 
 const Claim = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { tweetRewardList } = useTweetStore((state) => ({ ...state }));
+
+  const { run: getReward } = useTweetReward();
+
+  useEffect(() => {
+    getReward();
+  }, []);
 
   return (
     <>
@@ -107,7 +117,7 @@ const Claim = () => {
                 Reward:
               </span>
               <div className="flex flex-col space-y-2">
-                <span className="text-xl leading-[20px] font-medium">$294.3</span>
+                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">$294.3</span>
                 <div className="flex items-center space-x-1">
                   <Icon />
                   <span className="text-[#919099] text-sm font-medium">0.2</span>
@@ -178,7 +188,7 @@ const Claim = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row, i) => (
+                {tweetRewardList?.map((row, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell
                       component="th"
@@ -187,35 +197,41 @@ const Claim = () => {
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.date}
+                      {dayjs(row.createdAt).format('YYYY/MM/DD HH:mm')}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.creator}
+                      {/* {row.creator} */}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.rank}
+                      {/* {row.rank} */}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.total}
+                      <div className="flex items-center space-x-1">
+                        <Icon />
+                        <span className="text-[#0F1419] text-xs">0.234</span>
+                      </div>
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.reward}
+                      <div className="flex items-center space-x-1">
+                        <Icon />
+                        <span className="text-[#0F1419] text-xs">1.35</span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

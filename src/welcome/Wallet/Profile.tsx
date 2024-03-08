@@ -7,9 +7,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import http, { ResultData } from '../../service/request';
 import { WalletData } from '../../service/wallet/wallet';
+import dayjs from 'dayjs';
 import Modal from '../../components/Modal';
+import { useHolderList } from '../../service/share';
+import { useTweetList } from '../../service/tweet';
+import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import useShareStore from '../../store/useShareStore';
+import useTweetStore from '../../store/useTweetStore';
 
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';
@@ -33,70 +39,33 @@ const Icon = () => (
 );
 
 const ProfileModal = () => {
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
 
-  const rows = [
-    {
-      holder: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">Devon Lane</span>
-        </div>
-      ),
-      shares: 3,
-      value: (
-        <div className="flex items-center space-x-1">
-          <Icon />
-          <span className="text-[#0F1419] text-xs">1.002</span>
-        </div>
-      ),
-    },
-    {
-      holder: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/5884/a9a3/850993a22ae68a1d928237508e713a95?Expires=1708905600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T9lsT36Y6ti1wCGtYr6VAfuk0ThZ7zfLtIfDr75p2Ub0-1iUrD0mrbgjWIwnfmtfh06F8OuNjfd-NJzXTrKuwYqkOhcCQie5y4mchDi1rf4l9F55ETTo7ybPESnOV17zRxKa9GCh6Sre8W5vu4-YZZwupSiOvT9A7Fi-g6WJjSVQgRkPyvBG~xvFGn6ssDX6Ez0mG4pB9sOt~uy~1r5T6SOLrnVKBz3Qv1a9dt5aUyCHjHZ~wFyn4NAYWwfybQQ5fY51cOwmg6X6YnglsE0JnwsFY08fma2IUkLVLYpIMIUBqbwMhAip73a0GG9TL0wlNozEE5mYKteeC2W95RPxHQ__"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">Betty Moore</span>
-        </div>
-      ),
-      shares: 12,
-      value: (
-        <div className="flex items-center space-x-1">
-          <Icon />
-          <span className="text-[#0F1419] text-xs">2.012</span>
-        </div>
-      ),
-    },
-    {
-      holder: (
-        <div className="flex items-center space-x-1">
-          <img
-            onClick={openProfile}
-            src="https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1708905600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=e-PgtVkxH~VWHERF-owLSsC09jwWzMlIA83MuTKmxyxS0w6ezHeIHqYwP0n8LqDeteDXcg-h4ZCt1ibsO4wVXYQxboIeWRgDK6YI2NwqLF8UzGHHqJmJmjMs332gN0-RjCeIc01wnO0fQgKQziYRKDtNY4RGZIlEYa3kV03sXdKGBEkm-KsLgnEAwFdcqbTc-m1i-ZxFoVpc3vM9SG6~uo-CWBL5xxyPQme5OqMkmPUw~xvjW620aQaMpiQ-onAwQxeWXRPvPL0c4zXwq3NuTh5Omob8mbOowM9-Enna2-QqUhwuifzMxCsizIY6S-iBu0uVBWfO388p-5Y9ZK0kaw__"
-            alt=""
-            className="w-5 rounded-full cursor-pointer"
-          />
-          <span className="text-[#0F1419] text-xs">William Miller</span>
-        </div>
-      ),
-      shares: 43,
-      value: (
-        <div className="flex items-center space-x-1">
-          <Icon />
-          <span className="text-[#0F1419] text-xs">7.126</span>
-        </div>
-      ),
-    },
-  ];
+  const { openProfile, currentInfo } = useProfileModal((state) => ({ ...state }));
+  const { run: getHolderList } = useHolderList();
+  const { run: getTweetList } = useTweetList();
+  const { holderList } = useShareStore((state) => ({ ...state }));
+  const { tweetList } = useTweetStore((state) => ({ ...state }));
+
+  const rows = holderList?.map((item) => ({
+    holder: (
+      <div className="flex items-center space-x-1">
+        <img
+          onClick={() => openProfile(item)}
+          src={item.holderUser?.avatar}
+          alt=""
+          className="w-5 rounded-full cursor-pointer"
+        />
+        <span className="text-[#0F1419] text-xs">{item.holderUser?.username}</span>
+      </div>
+    ),
+    shares: item.holderUser?.holdValue,
+    value: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <span className="text-[#0F1419] text-xs">{item.shares}</span>
+      </div>
+    ),
+  }));
 
   const holder16 = [
     {
@@ -201,7 +170,7 @@ const ProfileModal = () => {
   const [key, setKey] = useState(0);
   const list = [
     {
-      text: 'Holders (20)',
+      text: `Holders (${holderList?.length})`,
     },
     {
       text: 'Holding',
@@ -210,6 +179,19 @@ const ProfileModal = () => {
       text: ' Tweet Ranking',
     },
   ];
+
+  const fetchMap: Record<any, any> = {
+    0: getHolderList,
+    1: getHolderList,
+    2: getTweetList,
+  };
+
+  useEffect(() => {
+    if (open) {
+      getHolderList();
+      getTweetList();
+    }
+  }, [open]);
 
   return (
     <>
@@ -221,20 +203,21 @@ const ProfileModal = () => {
           <div className="flex mt-6 items-center justify-between w-full">
             <div className="flex items-center space-x-[14px]">
               <img
-                onClick={openProfile}
-                src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+                src={currentInfo?.avatar}
                 alt="avatar"
                 className="w-[75px] h-[75px] rounded-full cursor-pointer"
               />
               <div className="flex flex-col space-y-[6px]">
                 <span className="text-[#0F1419] text-[20px] leading-[20px] font-bold">
-                  Devonkokl
+                  {currentInfo?.username}
                 </span>
-                <span className="text-[#919099] text-[16px] leading-[16px] font-medium">@Idoc</span>
+                <span className="text-[#919099] text-[16px] leading-[16px] font-medium">
+                  @{currentInfo?.twitterUsername}
+                </span>
                 <div className="flex items-center space-x-1">
                   <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-[14px]">0.2</span>
+                  <span className="text-[14px]">{currentInfo?.price}</span>
                 </div>
               </div>
             </div>
@@ -250,7 +233,10 @@ const ProfileModal = () => {
           <div className="w-full space-x-[30px] flex">
             {list.map((item, i) => (
               <div
-                onClick={() => setKey(i)}
+                onClick={() => {
+                  setKey(i);
+                  fetchMap[key]();
+                }}
                 key={item.text}
                 className={`rounded-full py-2 px-[18px] font-medium leading-[18px] border border-[#0F1419] ${
                   key === i ? 'bg-[#2C2A2A] text-white' : 'text-[#0F1419] bg-white cursor-pointer'
@@ -276,7 +262,7 @@ const ProfileModal = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, i) => (
+                  {rows?.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
                         {row.holder}
@@ -335,14 +321,16 @@ const ProfileModal = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ranking.map((row, i) => (
+                  {tweetList?.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row" width={180}>
-                        {row.data}
+                        {dayjs(row.createdAt).format('YYYY/MM/DD HH:mm')}
                       </TableCell>
-                      <TableCell>{row.post}</TableCell>
+                      <TableCell>
+                        <span className="truncate max-w-[200px] inline-block">{row.text}</span>
+                      </TableCell>
                       <TableCell>#{row.rank}</TableCell>
-                      <TableCell>{row.value}</TableCell>
+                      <TableCell>{row.reward}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

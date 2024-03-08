@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { useUserInfo } from '../../service/user';
+import useUserStore from '../../store/useUserStore';
 
 import Community from './Community';
 import Explore from './Explore';
@@ -7,6 +10,8 @@ import Reward from './Reward';
 
 const Profile = (props: { handleButtonClick?: () => void }) => {
   const [key, setKey] = useState('explore');
+  const { run: getUserInfo } = useUserInfo();
+  const { userInfo } = useUserStore((state) => ({ ...state }));
 
   const tapMap = [
     {
@@ -28,6 +33,10 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
     community: <Community />,
     reward: <Reward />,
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
@@ -69,7 +78,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
               </clipPath>
             </defs>
           </svg>
-          <span className="ml-1">0.02</span>
+          <span className="ml-1">{userInfo?.holdValue}</span>
         </div>
 
         <div

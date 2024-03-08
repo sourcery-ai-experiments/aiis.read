@@ -38,7 +38,6 @@ const Content = (): ReactElement => {
   const { message, messageType, messageOpen, closeMessage } = useGlobalStore((state) => ({
     ...state,
   }));
-  console.log(message);
 
   useEffect(() => {
     http.get('/api/share/trades', {
