@@ -20,7 +20,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install --frozen-lockfile
+        run: rm -rf node_modules && npm install
 
       - name: Build
         run: npm build
@@ -35,7 +35,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install --frozen-lockfile
+        run: rm -rf node_modules && npm install
 
       - name: Lint
         run: npm ci:test:lint
@@ -50,7 +50,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install --frozen-lockfile
+        run: rm -rf node_modules && npm install
 
       - name: Test types
         run: npm ci:test:types
@@ -74,7 +74,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install --frozen-lockfile
+        run: rm -rf node_modules && npm install
 
       - name: Unit test
         run: npm ci:test:unit
