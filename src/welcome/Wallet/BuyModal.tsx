@@ -63,7 +63,7 @@ const Left = () => (
 const BuyModal = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
 
-  const getFormattedAddress = useGlobalUserStore((state) => state.getFormattedAddress);
+  const balance = useGlobalUserStore((state) => state.balance);
 
   return (
     <>
@@ -151,7 +151,7 @@ const BuyModal = () => {
               <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
               <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
                 <Icon1 />
-                <span className="text-lg font-medium">{getFormattedAddress()}</span>
+                <span className="text-lg font-medium">{balance}</span>
               </div>
             </div>
           </div>
