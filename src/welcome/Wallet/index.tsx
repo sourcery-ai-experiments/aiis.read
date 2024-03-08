@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 
+import http from '../../service/request';
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
@@ -153,6 +155,23 @@ const GoBack = () => (
 const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
 
+  const { balance, getFormattedAddress } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
+
+  useEffect(() => {
+    const getUserAccounts = async () => {
+      const r = (await http.get(
+        `https://test-mpc-xfans-api.buidlerdao.xyz/xfans/api/shares/accounts`
+      )) as any;
+      console.log('user wallet:', r);
+      useGlobalUserStore.setState({
+        accounts: r.accounts,
+        balance: r.balance,
+      });
+    };
+    getUserAccounts();
+  }, []);
   return (
     <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
       <div className="pl-4 py-3 space-x-[10px] flex items-center">
@@ -173,7 +192,9 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
             <div className="flex flex-col">
               <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>
               <div className="flex space-x-2 items-center">
-                <span className="font-medium text-base text-[#919099]">0x41...64fd</span>
+                <span className="font-medium text-base text-[#919099]">
+                  {getFormattedAddress()}
+                </span>
                 <Copy />
               </div>
               <div className="flex space-x-1 items-center">
@@ -194,7 +215,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">30.24</span>
+                <span className="text-base text-[#9A6CF9] font-bold">{balance}</span>
               </div>
             </div>
 
@@ -235,7 +256,6 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
           <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]">
             Log Out
           </div>
-          <div onClick={() => useGlobalStore.setState({ messageOpen: true })}>123</div>
         </div>
       </div>
     </div>

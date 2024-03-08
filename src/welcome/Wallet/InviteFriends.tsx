@@ -9,6 +9,7 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -48,6 +49,7 @@ const rows = [
 
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const getFormattedAddress = useGlobalUserStore((state) => state.getFormattedAddress);
 
   return (
     <>
@@ -87,7 +89,7 @@ const InviteFriends = () => {
 
           <div className="mt-6 w-full flex rounded-[8px] border border-[#EBECED] h-[56px] overflow-hidden text-base">
             <div className="pl-[26px] text-[#1A1D1F] font-medium flex-1 flex items-center">
-              0x415eB....c2764fd
+              {getFormattedAddress()}
             </div>
             <div className="flex items-center justify-center bg-[#9A6CF9] w-[186px] cursor-pointer">
               <div className="flex space-x-2 items-center">
