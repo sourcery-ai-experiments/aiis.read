@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, TextField } from '@mui/material';
-import { useToggle } from 'ahooks';
+import { Divider } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
+import NumberInput from '../../components/NumberInput';
 import TruncateText from '../../components/TruncateText';
 import useWallet from '../../hooks/useWallet';
 import {
-  buyShares,
   getSellPrice,
   getSellPriceAfterFee,
   getSharesBalance,
@@ -17,7 +17,6 @@ import {
 import { getBalance } from '../../service/contract/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
-import { getBigNumberString } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -74,8 +73,11 @@ const Left = () => (
   </svg>
 );
 
-const SellModal = () => {
-  const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+type SellModalProps = {
+  onClose(): void;
+};
+
+const SellModal = ({ onClose }: SellModalProps) => {
   const { currentInfo } = useProfileModal();
   const wallet = useWallet();
   const [price, setPrice] = useState<string>('0');
@@ -86,35 +88,56 @@ const SellModal = () => {
   const [total, setTotal] = useState('0');
   const [balance, setBalance] = useState('0');
   const [shareBalance, setShareBalance] = useState('0');
+  const [isSelling, setIsSelling] = useState(false);
   useEffect(() => {
-    if (amount !== 0 && currentInfo?.walletAddress != null) {
+    if (amount === 0) {
+      setGasFee('0');
+      setPrice('0');
+      setPriceAfterFee('0');
+      return;
+    }
+    let cancel = false;
+    if (currentInfo?.walletAddress != null) {
       getSellPrice(currentInfo?.walletAddress, amount).then(({ gasFee, price }) => {
+        if (cancel) return;
         setGasFee(gasFee);
         setPrice(price);
       });
-      getSellPriceAfterFee(currentInfo?.walletAddress, amount).then(setPriceAfterFee);
+      getSellPriceAfterFee(currentInfo?.walletAddress, amount).then((fee) => {
+        if (cancel) return;
+        setPriceAfterFee(fee);
+      });
     }
-  }, [amount, currentInfo?.walletAddress, price]);
+    return () => {
+      cancel = true;
+    };
+  }, [amount, currentInfo?.walletAddress]);
 
   // Transaction fee
   useEffect(() => {
     if (price !== '0' && priceAfterFee !== '0') {
-      const _transactionFee = new BigNumber(priceAfterFee).minus(new BigNumber(price));
+      const _transactionFee = new BigNumber(price).minus(new BigNumber(priceAfterFee));
       setTransactionFee(_transactionFee.toString());
+    } else {
+      setTransactionFee('0');
     }
   }, [price, priceAfterFee, transactionFee]);
 
+  // total
   useEffect(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
       const _total = new BigNumber(priceAfterFee).plus(new BigNumber(gasFee));
       setTotal(_total.toString());
+    } else {
+      setTotal('0');
     }
   }, [gasFee, priceAfterFee]);
 
+  // shareBalance
   useEffect(() => {
     if (currentInfo?.walletAddress) {
       getSharesBalance(currentInfo?.walletAddress).then((balance) => {
-        setBalance(balance);
+        setShareBalance(balance);
       });
     }
   }, [currentInfo?.walletAddress]);
@@ -127,8 +150,23 @@ const SellModal = () => {
     }
   }, [wallet]);
 
+  // 刷新数据
+  function refresh() {
+    if (currentInfo?.walletAddress) {
+      getSharesBalance(currentInfo?.walletAddress).then((balance) => {
+        setShareBalance(balance);
+      });
+      getBalance().then((balance) => {
+        setBalance(balance);
+      });
+    }
+  }
+
   function handleSellClick() {
-    sellShares(amount).then(() => {
+    setIsSelling(true);
+    sellShares(currentInfo!.walletAddress!, amount).then(() => {
+      setIsSelling(false);
+      refresh();
       useGlobalStore.setState({
         message: '出售成功！',
         messageType: 'succes',
@@ -138,143 +176,136 @@ const SellModal = () => {
   }
 
   return (
-    <>
-      <BasicButton
-        onClick={open}
-        classes={{
-          outlined: '!w-[86px] !px-[30px] !py-[10px]',
-        }}
-      >
-        Sell
-      </BasicButton>
-      <Modal onClose={close} open={isOpen} width={553}>
-        <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32]">
-            Sell Shares of {currentInfo?.username}
-          </h2>
-          <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
+    <Modal onClose={onClose} open width={553}>
+      <div className="relative flex flex-col items-center">
+        <h2 className="text-[24px] font-medium text-[#2E2E32]">
+          Sell Shares of {currentInfo?.username}
+        </h2>
+        <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
 
-          <div className="mt-6 flex items-center w-full justify-between text-black">
-            <div className="flex items-center space-x-[6px]">
-              <span className="text-[#2E2E32] font-bold text-xl">Price:</span>
-              <Icon />
-              <span className="text-xl font-medium">{getBigNumberString(price)}</span>
-            </div>
-
-            <div className="flex items-center space-x-[6px]">
-              <span className="text-[#2E2E32] font-bold text-xl">You Own:</span>
-              <span className="text-xl font-medium">{shareBalance}</span>
-            </div>
+        <div className="mt-6 flex items-center w-full justify-between text-black">
+          <div className="flex items-center space-x-[6px]">
+            <span className="text-[#2E2E32] font-bold text-xl">Price:</span>
+            <Icon />
+            <span className="text-xl font-medium">
+              <NumberDisplayer text={price} />
+            </span>
           </div>
 
-          <TextField
-            className="!mt-6 w-full"
-            type="number"
-            label="Amount"
-            onChange={(event) => {
-              const onlyNums = event.target.value.replace(/[^0-9]/g, '');
-              if (onlyNums.length < 10) {
-                setAmount(+onlyNums);
-              } else if (onlyNums.length === 10) {
-                const number = onlyNums.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-                setAmount(+number);
-              }
-            }}
-          />
-
-          <div className="mt-4 text-black flex items-center space-x-1 self-end">
-            <span className="text-sm">Minimum unit: </span>
-            <span className="text-sm font-medium">0.1 </span>
-          </div>
-
-          <Divider
-            sx={{
-              marginTop: 3,
-              width: '100%',
-              borderColor: '#EBEEF0',
-              borderStyle: 'dashed',
-            }}
-          />
-
-          <div className="space-y-4 mt-5 text-black w-full">
-            <div className="flex items-center justify-between">
-              <span className="text-[#919099] text-lg font-medium">From</span>
-              <span className="text-lg font-medium">
-                {wallet && <TruncateText text={wallet} />}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#919099] text-lg font-medium">To</span>
-              <span className="text-lg font-medium">
-                {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">Transaction Fee</span>
-              <div className="flex items-center space-x-1">
-                <Icon1 />
-                <span className="text-lg font-medium">{getBigNumberString(transactionFee)}</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">Est. Gas Fee</span>
-              <div className="flex items-center space-x-1">
-                <Icon1 />
-                <span className="text-lg font-medium">{getBigNumberString(gasFee)}</span>
-              </div>
-            </div>
-          </div>
-
-          <Divider
-            sx={{
-              marginTop: 3,
-              width: '100%',
-              borderColor: '#EBEEF0',
-              borderStyle: 'dashed',
-            }}
-          />
-
-          <div className="space-y-4 mt-5 text-black w-full">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">You Pay(Including Fees)</span>
-              <div className="flex items-center space-x-1">
-                <Icon1 />
-                <span className="text-2xl font-bold">{getBigNumberString(total)}</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
-              <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
-                <Icon1 />
-                <span className="text-lg font-medium">{balance}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-between w-full my-[30px]">
-            <BasicButton
-              classes={{
-                outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
-              }}
-              onClick={close}
-            >
-              <div className="flex space-x-2 items-center justify-center">
-                <Left />
-                <span className="text-[15px] font-medium">Go Back</span>
-              </div>
-            </BasicButton>
-            <PrimaryButton
-              classes={{
-                contained: '!py-[10px] !px-[38px] !w-[170px]',
-              }}
-              onClick={handleSellClick}
-            >
-              <span className="text-[15px] font-medium">Sell</span>
-            </PrimaryButton>
+          <div className="flex items-center space-x-[6px]">
+            <span className="text-[#2E2E32] font-bold text-xl">You Own:</span>
+            <span className="text-xl font-medium">{+shareBalance / 100}</span>
           </div>
         </div>
-      </Modal>
-    </>
+
+        <NumberInput
+          className="!mt-6"
+          fullWidth
+          label="Amount"
+          max={+shareBalance / 100}
+          disabled={isSelling}
+          onChange={(v) => {
+            setAmount(v ?? 0);
+          }}
+        />
+
+        <div className="mt-4 text-black flex items-center space-x-1 self-end">
+          <span className="text-sm">Minimum unit: </span>
+          <span className="text-sm font-medium">0.01 </span>
+        </div>
+
+        <Divider
+          sx={{
+            marginTop: 3,
+            width: '100%',
+            borderColor: '#EBEEF0',
+            borderStyle: 'dashed',
+          }}
+        />
+
+        <div className="space-y-4 mt-5 text-black w-full">
+          <div className="flex items-center justify-between">
+            <span className="text-[#919099] text-lg font-medium">From</span>
+            <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-[#919099] text-lg font-medium">To</span>
+            <span className="text-lg font-medium">
+              {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-medium">Transaction Fee</span>
+            <div className="flex items-center space-x-1">
+              <Icon1 />
+              <span className="text-lg font-medium">
+                <NumberDisplayer text={transactionFee} />
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-medium">Est. Gas Fee</span>
+            <div className="flex items-center space-x-1">
+              <Icon1 />
+              <span className="text-lg font-medium">
+                <NumberDisplayer text={gasFee} />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <Divider
+          sx={{
+            marginTop: 3,
+            width: '100%',
+            borderColor: '#EBEEF0',
+            borderStyle: 'dashed',
+          }}
+        />
+
+        <div className="space-y-4 mt-5 text-black w-full">
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-medium">You Pay(Including Fees)</span>
+            <div className="flex items-center space-x-1">
+              <Icon1 />
+              <span className="text-2xl font-bold">
+                <NumberDisplayer text={total} />
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-[#919099] text-lg font-medium">Wallet Balance</span>
+            <div className="flex items-center justify-center bg-[#F5F5F5] rounded-full space-x-1 px-5 py-1">
+              <Icon1 />
+              <span className="text-lg font-medium">{balance}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between w-full my-[30px]">
+          <BasicButton
+            classes={{
+              outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
+            }}
+            onClick={onClose}
+          >
+            <div className="flex space-x-2 items-center justify-center">
+              <Left />
+              <span className="text-[15px] font-medium">Go Back</span>
+            </div>
+          </BasicButton>
+          <PrimaryButton
+            classes={{
+              contained: '!py-[10px] !px-[38px] !w-[170px]',
+            }}
+            onClick={handleSellClick}
+            disabled={isSelling}
+          >
+            <span className="text-[15px] font-medium">Sell</span>
+          </PrimaryButton>
+        </div>
+      </div>
+    </Modal>
   );
 };
 

@@ -126,6 +126,7 @@ declare global {
      * 数据更新时间
      */
     updatedAt?: number;
+    createdAt?: number;
     /**
      * 用户名
      */
