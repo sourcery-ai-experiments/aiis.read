@@ -14,6 +14,7 @@ import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useHolderList } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';

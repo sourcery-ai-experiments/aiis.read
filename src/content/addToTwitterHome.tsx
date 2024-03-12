@@ -5,7 +5,7 @@ import { FriendPrice } from '../components/twitterAdded/feedsPage/ethIcon';
 import { VoteTwitter } from '../components/twitterAdded/feedsPage/voteIcon';
 import { UserPagePrice } from '../components/twitterAdded/twitterPage/userEthIcon';
 
-export const addPriceComponent = (element: Element, tweetId: string) => {
+export const addPriceComponent = (element: Element, tweetId: string, twitterUsername: string) => {
   const priceContainer = document.createElement('div');
   const specificElement = element.querySelector(
     'article > div > div > div:nth-child(2) > div:nth-child(1)'
@@ -15,7 +15,7 @@ export const addPriceComponent = (element: Element, tweetId: string) => {
     const root = createRoot(priceContainer);
     root.render(
       <div id={`xfans-price-${tweetId}`}>
-        <FriendPrice price={0.1} />
+        <FriendPrice twitterUsername={twitterUsername} />
       </div>
     );
     specificElement.appendChild(priceContainer);
@@ -75,7 +75,7 @@ export const addTwitterComponent = () => {
       const existingVoteElement = document.getElementById('xfans-vote-' + tweetId);
 
       if (!existingPriceElement) {
-        addPriceComponent(element, tweetId);
+        addPriceComponent(element, tweetId, username);
       } else {
         // console.log('Element already exists for tweetId:', tweetId);
       }

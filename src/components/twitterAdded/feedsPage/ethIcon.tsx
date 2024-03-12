@@ -1,16 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+
+import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useProfileModal from '../../../store/useProfileModal';
+import { NumberDisplayer } from '../../NumberDisplayer';
 
 import '../../../tailwind.css';
-
 interface FriendPriceProps {
-  price: number; // 假设价格是一个数字
+  twitterUsername: string; // 假设价格是一个数字
 }
 
-export const FriendPrice: FC<FriendPriceProps> = ({ price }) => {
+export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const [userInfo, setUserInfo] = useState(null);
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [twitterUsername],
+    (result) => {
+      console.log('batchUserInfo', result);
+      setUserInfo(result?.data?.items?.[0]);
+    },
+    () => {
+      console.log();
+    }
+  );
+
+  useEffect(() => {
+    batchUserInfo(userInfo);
+  }, []);
   return (
     <div
       className="justify-center items-center text-center w-auto"
       onClick={(e) => {
+        openProfile(userInfo);
         e.preventDefault();
         e.stopPropagation();
       }}
@@ -73,7 +93,9 @@ export const FriendPrice: FC<FriendPriceProps> = ({ price }) => {
           </clipPath>
         </defs>
       </svg>
-      <p className="font-medium text-[12px] mx-auto">{price}</p>
+      <p className="font-medium text-[12px] mx-auto">
+        <NumberDisplayer text={userInfo?.price} />
+      </p>
     </div>
   );
 };

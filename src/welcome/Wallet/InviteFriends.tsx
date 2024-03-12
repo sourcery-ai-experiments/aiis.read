@@ -10,8 +10,10 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import TruncateText, { truncateText } from '../../components/TruncateText';
 import { useUserInvite } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
 
 const Copy = () => (
@@ -52,6 +54,7 @@ const rows = [
 
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const accounts = useGlobalUserStore((state) => state.accounts);
 
   const { run: getInvite } = useUserInvite();
   const { inviteInfo } = useUserStore((state) => ({ ...state }));
@@ -102,10 +105,10 @@ const InviteFriends = () => {
 
           <div className="mt-6 w-full flex rounded-[8px] border border-[#EBECED] h-[56px] overflow-hidden text-base">
             <div className="pl-[26px] text-[#1A1D1F] font-medium flex-1 flex items-center">
-              0x415eB....c2764fd
+              <TruncateText text={accounts[0] ?? ''} startLength={7} endLength={7} />
             </div>
             <CopyToClipboard
-              text="0x41...64fd"
+              text={accounts[0] ?? ''}
               onCopy={() => {
                 useGlobalStore.setState({
                   messageOpen: true,

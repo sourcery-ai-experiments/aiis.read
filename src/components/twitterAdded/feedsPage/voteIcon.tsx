@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 
-import '../../../tailwind.css';
+import { useTweetVote } from '../../../service/tweet';
 
+import '../../../tailwind.css';
 interface VoteTwitterProps {
   twitterId: string;
   userName: string;
@@ -9,11 +10,21 @@ interface VoteTwitterProps {
 
 export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   const [voted, setVoted] = useState(false);
+  const { run: requestVote } = useTweetVote(
+    twitterId,
+    userName,
+    () => {
+      setVoted(true);
+    },
+    () => {
+      setVoted(false);
+    }
+  );
   return (
     <div
       className="justify-center items-center text-center w-auto ml-[55px] !cursor-pointer !z-[999]"
       onClick={(e) => {
-        setVoted(!voted);
+        requestVote();
         e.preventDefault();
         e.stopPropagation();
       }}

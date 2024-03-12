@@ -5,9 +5,12 @@ import Switch from '@mui/material/Switch';
 import { useAsyncEffect } from 'ahooks';
 
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import TruncateText from '../../components/TruncateText';
 import useWallet from '../../hooks/useWallet';
 import { useUserInfo } from '../../service/user';
+import { useWalletAccounts } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useProfileModal from '../../store/useProfileModal';
 import useUserStore from '../../store/useUserStore';
 
@@ -210,12 +213,18 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const { run: getUserInfo } = useUserInfo();
-  const account = useWallet();
-
+  const { run: getWalletAccounts } = useWalletAccounts();
   useEffect(() => {
     getUserInfo();
   }, []);
 
+  const { balance, accounts } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
+
+  useEffect(() => {
+    getWalletAccounts();
+  }, []);
   return (
     <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
       <div className="pl-4 py-3 space-x-[10px] flex items-center">
@@ -238,7 +247,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
                 @{userInfo?.twitterUsername}
               </span>
               <CopyToClipboard
-                text={account!}
+                text={accounts[0] ?? '0x0'}
                 onCopy={() => {
                   useGlobalStore.setState({
                     messageOpen: true,
@@ -249,14 +258,14 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               >
                 <div className="flex space-x-2 items-center cursor-pointer">
                   <span className="font-medium text-base text-[#919099]">
-                    {account ? account.replace(/(\w{4})\w+(\w{4})/, '$1....$2') : ''}
+                    <TruncateText text={accounts[0] ?? ''} />
                   </span>
                   <Copy />
                 </div>
               </CopyToClipboard>
 
               <div className="flex space-x-1 items-center">
-                <span className="text-[#919099]">Network:Blast</span>
+                <span className="text-[#919099]">Network:Blast Testnet</span>
                 <Network />
               </div>
             </div>
