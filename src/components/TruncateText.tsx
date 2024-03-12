@@ -19,9 +19,12 @@ export type TruncateTextProps = {
 export default function TruncateText({ text, startLength = 4, endLength = 4 }: TruncateTextProps) {
   const startStr = text.substring(0, startLength);
   const endStr = text.substring(text.length - endLength);
-  return (
-    <span>
-      {startStr}...{endStr}
-    </span>
-  );
+  return <span>{truncateText({ text, startLength, endLength })}</span>;
+}
+
+export function truncateText({ text, startLength = 4, endLength = 4 }: TruncateTextProps) {
+  if (text == null) return '0x0';
+  const startStr = text.substring(0, startLength);
+  const endStr = text.substring(text.length - endLength);
+  return `${startStr}...${endStr}`;
 }

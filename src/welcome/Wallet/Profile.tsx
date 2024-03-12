@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useToggle } from 'ahooks';
 import BigNumber from 'bignumber.js';
-import dayjs from 'dayjs';
-
+import { useToggle } from 'ahooks';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useHolderList } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';
 
@@ -213,7 +212,7 @@ const ProfileModal = () => {
                 <div className="flex items-center space-x-1">
                   <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-[14px]">
+                  <span className="text-[14px] text-[#919099]">
                     <NumberDisplayer text={currentInfo?.price} />
                   </span>
                 </div>
