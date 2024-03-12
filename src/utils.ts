@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 export function formatTime(seconds: any) {
@@ -23,4 +24,11 @@ export function getTimeDistanceFromDate(date: any) {
   const secondsDiff = now.diff(targetDate, 'second');
 
   return formatTime(secondsDiff);
+}
+
+export function getBigNumberString(numStr: string) {
+  return new BigNumber(numStr)
+    .dividedBy(new BigNumber(Math.pow(10, 18)))
+    .toNumber()
+    .toLocaleString(undefined, { maximumFractionDigits: 20 });
 }

@@ -5,14 +5,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import http, { ResultData } from '../../service/request';
-import { WalletData } from '../../service/wallet/wallet';
 import BigNumber from 'bignumber.js';
-import dayjs from 'dayjs';
+import { useToggle } from 'ahooks';
+import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useHolderList } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
-import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useShareStore from '../../store/useShareStore';
@@ -46,6 +45,8 @@ const ProfileModal = () => {
   const { run: getTweetList } = useTweetList();
   const { holderList } = useShareStore((state) => ({ ...state }));
   const { tweetList } = useTweetStore((state) => ({ ...state }));
+  const [isBuyModalOpen, { setLeft: closeBuyModal, setRight: openBuyModal }] = useToggle(false);
+  const [isSellModalOpen, { setLeft: closeSellModal, setRight: openSellModal }] = useToggle(false);
 
   const rows = holderList?.map((item) => ({
     holder: (
@@ -218,14 +219,32 @@ const ProfileModal = () => {
                 <div className="flex items-center space-x-1">
                   <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-[14px]">{currentInfo?.price}</span>
+                  <span className="text-[14px]">
+                    <NumberDisplayer text={currentInfo?.price} />
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="flex space-x-3">
-              <BuyModal />
-              <SellModal />
+              <PrimaryButton
+                onClick={openBuyModal}
+                classes={{
+                  contained: '!w-[86px] !px-[30px] !py-[10px]',
+                }}
+              >
+                Buy
+              </PrimaryButton>
+              <BasicButton
+                onClick={openSellModal}
+                classes={{
+                  outlined: '!w-[86px] !px-[30px] !py-[10px]',
+                }}
+              >
+                Sell
+              </BasicButton>
+              {isBuyModalOpen && <BuyModal onClose={closeBuyModal} />}
+              {isSellModalOpen && <SellModal onClose={closeSellModal} />}
             </div>
           </div>
 

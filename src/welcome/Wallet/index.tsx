@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React, { useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { useUserInfo } from '../../service/user';
@@ -7,7 +6,7 @@ import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
-
+import { truncateText } from '../../components/TruncateText';
 import http from '../../service/request';
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
@@ -165,7 +164,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
     getUserInfo();
   }, []);
 
-  const { balance, getFormattedAddress } = useGlobalUserStore((state) => ({
+  const { balance, accounts } = useGlobalUserStore((state) => ({
     ...state,
   }));
 
@@ -200,12 +199,11 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               className="w-[70px] h-[70px] rounded-full cursor-pointer"
             />
             <div className="flex flex-col">
-
               <span className="#0F1419 text-[20px] leading-[20px] font-bold">
                 @{userInfo?.twitterUsername}
               </span>
               <CopyToClipboard
-                text="0x41...64fd"
+                text={accounts[0] ?? '0x0'}
                 onCopy={() => {
                   useGlobalStore.setState({
                     messageOpen: true,
@@ -215,13 +213,15 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
                 }}
               >
                 <div className="flex space-x-2 items-center cursor-pointer">
-                  <span className="font-medium text-base text-[#919099]">0x41...64fd</span>
+                  <span className="font-medium text-base text-[#919099]">
+                    {truncateText({ text: accounts[0] ?? '' })}
+                  </span>
                   <Copy />
                 </div>
               </CopyToClipboard>
 
               <div className="flex space-x-1 items-center">
-                <span className="text-[#919099]">Network:Blast</span>
+                <span className="text-[#919099]">Network:Blast Testnet</span>
                 <Network />
               </div>
             </div>
@@ -238,7 +238,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               </div>
               <div className="flex space-x-1 items-center">
                 <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">{userInfo?.price}</span>
+                <span className="text-base text-[#9A6CF9] font-bold">{balance}</span>
               </div>
             </div>
 
