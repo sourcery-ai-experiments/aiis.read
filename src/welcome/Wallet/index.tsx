@@ -8,6 +8,8 @@ import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
 import { truncateText } from '../../components/TruncateText';
 import http from '../../service/request';
+import { useWalletAccounts } from '../../service/wallet';
+
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
@@ -159,7 +161,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const { run: getUserInfo } = useUserInfo();
-
+  const { run: getWalletAccounts } = useWalletAccounts();
   useEffect(() => {
     getUserInfo();
   }, []);
@@ -169,17 +171,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
   }));
 
   useEffect(() => {
-    const getUserAccounts = async () => {
-      const r = (await http.get(
-        `https://test-mpc-xfans-api.buidlerdao.xyz/xfans/api/shares/accounts`
-      )) as any;
-      console.log('user wallet:', r);
-      useGlobalUserStore.setState({
-        accounts: r.accounts,
-        balance: r.balance,
-      });
-    };
-    getUserAccounts();
+    getWalletAccounts();
   }, []);
   return (
     <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
