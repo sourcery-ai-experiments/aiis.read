@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
  *
  * eg. 0.0{4}5252
  */
-export function NumberDisplayer({ text = '0' }: { text?: string }) {
+export function NumberDisplayer({ text = '0', className }: { text?: string; className?: string }) {
   // 转成处理过后的字符串形式
   const number = new BigNumber(text).dividedBy(new BigNumber(Math.pow(10, 18))).toFixed();
   // 拆分成2部分
@@ -34,8 +34,9 @@ export function NumberDisplayer({ text = '0' }: { text?: string }) {
     const [, noneZeroRealValue] = (+`0.${noneZeroValue}`).toFixed(4).split('.');
     value = `0{${zeroCount}}${noneZeroRealValue}`;
   }
+
   return (
-    <span>
+    <span className={className}>
       {valueBeforeDot}.{value}
     </span>
   );

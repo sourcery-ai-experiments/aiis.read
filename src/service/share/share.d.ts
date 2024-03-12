@@ -152,5 +152,6 @@ declare global {
     subject?: string;
     subjectUser?: TopUserProps;
     updatedAt?: number;
+    value?: string;
   }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useUserInfo } from '../../service/user';
 import useUserStore from '../../store/useUserStore';
 
@@ -78,7 +79,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
               </clipPath>
             </defs>
           </svg>
-          <span className="ml-1">{userInfo?.holdValue}</span>
+          <NumberDisplayer className="ml-1" text={userInfo?.holdValue} />
         </div>
 
         <div

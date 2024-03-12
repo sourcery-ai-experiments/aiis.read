@@ -43,7 +43,7 @@ const ProfileModal = () => {
   const { openProfile, currentInfo } = useProfileModal((state) => ({ ...state }));
   const { run: getHolderList } = useHolderList();
   const { run: getTweetList } = useTweetList();
-  const { holderList } = useShareStore((state) => ({ ...state }));
+  const { holderList, holderingList } = useShareStore((state) => ({ ...state }));
   const { tweetList } = useTweetStore((state) => ({ ...state }));
   const [isBuyModalOpen, { setLeft: closeBuyModal, setRight: openBuyModal }] = useToggle(false);
   const [isSellModalOpen, { setLeft: closeSellModal, setRight: openSellModal }] = useToggle(false);
@@ -60,11 +60,32 @@ const ProfileModal = () => {
         <span className="text-[#0F1419] text-xs">{item.holderUser?.username}</span>
       </div>
     ),
-    shares: item.holderUser?.holdValue,
+    shares: Number(item.shares) / 100,
     value: (
       <div className="flex items-center space-x-1">
         <Icon />
-        <span className="text-[#0F1419] text-xs">{item.shares}</span>
+        <NumberDisplayer className="text-[#0F1419] text-xs" text={item.value!} />
+      </div>
+    ),
+  }));
+
+  const holding = holderingList?.map((item) => ({
+    holder: (
+      <div className="flex items-center space-x-1">
+        <img
+          onClick={() => openProfile(item)}
+          src={item.subjectUser?.avatar}
+          alt=""
+          className="w-5 rounded-full cursor-pointer"
+        />
+        <span className="text-[#0F1419] text-xs">{item.subjectUser?.username}</span>
+      </div>
+    ),
+    shares: Number(item.shares) / 100,
+    value: (
+      <div className="flex items-center space-x-1">
+        <Icon />
+        <NumberDisplayer className="text-[#0F1419] text-xs" text={item.value!} />
       </div>
     ),
   }));
@@ -182,12 +203,31 @@ const ProfileModal = () => {
     },
   ];
 
+  const fetchMap: Record<string, any> = {
+    0: () =>
+      getHolderList({
+        subject: currentInfo?.walletAddress,
+      }),
+    1: () =>
+      getHolderList({
+        holder: currentInfo?.walletAddress,
+      }),
+    2: () => getTweetList(),
+  };
+
   useEffect(() => {
     if (open) {
-      getHolderList();
-      getTweetList();
+      getHolderList({
+        subject: currentInfo?.walletAddress,
+      });
+    } else {
+      setKey(0);
     }
   }, [open]);
+
+  useEffect(() => {
+    fetchMap[key]();
+  }, [key]);
 
   return (
     <>
@@ -213,9 +253,10 @@ const ProfileModal = () => {
                 <div className="flex items-center space-x-1">
                   <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-[14px]">
-                    <NumberDisplayer text={currentInfo?.price} />
-                  </span>
+                  <NumberDisplayer
+                    className="text-[#0F1419] text-[14px]"
+                    text={currentInfo?.price}
+                  />
                 </div>
               </div>
             </div>
@@ -280,8 +321,8 @@ const ProfileModal = () => {
                       <TableCell component="th" scope="row">
                         {row.holder}
                       </TableCell>
-                      <TableCell>{row.value}</TableCell>
                       <TableCell>{row.shares}</TableCell>
+                      <TableCell>{row.value}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -304,7 +345,7 @@ const ProfileModal = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {holder16.map((row, i) => (
+                  {holding?.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
                         {row.holder}
