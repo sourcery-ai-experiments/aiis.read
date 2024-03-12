@@ -96,4 +96,4 @@ const useTweetBatchUserInfo = (
   return result;
 };
 
-export { useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote, useTweetBatchUserInfo };
+export { useTweetBatchUserInfo, useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote };

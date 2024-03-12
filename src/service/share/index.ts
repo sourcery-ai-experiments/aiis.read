@@ -72,10 +72,16 @@ const useHolderList = () => {
     (params) => http.get('/api/share/holds', params),
     {
       manual: true,
-      onSuccess(response) {
-        useShareStore.setState({
-          holderList: response.data.items,
-        });
+      onSuccess(response, params) {
+        useShareStore.setState(
+          params[0].subject
+            ? {
+                holderList: response.data.items,
+              }
+            : {
+                holderingList: response.data.items,
+              }
+        );
       },
     }
   );

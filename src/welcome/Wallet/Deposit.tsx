@@ -3,8 +3,8 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
 import TruncateText from '../../components/TruncateText';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 
 const Left = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

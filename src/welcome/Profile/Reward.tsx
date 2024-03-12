@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import { useAsyncEffect } from 'ahooks';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
 import useTweetStore from '../../store/useTweetStore';
@@ -38,6 +40,7 @@ const Icon = () => (
 const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
+  const [priceMap, setPriceMap] = useState<Record<string, any>>({});
   const [value, setValue] = React.useState('1');
   const { run: getTweet } = useTweetList();
   const { tweetList } = useTweetStore((state) => ({ ...state }));
@@ -64,6 +67,22 @@ const Reward = () => {
     }
   }, []);
 
+  const getPrice = async () => {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/price');
+
+    if (res.ok) {
+      return res.json();
+    }
+  };
+
+  useAsyncEffect(async () => {
+    const list = await getPrice();
+
+    setPriceMap(list);
+  }, []);
+
+  console.log(priceMap);
+
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
@@ -79,12 +98,10 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex space-x-1 items-center">
               <Icon />
-              <span className="text-xs text-[#0F1419] font-medium">
-                {new BigNumber(Number(userInfo?.rewardEarned))
-                  .dividedBy(new BigNumber(Math.pow(10, 18)))
-                  .toNumber()
-                  .toLocaleString(undefined, { maximumFractionDigits: 20 })}
-              </span>
+              <NumberDisplayer
+                className="text-xs text-[#0F1419] font-medium"
+                text={userInfo?.rewardEarned}
+              />
             </div>
             <span className="text-[#919099] text-[15px] font-medium">Your Reward</span>
           </div>

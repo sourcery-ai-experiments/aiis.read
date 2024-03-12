@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
+
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
@@ -173,9 +174,7 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">
-                        <NumberDisplayer text={item.price} />
-                      </span>
+                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
                     </div>
 
                     <div className="flex items-center space-x-[6px]">
@@ -217,9 +216,7 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">
-                        <NumberDisplayer text={item.price} />
-                      </span>
+                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
                     </div>
 
                     <span className="text-[#919099] text-sm">
@@ -260,9 +257,7 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">
-                        <NumberDisplayer text={item.price} />
-                      </span>
+                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
                     </div>
 
                     <div className="flex items-center space-x-1">
@@ -287,16 +282,18 @@ const Explore = () => {
                 <span className="text-[#A1A1AA] text-sm">
                   {dayjs(item.createdAt).format('YYYY/MM/DD HH:mm')}
                 </span>
-                <div className="flex items-center justify-between">
-                  <div className="flex space-x-5 items-center">
+                <div className="flex items-center justify-between pl-5">
+                  <div className="flex space-x-9 items-center">
                     <div className="flex flex-col items-center w-9">
                       <img
-                        onClick={() => openProfile(item)}
+                        onClick={() => openProfile(item.traderUser)}
                         src={item.traderUser?.avatar}
                         alt="avatar"
                         className="w-9 h-9 rounded-full cursor-pointer"
                       />
-                      <span className="text-[#919099] text-sm">{item.traderUser?.username}</span>
+                      <span className="text-[#919099] text-sm max-w-[80px] truncate">
+                        @{item.traderUser?.username}
+                      </span>
                     </div>
 
                     <span className="font-bold w-12 text-center text-sm">
@@ -305,35 +302,33 @@ const Explore = () => {
 
                     <div className="flex flex-col items-center w-9">
                       <img
-                        onClick={() => openProfile(item)}
+                        onClick={() => openProfile(item.subjectUser)}
                         src={item.subjectUser?.avatar}
                         alt="avatar"
                         className="w-9 h-9 rounded-full cursor-pointer"
                       />
-                      <span className="text-[#919099] text-sm">{item.subjectUser?.username}</span>
+                      <span className="text-[#919099] text-sm max-w-[80px] truncate">
+                        @{item.subjectUser?.username}
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-end">
                     <span
                       className={`text-base font-bold ${
-                        Number(item.shareAmount) > 0 ? 'text-[#16B364]' : 'text-[#FF2E00]'
+                        item.isBuy ? 'text-[#16B364]' : 'text-[#FF2E00]'
                       }`}
                     >
-                      {Number(item.shareAmount) > 0 ? '+' : '-'}
+                      {item.isBuy ? '+' : '-'}
                       {item.shareAmount} Shares
                     </span>
                     <div className="space-x-1 flex items-center">
                       <Icon />
                       <span
-                        className={`text-xs ${
-                          Number(item.ethAmount) > 0 ? 'text-[#FF2E00]' : 'text-[#16B364]'
-                        }`}
+                        className={`text-xs ${!item.isBuy ? 'text-[#FF2E00]' : 'text-[#16B364]'}`}
                       >
-                        {new BigNumber(Number(item.ethAmount))
-                          .dividedBy(new BigNumber(Math.pow(10, 18)))
-                          .toNumber()
-                          .toLocaleString(undefined, { maximumFractionDigits: 20 })}
+                        {item.isBuy ? '-' : '+'}
+                        <NumberDisplayer text={item.ethAmount} />
                       </span>
                     </div>
                   </div>

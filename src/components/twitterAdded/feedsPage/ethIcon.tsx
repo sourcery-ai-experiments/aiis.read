@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import '../../../tailwind.css';
-import useProfileModal from '../../../store/useProfileModal';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useProfileModal from '../../../store/useProfileModal';
 import { NumberDisplayer } from '../../NumberDisplayer';
+
+import '../../../tailwind.css';
 interface FriendPriceProps {
   twitterUsername: string; // 假设价格是一个数字
 }
@@ -17,7 +18,9 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
       console.log('batchUserInfo', result);
       setUserInfo(result?.data?.items?.[0]);
     },
-    () => {}
+    () => {
+      console.log();
+    }
   );
 
   useEffect(() => {

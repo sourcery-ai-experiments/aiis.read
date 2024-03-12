@@ -7,12 +7,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import TruncateText, { truncateText } from '../../components/TruncateText';
+
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
+import TruncateText, { truncateText } from '../../components/TruncateText';
 import { useUserInvite } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
 
 const Copy = () => (

@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 
-import '../../../tailwind.css';
 import { useTweetVote } from '../../../service/tweet';
+
+import '../../../tailwind.css';
 interface VoteTwitterProps {
   twitterId: string;
   userName: string;
