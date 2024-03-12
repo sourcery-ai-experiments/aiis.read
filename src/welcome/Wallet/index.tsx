@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { alpha, styled } from '@mui/material/styles';
+import Switch from '@mui/material/Switch';
 
 import { useUserInfo } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
@@ -153,6 +155,18 @@ const GoBack = () => (
   </svg>
 );
 
+const PurpleSwitch = styled(Switch)(({ theme }) => ({
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#9A6CF9',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#C5A9FF',
+  },
+}));
+
 const Wallet = (props: { handleButtonClick?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
@@ -242,6 +256,16 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               <div className="flex space-x-1 items-center">
                 <Icon />
                 <span className="text-base text-[#9A6CF9] font-bold">{userInfo?.rewardEarned}</span>
+              </div>
+            </div>
+
+            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
+              <div className="flex space-x-3 items-center">
+                <Gift />
+                <span className="text-base font-medium">Hide Twitter Price Tags</span>
+              </div>
+              <div className="flex space-x-1 items-center">
+                <PurpleSwitch />
               </div>
             </div>
           </div>
