@@ -55,12 +55,16 @@ type VoteSuccessFunctionType = () => void;
 
 const useTweetVote = (
   tweetId: string,
-  tweetAuthorId: string,
+  tweetAuthorUsername: string,
   success: VoteSuccessFunctionType,
   error: VoteSuccessFunctionType
 ) => {
   const result = useRequest<ResultData<ItemsResponse<TweetRewardProps>>, unknown[]>(
-    () => http.post('/api/twitter/report', { tweetId: tweetId, tweetAuthorId: tweetAuthorId }),
+    () =>
+      http.post('/api/twitter/report', {
+        tweetId: tweetId,
+        tweetAuthorUsername: tweetAuthorUsername,
+      }),
     {
       manual: true,
       onSuccess: success,
