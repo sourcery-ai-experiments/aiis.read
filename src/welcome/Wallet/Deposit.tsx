@@ -4,6 +4,7 @@ import { useToggle } from 'ahooks';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import TruncateText from '../../components/TruncateText';
 
 const Left = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -26,7 +27,7 @@ const Left = () => (
 
 const Deposit = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  const getFormattedAddress = useGlobalUserStore((state) => state.getFormattedAddress);
+  const accounts = useGlobalUserStore((state) => state.accounts);
 
   return (
     <>
@@ -54,7 +55,7 @@ const Deposit = () => {
             <div className="flex flex-col space-y-[14px]">
               <span className="text-[#919099] text-base font-medium">Address</span>
               <div className="pl-[26px] py-[18px] rounded-[8px] bg-[#F7F9FA] text-base font-medium text-[#1A1D1F]">
-                {getFormattedAddress()}
+                {accounts[0] ?? '0x0'}
               </div>
             </div>
             <div className="flex flex-col space-y-[14px]">

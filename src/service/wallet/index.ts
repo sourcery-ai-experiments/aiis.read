@@ -4,7 +4,7 @@ import useGlobalUserStore from '../../store/useGlobalUserStore';
 import { contractRequestHttp } from '../request';
 
 const useWalletAccounts = () => {
-  const result = useRequest(() => contractRequestHttp.get('/xfans/api/shares/accounts'), {
+  const result = useRequest(() => contractRequestHttp.get('/xfans/api/user/accounts'), {
     manual: true,
     onSuccess(response: any) {
       useGlobalUserStore.setState({

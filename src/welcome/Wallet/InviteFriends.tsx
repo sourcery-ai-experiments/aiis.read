@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import { truncateText } from '../../components/TruncateText';
+import TruncateText, { truncateText } from '../../components/TruncateText';
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
@@ -104,10 +104,10 @@ const InviteFriends = () => {
 
           <div className="mt-6 w-full flex rounded-[8px] border border-[#EBECED] h-[56px] overflow-hidden text-base">
             <div className="pl-[26px] text-[#1A1D1F] font-medium flex-1 flex items-center">
-              {truncateText({ text: accounts[0] ?? '' })}
+              <TruncateText text={accounts[0] ?? ''} startLength={7} endLength={7} />
             </div>
             <CopyToClipboard
-              text={truncateText({ text: accounts[0] ?? '' })}
+              text={accounts[0] ?? ''}
               onCopy={() => {
                 useGlobalStore.setState({
                   messageOpen: true,

@@ -6,8 +6,7 @@ import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
-import { truncateText } from '../../components/TruncateText';
-import http from '../../service/request';
+import TruncateText from '../../components/TruncateText';
 import { useWalletAccounts } from '../../service/wallet';
 
 import Deposit from './Deposit';
@@ -206,7 +205,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
               >
                 <div className="flex space-x-2 items-center cursor-pointer">
                   <span className="font-medium text-base text-[#919099]">
-                    {truncateText({ text: accounts[0] ?? '' })}
+                    <TruncateText text={accounts[0] ?? ''} />
                   </span>
                   <Copy />
                 </div>

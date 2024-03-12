@@ -174,7 +174,7 @@ const Explore = () => {
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
                       <span className="text-[#919099] text-[15px]">
-                        {NumberDisplayer({ text: item.price })}
+                        <NumberDisplayer text={item.price} />
                       </span>
                     </div>
 
@@ -218,7 +218,7 @@ const Explore = () => {
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
                       <span className="text-[#919099] text-[15px]">
-                        {NumberDisplayer({ text: item.price })}
+                        <NumberDisplayer text={item.price} />
                       </span>
                     </div>
 
@@ -261,7 +261,7 @@ const Explore = () => {
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
                       <span className="text-[#919099] text-[15px]">
-                        {NumberDisplayer({ text: item.price })}
+                        <NumberDisplayer text={item.price} />
                       </span>
                     </div>
 
