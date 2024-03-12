@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
@@ -173,7 +173,9 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">{item.tradingVolume}</span>
+                      <span className="text-[#919099] text-[15px]">
+                        {NumberDisplayer({ text: item.price })}
+                      </span>
                     </div>
 
                     <div className="flex items-center space-x-[6px]">
@@ -215,7 +217,9 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">{item.tradingVolume}</span>
+                      <span className="text-[#919099] text-[15px]">
+                        {NumberDisplayer({ text: item.price })}
+                      </span>
                     </div>
 
                     <span className="text-[#919099] text-sm">
@@ -256,7 +260,9 @@ const Explore = () => {
                     <div className="flex items-center space-x-[6px]">
                       <span className="text-[#919099] text-sm">Price</span>
                       <Icon />
-                      <span className="text-[#919099] text-[15px]">{item.price}</span>
+                      <span className="text-[#919099] text-[15px]">
+                        {NumberDisplayer({ text: item.price })}
+                      </span>
                     </div>
 
                     <div className="flex items-center space-x-1">

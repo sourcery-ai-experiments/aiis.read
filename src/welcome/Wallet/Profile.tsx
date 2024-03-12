@@ -39,7 +39,6 @@ const Icon = () => (
 );
 
 const ProfileModal = () => {
-
   const { openProfile, currentInfo } = useProfileModal((state) => ({ ...state }));
   const { run: getHolderList } = useHolderList();
   const { run: getTweetList } = useTweetList();
@@ -219,7 +218,7 @@ const ProfileModal = () => {
                 <div className="flex items-center space-x-1">
                   <span className="text-[#2E2E32] text-[14px] font-bold">Floor Price:</span>
                   <Icon />
-                  <span className="text-[14px]">
+                  <span className="text-[14px] text-[#919099]">
                     <NumberDisplayer text={currentInfo?.price} />
                   </span>
                 </div>
