@@ -7,6 +7,10 @@ import manifest from './src/manifest';
 import removeSrcFromHtmlPaths from './utils/plugins/removeSrcFromHtmlPaths';
 
 export default defineConfig({
+  optimizeDeps: {
+    // 不加这行跑不起来，原因目前未知
+    include: ['react-dom'],
+  },
   build: {
     rollupOptions: {
       input: {

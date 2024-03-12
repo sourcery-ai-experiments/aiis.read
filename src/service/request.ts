@@ -38,6 +38,15 @@ const config = {
   withCredentials: true,
 };
 
+const contractConfig = {
+  // 默认地址请求地址，可在 .env.** 文件中修改
+  baseURL: 'https://test-mpc-xfans-api.buidlerdao.xyz/',
+  // 设置超时时间
+  timeout: ResultEnum.TIMEOUT as number,
+  // 跨域时候允许携带凭证
+  withCredentials: true,
+};
+
 let showMsg = true;
 
 class RequestHttp {
@@ -133,7 +142,7 @@ class RequestHttp {
   /**
    * @description 常用请求方法封装
    */
-  get<T, P>(url: string, params?: P, _object = {}): Promise<ResultData<T>> {
+  get<T>(url: string, params?: object, _object = {}): Promise<T> {
     return this.service.get(url, { params, ..._object });
   }
   post<T>(url: string, params?: object | string, _object = {}): Promise<T> {
@@ -151,3 +160,4 @@ class RequestHttp {
 }
 
 export default new RequestHttp(config);
+export const contractRequestHttp = new RequestHttp(contractConfig);
