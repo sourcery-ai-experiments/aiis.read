@@ -182,12 +182,6 @@ const ProfileModal = () => {
     },
   ];
 
-  const fetchMap: Record<any, any> = {
-    0: getHolderList,
-    1: getHolderList,
-    2: getTweetList,
-  };
-
   useEffect(() => {
     if (open) {
       getHolderList();
@@ -255,7 +249,6 @@ const ProfileModal = () => {
               <div
                 onClick={() => {
                   setKey(i);
-                  fetchMap[key]();
                 }}
                 key={item.text}
                 className={`rounded-full py-2 px-[18px] font-medium leading-[18px] border border-[#0F1419] ${
