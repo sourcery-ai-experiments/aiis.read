@@ -51,4 +51,24 @@ const useTweetRewardHistory = () => {
   return result;
 };
 
-export { useTweetList, useTweetReward, useTweetRewardHistory };
+type VoteSuccessFunctionType = () => void;
+
+const useTweetVote = (
+  tweetId: string,
+  tweetAuthorId: string,
+  success: VoteSuccessFunctionType,
+  error: VoteSuccessFunctionType
+) => {
+  const result = useRequest<ResultData<ItemsResponse<TweetRewardProps>>, unknown[]>(
+    () => http.post('/api/twitter/report', { tweetId: tweetId, tweetAuthorId: tweetAuthorId }),
+    {
+      manual: true,
+      onSuccess: success,
+      onError: error,
+    }
+  );
+
+  return result;
+};
+
+export { useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote };
