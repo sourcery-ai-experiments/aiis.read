@@ -17,13 +17,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install
+        run: rm -rf node_modules && pnpm install --frozen-lockfile
 
       - name: Build
-        run: npm build
+        run: pnpm build
 
   lint:
     runs-on: ubuntu-latest
@@ -32,13 +32,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install
+        run: rm -rf node_modules && pnpm install --frozen-lockfile
 
       - name: Lint
-        run: npm ci:test:lint
+        run: pnpm ci:test:lint
 
   typecheck:
     runs-on: ubuntu-latest
@@ -47,13 +47,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install
+        run: rm -rf node_modules && pnpm install --frozen-lockfile
 
       - name: Test types
-        run: npm ci:test:types
+        run: pnpm ci:test:types
 
   unit:
     runs-on: ${{ matrix.os }}
@@ -71,10 +71,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: rm -rf node_modules && npm install
+        run: rm -rf node_modules && pnpm install --frozen-lockfile
 
       - name: Unit test
-        run: npm ci:test:unit
+        run: pnpm ci:test:unit
