@@ -44,6 +44,25 @@ const Network = () => (
   </svg>
 );
 
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M12 10C14.2091 10 16 8.20914 16 6C16 3.79086 14.2091 2 12 2C9.79086 2 8 3.79086 8 6C8 8.20914 9.79086 10 12 10Z"
+      stroke="#2E2E32"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M21 22C21 17.0294 16.9706 13 12 13C7.02945 13 3 17.0294 3 22"
+      stroke="#2E2E32"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const WalletIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
@@ -210,6 +229,17 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
 
         <div className="mt-10">
           <div className="space-y-[15px]">
+            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
+              <div className="flex space-x-3 items-center">
+                <UserIcon />
+                <span className="text-base font-medium">Portfolio Value</span>
+              </div>
+              <div className="flex space-x-1 items-center">
+                <Icon />
+                <span className="text-base text-[#9A6CF9] font-bold">{userInfo?.holdValue}</span>
+              </div>
+            </div>
+
             <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
               <div className="flex space-x-3 items-center">
                 <WalletIcon />
