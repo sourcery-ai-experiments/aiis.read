@@ -287,8 +287,8 @@ const ProfileModal = () => {
                       <TableCell component="th" scope="row">
                         {row.holder}
                       </TableCell>
-                      <TableCell>{row.shares}</TableCell>
                       <TableCell>{row.value}</TableCell>
+                      <TableCell>{row.shares}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
