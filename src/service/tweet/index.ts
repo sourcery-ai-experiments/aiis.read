@@ -75,4 +75,25 @@ const useTweetVote = (
   return result;
 };
 
-export { useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote };
+type BatchUserInfoSuccessFunctionType = (result: any) => void;
+const useTweetBatchUserInfo = (
+  twitterUsernames: string[],
+  success: BatchUserInfoSuccessFunctionType,
+  error: VoteSuccessFunctionType
+) => {
+  const result = useRequest<ResultData<ItemsResponse<TweetRewardProps>>, unknown[]>(
+    () =>
+      http.get('/api/user/batch', {
+        twitterUsernames: JSON.stringify(twitterUsernames),
+      }),
+    {
+      manual: true,
+      onSuccess: success,
+      onError: error,
+    }
+  );
+
+  return result;
+};
+
+export { useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote, useTweetBatchUserInfo };
