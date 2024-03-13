@@ -9,10 +9,11 @@ import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import dayjs from 'dayjs';
 
-import { BasicButton, PrimaryButton } from '../../components/Button';
+import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { useTweetReward } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
+import { useWalletClaimReward } from '../../service/wallet';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -92,6 +93,25 @@ const Claim = () => {
 
   const { run: getReward } = useTweetReward();
 
+  /*
+(index=2,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["877c7a6afac7a1fb0ef4579e11d4585cb37842b5f0031649cc0528d902a82596","702a8c1786ae8aef1ee2322a325247897950a17c8de6d04edb78e096b272f0c4","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+(index=3,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["0637bbffaf6f1ec2bd5fc12238f0a24cee574963524781f8db2390486e5b2396","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+(index=4,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["d6b667c9ea2e66dfab42a8c85b14ac0e70886f1206306cdd472b3793aea5d788","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+(index=5,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["5cd70a734862fe4715ebbeeeda058344b92599ce7a5ad6b172ece947318c6c38"])
+*/
+  const { loading, run: claimReward } = useWalletClaimReward(
+    '3',
+    '0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E',
+    '1000000000000',
+    [
+      '0637bbffaf6f1ec2bd5fc12238f0a24cee574963524781f8db2390486e5b2396',
+      '5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744',
+      'e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08',
+    ],
+    () => {},
+    () => {}
+  );
+
   useEffect(() => {
     getReward();
   }, []);
@@ -125,13 +145,20 @@ const Claim = () => {
               </div>
             </div>
 
-            <PrimaryButton
+            <PrimaryLoadingButton
               classes={{
                 contained: '!py-[14px] !px-[30px] !w-[170px]',
               }}
+              onClick={() => {
+                claimReward();
+              }}
+              disabled={loading}
+              loading={loading}
+              loadingPosition="end"
+              endIcon={<span />}
             >
               Claim
-            </PrimaryButton>
+            </PrimaryLoadingButton>
           </div>
 
           <Divider

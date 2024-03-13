@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button as MButton, ButtonProps } from '@mui/material/';
+import { LoadingButton, LoadingButtonProps } from '@mui/lab';
 import { styled } from '@mui/material/styles';
 
 const BasicStyleButton = styled(MButton)({
@@ -16,7 +17,7 @@ const BasicStyleButton = styled(MButton)({
   },
 });
 
-const PrimaryStyleButton = styled(MButton)({
+const primaryStyle = {
   boxShadow: 'none',
   color: '#FFFFFF',
   backgroundColor: '#9A6CF9',
@@ -27,7 +28,11 @@ const PrimaryStyleButton = styled(MButton)({
     boxShadow: 'none',
     backgroundColor: '#9A6CF9',
   },
-});
+};
+
+const PrimaryStyleButton = styled(MButton)(primaryStyle as any);
+
+const PrimaryStyleLoadingButton = styled(LoadingButton)(primaryStyle as any);
 
 const BasicButton = (props: ButtonProps) => {
   return (
@@ -45,6 +50,14 @@ const PrimaryButton = (props: ButtonProps) => {
   );
 };
 
-export { BasicButton, PrimaryButton };
+const PrimaryLoadingButton = (props: LoadingButtonProps) => {
+  return (
+    <PrimaryStyleLoadingButton variant="contained" disableRipple {...props}>
+      {props.children}
+    </PrimaryStyleLoadingButton>
+  );
+};
+
+export { BasicButton, PrimaryButton, PrimaryLoadingButton };
 
 export default MButton;
