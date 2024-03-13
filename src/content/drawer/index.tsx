@@ -64,32 +64,29 @@ export default function PersistentDrawerRight() {
   const [pageState, setPageState] = React.useState('login');
 
   React.useEffect(() => {
-    // 获取当前 URL 中的参数
-    const urlParams = new URLSearchParams(window.location.search);
-    const xfansToken = urlParams.get('xfans_token');
-
-    console.log(xfansToken);
-
-    // 获取 xfans_token 参数的值
-    const localStorageToken = localStorage.getItem('xfans-token');
-
+    // 先检查是否需要展开
     const loginState = localStorage.getItem('xfans-login-state');
     const shouldOpenStateList: string[] = ['waitingRedirect', 'waitingInvite'];
-
     if (shouldOpenStateList.includes(String(loginState))) {
       setOpen(true);
     }
-    if (localStorageToken && localStorageToken.length > 0) {
-      // 已经有 token 的情况，登录判断 invite 状态
-      useGlobalStore.setState({ token: localStorageToken });
+
+    // 再获取url中的token 作为第一优先级
+    const urlParams = new URLSearchParams(window.location.search);
+    const xfansToken = urlParams.get('xfans_token');
+    console.log(xfansToken);
+    if (xfansToken) {
+      // 登录看是否有效，拿到 invite 状态
+      useGlobalStore.setState({ token: xfansToken });
+      localStorage.setItem('xfans-token', xfansToken);
       checkProfileData();
     } else {
-      // 没有 token 的状态，检查 url 是否存在 token
-      if (xfansToken) {
-        // 登录看是否有效，拿到 invite 状态
-        useGlobalStore.setState({ token: xfansToken });
-        localStorage.setItem('xfans-token', xfansToken);
-        clickLogin();
+      // 获取 xfans_token 参数的值
+      const localStorageToken = localStorage.getItem('xfans-token');
+      if (localStorageToken && localStorageToken.length > 0) {
+        // 已经有 token 的情况，登录判断 invite 状态
+        useGlobalStore.setState({ token: localStorageToken });
+        checkProfileData();
       }
     }
   }, []);
@@ -144,6 +141,13 @@ export default function PersistentDrawerRight() {
     }
   };
 
+  const logout = () => {
+    setPageState('login');
+    useGlobalStore.setState({ token: '' });
+    localStorage.setItem('xfans-token', '');
+    localStorage.setItem('xfans-login-state', '');
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <ProfileModal />
@@ -172,7 +176,7 @@ export default function PersistentDrawerRight() {
         open={open}
       >
         <div className="flex">
-          <div className="h-[24px] w-[24px] mt-[37px] mx-[2px]">
+          <div className="mx-[2px] mt-[37px] h-[24px] w-[24px]">
             <ChevronRightIcon onClick={handleDrawerClose} className="m-0 w-[24px] cursor-pointer" />
           </div>
           <Divider orientation="vertical" flexItem />
@@ -186,7 +190,9 @@ export default function PersistentDrawerRight() {
             <CongratulationPage handleButtonClick={() => setPageState('profile')} />
           )}
           {pageState === 'profile' && <Profile handleButtonClick={() => setPageState('wallet')} />}
-          {pageState === 'wallet' && <Wallet handleButtonClick={() => setPageState('profile')} />}
+          {pageState === 'wallet' && (
+            <Wallet back={() => setPageState('profile')} logout={logout} />
+          )}
         </div>
       </Drawer>
     </Box>

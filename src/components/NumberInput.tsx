@@ -11,6 +11,7 @@ type NumberInputProps = {
   label?: string;
   max?: number;
   min?: number;
+  size?: 'small' | 'medium';
   onChange(value: number | null): void;
 };
 export default function NumberInput({
