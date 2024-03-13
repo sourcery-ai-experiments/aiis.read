@@ -11,16 +11,15 @@ interface FriendPriceProps {
 
 export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState({ price: '0' });
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [twitterUsername],
     (result) => {
       console.log('batchUserInfo', result);
       setUserInfo(result?.data?.items?.[0]);
     },
-    () => {
-      console.log();
-    }
+    () => undefined
+
   );
 
   useEffect(() => {
