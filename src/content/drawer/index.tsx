@@ -172,7 +172,7 @@ export default function PersistentDrawerRight() {
         open={open}
       >
         <div className="flex">
-          <div className="h-[24px] w-[24px] mt-[37px] mx-[2px]">
+          <div className="mx-[2px] mt-[37px] h-[24px] w-[24px]">
             <ChevronRightIcon onClick={handleDrawerClose} className="m-0 w-[24px] cursor-pointer" />
           </div>
           <Divider orientation="vertical" flexItem />

@@ -1,55 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import StackModal from './community/StackModal';
 
 const list = [
   {
     avatar:
-      'https://s3-alpha-sig.figma.com/img/cafb/bfb3/79841c5839bda8db1c23698bcd76f327?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Z~9PwIwBNGImUSsrQbjgcHzw~HyMFI1psmUWKcMYNaylxi9R7FAx5FOHCY8JgX97SB8veSosooX8L88ZTYOgwaEKyT9hXzbyRHg67PnirX6vxwmr-49ZIWnIIlajVVvH4~b8H9bjrrS0efWVYmFDTR2UU7muBjEyBaOv~~Bdz2wP~EBsD1tZ2Ox3X5wByacUb1Gen9cSRjXp5V2xEuVLldu~UUU7rVlCb~jpZ~qLyG8K7t~YqZyfrfvfvIJ66y--P7lSgH3uOTb5jo0i-Xw0LDNUhmOHgX1SekOqEe-8V0SWO3wHwBvA4-GGsef5MAW5cKBdMdab0~eyQU6C7h1Y0g__',
+      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
     title: 'Damo‘s  Community',
     text: '[12] frank：hi frens',
   },
   {
     avatar:
-      'https://s3-alpha-sig.figma.com/img/1203/cf03/bb9345489f0ac2959e0b644729346c7e?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=KJ8hCWPSoBza1eLqmxr4B6InmTHdHP1xO8EQRuIcGvDZ4wi~qaKyRmh0gAfTqGdmkxIiAaosFbW1jHfR5TD2~ET5ak017f-6y5mx5BqCmVD2jtRDZORwwDNj175dE-zA5EasjO1XF~t77KdDeIzuPCfZtCB9oYn6AMkGLxNrSqDWuvrSxloa-llXwOT20hGLDzQmF7TOXPaOgwBWt1XuZk2Bq5Ns~1A~nAzjfA6e3ywYJJ3Nh6BHKcuItbYbdFtzBqBX56IWH1M9WT4YiycEmrLqZ7NshcUWqXT5NoDZBnQmWvz3YhHN8Ie9tX6hWSMfeV6egAjanGFYuN4yDrLU4g__',
+      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
     title: 'Esther‘s  Community',
     text: '[16] Cook：Over 30M was collected from free mium ',
   },
   {
     avatar:
-      'https://s3-alpha-sig.figma.com/img/d712/b94a/0f3c705a168c7a61bdcc46bb8982e19e?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=MZ3iw21cVVnb2cpL5nYu5TWrk4UD66G~dTFXD6zCsoojSxZkzxi5~YOidx~0gt9A21HUSA3tQXoGAqDW5rFKoQYaf8gDLaJq39~FB91jt1~zIAA0YZHnoCtoVZKMlZqprsDNfm8v~lIdFRh6pCu-0Quinae9kLDkWEMGzFzktLYeUn5waO0m-FZVWkEDKZwIuNRG7Qav8-fm87deHRqxlRFUB5JB8ljMr6KGQxOFZrELwscItwL49S5gD~ne9Vn0cYSTQBcfcyg9zjJ3ay6AhrCqn~Ydbuc5tA8A9hhmhSwvpK3rGaR8QymL0Z1I60D0EIfb0D4axvFfoiV7szFg~A__',
+      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
     title: 'Bessie‘s  Community',
-    text: '[18] Poing：2024 will be a fruitful year for  stakers',
+    text: '[18] Poing：2024 will be a fruitful year for  stakers 2024 will be a fruitful year for  stakers',
   },
   {
     avatar:
-      'https://s3-alpha-sig.figma.com/img/0f68/3ae1/4ab8a414136ff5309aa90fce411b6961?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=WIAWPZMGC5Pn8jHuv6knMVyzT2BHbRYITNgg2ejTmoOBGKqIVAn-XEs21N228jjXmWc9iRCcZEZpdPzoNUOhDe6U997zvQGDcZaS87Q9GlS7p3dFGCzHnFdloT3pruWZ5yyaQi0objGE0jUEJawP659IwibYua35jwbzR8C6QFEjmB-mgl9iXYRYreABfn4l4ElMWEpT-xia-OYEUgpBWvqUKxWSpfKGbg3VUiipKmAOuPVz~Ro8ahnWWPXw~0KEsSWvQl5Cr-Q7hgcX0Ne9GyY5vWYvYGgELcNOpmNB88of8Dq~EnLwRwRVNK4tl8SkwNo1VQhrv5ZUJscmEKGJxw__',
+      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
     title: 'Richards‘s  Community',
     text: '[20] Moke：hi frens',
   },
 ];
 
 const Community = () => {
+  const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const list1 = Array(4).fill('');
 
   return (
-    <div className="mx-4 relative">
-      <div
-        className="absolute w-full h-full flex items-center justify-center"
-        style={{
-          background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.78) 43.09%, #FFF 110.54%)',
-        }}
-      >
-        <span
-          className="text-[#9A6CF9] text-[27px] font-bold"
-          style={{
-            textShadow: '3px 4px 5.1px rgba(154, 108, 249, 0.50)',
-            letterSpacing: 3,
-            marginTop: -120,
-          }}
-        >
-          Coming soon
-        </span>
-      </div>
+    <div className="relative mx-4">
       <ul>
         {list.map((item, i) => (
           <li
@@ -60,14 +45,14 @@ const Community = () => {
           >
             <div className="ml-3 flex items-center">
               <img src={item.avatar} alt="" className="w-[44px] rounded-full" />
-              <div className="ml-[28px]">
+              <div className="ml-[28px] flex-1 overflow-hidden">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center">
-                    <span className="text-sm text-black font-medium w-[210px]">{item.title}</span>
-                    <span className="text-[#A1A1AA] text-xs ml-10">21:22</span>
+                    <span className="w-[210px] text-sm font-medium text-black">{item.title}</span>
+                    <span className="ml-10 text-xs text-[#A1A1AA]">21:22</span>
                   </div>
 
-                  <p className="text-[#5B7083] text-xs">{item.text}</p>
+                  <p className="truncate text-xs text-[#5B7083]">{item.text}</p>
                 </div>
               </div>
             </div>
@@ -75,33 +60,93 @@ const Community = () => {
         ))}
       </ul>
 
-      <p className="text-center mt-10 text-[#9A6CF9] text-[15px] font-medium">
-        The Following Are Unlocked Communities
+      <p className="mt-10 text-center text-[15px] font-medium text-[#9A6CF9]">
+        The Following Are Locked Communities
       </p>
 
       <ul className="mt-4 space-y-[10px]">
         {list1.map((item, i) => (
           <li
             key={i}
-            className="py-2 px-3 flex items-center space-x-[14px] rounded-[8px] bg-[#F7F9FA]"
+            className="relative flex cursor-pointer items-center space-x-[14px] overflow-hidden rounded-[8px] bg-[#F7F9FA] py-2 px-3"
+            onClick={() => setIsStackModalOpen(true)}
           >
             <img
               src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
               alt=""
-              className="w-[60px] rounded-full"
+              className="w-[44px] rounded-full"
             />
-            <div className="flex flex-col">
-              <span className="text-black text-sm font-medium">Barlend‘ Community</span>
+            <div className="flex w-full flex-col">
+              <span className="text-sm font-medium text-black">Barlend‘ Community</span>
               <div className="flex items-start justify-between">
-                <span className="text-[#5B7083] text-xs">Unlock Requires Staking: 5</span>
-                <span className="text-[#5B7083] text-xs">Staked: 0</span>
+                <span className="text-xs text-[#5B7083]">Unlock Requires Staking: 5</span>
+                <span className="text-xs text-[#5B7083]">Staked: 0</span>
               </div>
             </div>
+            <LockBackgroundIcon className="absolute top-0 left-[-14px]" />
+            <LockIcon className="absolute top-[3px] left-[-11px]" />
           </li>
         ))}
       </ul>
+      {isStackModalOpen && <StackModal onClose={() => setIsStackModalOpen(false)} />}
     </div>
   );
 };
+
+function LockIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="10"
+      height="10"
+      viewBox="0 0 10 10"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_1007_12838)">
+        <path
+          d="M8.33333 4.58301H1.66667C1.43655 4.58301 1.25 4.76956 1.25 4.99967V8.74967C1.25 8.97979 1.43655 9.16634 1.66667 9.16634H8.33333C8.56345 9.16634 8.75 8.97979 8.75 8.74967V4.99967C8.75 4.76956 8.56345 4.58301 8.33333 4.58301Z"
+          stroke="#0F1419"
+          strokeWidth="0.833333"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M2.91699 4.58301V2.91634C2.91699 1.76575 3.84974 0.833008 5.00033 0.833008C6.15091 0.833008 7.08366 1.76575 7.08366 2.91634V4.58301"
+          stroke="#0F1419"
+          strokeWidth="0.833333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5 6.25V7.5"
+          stroke="#0F1419"
+          strokeWidth="0.833333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1007_12838">
+          <rect width="10" height="10" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function LockBackgroundIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="22"
+      height="17"
+      viewBox="0 0 22 17"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 0H22C22 9.38884 14.3888 17 5 17H0V0Z" fill="#BBBAFB" />
+    </svg>
+  );
+}
 
 export default Community;
