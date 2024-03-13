@@ -209,7 +209,7 @@ const PurpleSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Wallet = (props: { handleButtonClick?: () => void }) => {
+const Wallet = (props: { back?: () => void; logout?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const { run: getUserInfo } = useUserInfo();
@@ -228,7 +228,7 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
   return (
     <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
       <div className="pl-4 py-3 space-x-[10px] flex items-center">
-        <div className="cursor-pointer" onClick={() => props.handleButtonClick?.()}>
+        <div className="cursor-pointer" onClick={() => props.back?.()}>
           <GoBack />
         </div>
         <span className="text-xl font-medium">Home</span>
@@ -353,7 +353,10 @@ const Wallet = (props: { handleButtonClick?: () => void }) => {
             <WithDraw />
           </div>
 
-          <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]">
+          <div
+            className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]"
+            onClick={() => props.logout?.()}
+          >
             Log Out
           </div>
         </div>
