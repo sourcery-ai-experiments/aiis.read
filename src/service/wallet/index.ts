@@ -20,20 +20,14 @@ type ClaimSuccessFunctionType = () => void;
 type ClaimFailedFunctionType = () => void;
 
 const useWalletClaimReward = (
-  index: string,
-  address: string,
-  amount: string,
-  proof: string[],
+  list: TweetRewardProps[] | null,
   success: ClaimSuccessFunctionType,
   failed: ClaimFailedFunctionType
 ) => {
   const result = useRequest(
     () =>
       contractRequestHttp.post('/xfans/api/pool/claim', {
-        index,
-        address,
-        amount,
-        proof,
+        list,
       }),
     {
       manual: true,

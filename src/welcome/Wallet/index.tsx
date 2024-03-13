@@ -226,8 +226,8 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
     getWalletAccounts();
   }, []);
   return (
-    <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
-      <div className="pl-4 py-3 space-x-[10px] flex items-center">
+    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
+      <div className="flex items-center space-x-[10px] py-3 pl-4">
         <div className="cursor-pointer" onClick={() => props.back?.()}>
           <GoBack />
         </div>
@@ -235,15 +235,15 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
       </div>
       <div className="px-3 py-[30px]">
         <div className="flex items-start justify-between">
-          <div className="flex space-x-[14px] items-center">
+          <div className="flex items-center space-x-[14px]">
             <img
               onClick={() => openProfile(userInfo)}
               src={userInfo?.avatar}
               alt="avatar"
-              className="w-[70px] h-[70px] rounded-full cursor-pointer"
+              className="h-[70px] w-[70px] cursor-pointer rounded-full"
             />
             <div className="flex flex-col">
-              <span className="#0F1419 text-[20px] leading-[20px] font-bold">
+              <span className="#0F1419 text-[20px] font-bold leading-[20px]">
                 @{userInfo?.twitterUsername}
               </span>
               <CopyToClipboard
@@ -256,15 +256,15 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
                   });
                 }}
               >
-                <div className="flex space-x-2 items-center cursor-pointer">
-                  <span className="font-medium text-base text-[#919099]">
+                <div className="flex cursor-pointer items-center space-x-2">
+                  <span className="text-base font-medium text-[#919099]">
                     <TruncateText text={accounts[0] ?? ''} />
                   </span>
                   <Copy />
                 </div>
               </CopyToClipboard>
 
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <span className="text-[#919099]">Network:Blast Testnet</span>
                 <Network />
               </div>
@@ -275,68 +275,66 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
 
         <div className="mt-10">
           <div className="space-y-[15px]">
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
                 <UserIcon />
                 <span className="text-base font-medium">Portfolio Value</span>
               </div>
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <Icon />
                 <NumberDisplayer
-                  className="text-base text-[#9A6CF9] font-bold"
+                  className="text-base font-bold text-[#9A6CF9]"
                   text={userInfo?.holdValue}
                 />
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
                 <WalletIcon />
                 <span className="text-base font-medium">Wallet Balance</span>
               </div>
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <Icon />
-                <NumberDisplayer
-                  className="text-base text-[#9A6CF9] font-bold"
-                  text={userInfo?.price}
-                />
+                {balance}
+                {/* <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} /> */}
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
                 <Fire />
                 <span className="text-base font-medium">Transaction Fee Earned</span>
               </div>
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <Icon />
                 <NumberDisplayer
-                  className="text-base text-[#9A6CF9] font-bold"
+                  className="text-base font-bold text-[#9A6CF9]"
                   text={userInfo?.tradingFeeEarned}
                 />
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
                 <Gift />
                 <span className="text-base font-medium">Reward Earned</span>
               </div>
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <Icon />
                 <NumberDisplayer
-                  className="text-base text-[#9A6CF9] font-bold"
+                  className="text-base font-bold text-[#9A6CF9]"
                   text={userInfo?.rewardEarned}
                 />
               </div>
             </div>
 
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
                 <Setting />
                 <span className="text-base font-medium">Hide Twitter Price Tags</span>
               </div>
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <PurpleSwitch />
               </div>
             </div>
@@ -354,7 +352,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
           </div>
 
           <div
-            className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]"
+            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-[15px] font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
             onClick={() => props.logout?.()}
           >
             Log Out

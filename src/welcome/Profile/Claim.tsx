@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import dayjs from 'dayjs';
-
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { useTweetReward } from '../../service/tweet';
@@ -33,81 +33,19 @@ const Icon = () => (
   </svg>
 );
 
-const rows = [
-  {
-    date: '2023/02/01',
-    creator: 'Devon Lane',
-    rank: '#2',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.234</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.001</span>
-      </div>
-    ),
-  },
-  {
-    date: '2023/01/18',
-    creator: 'Steven Garcia',
-    rank: '#45',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">1.452</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">5.01</span>
-      </div>
-    ),
-  },
-  {
-    date: '2022/12/25',
-    creator: 'Patricia Smith',
-    rank: '#2',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">3.24</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">1.35</span>
-      </div>
-    ),
-  },
-];
-
 const Claim = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { tweetRewardList } = useTweetStore((state) => ({ ...state }));
-
   const { run: getReward } = useTweetReward();
 
   /*
-(index=2,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["877c7a6afac7a1fb0ef4579e11d4585cb37842b5f0031649cc0528d902a82596","702a8c1786ae8aef1ee2322a325247897950a17c8de6d04edb78e096b272f0c4","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
-(index=3,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["0637bbffaf6f1ec2bd5fc12238f0a24cee574963524781f8db2390486e5b2396","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
-(index=4,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["d6b667c9ea2e66dfab42a8c85b14ac0e70886f1206306cdd472b3793aea5d788","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
-(index=5,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["5cd70a734862fe4715ebbeeeda058344b92599ce7a5ad6b172ece947318c6c38"])
-*/
+  (index=2,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["877c7a6afac7a1fb0ef4579e11d4585cb37842b5f0031649cc0528d902a82596","702a8c1786ae8aef1ee2322a325247897950a17c8de6d04edb78e096b272f0c4","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+  (index=3,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["0637bbffaf6f1ec2bd5fc12238f0a24cee574963524781f8db2390486e5b2396","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+  (index=4,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["d6b667c9ea2e66dfab42a8c85b14ac0e70886f1206306cdd472b3793aea5d788","5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
+  (index=5,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["5cd70a734862fe4715ebbeeeda058344b92599ce7a5ad6b172ece947318c6c38"])
+  */
   const { loading, run: claimReward } = useWalletClaimReward(
-    '3',
-    '0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E',
-    '1000000000000',
-    [
-      '0637bbffaf6f1ec2bd5fc12238f0a24cee574963524781f8db2390486e5b2396',
-      '5f095dea6356c6651198e485ef419cec5f167fcebebeef886acf714f4234e744',
-      'e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08',
-    ],
+    tweetRewardList,
     () => {},
     () => {}
   );
@@ -129,18 +67,18 @@ const Claim = () => {
       <Modal onClose={close} open={isOpen} width={626}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Claim Reward</h2>
-          <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
+          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
 
-          <div className="mt-6 flex items-center justify-between w-full">
+          <div className="mt-6 flex w-full items-center justify-between">
             <div className="flex items-center space-x-[10px]">
-              <span className="text-[#2E2E32] text-xl font-bold" style={{ letterSpacing: 1 }}>
+              <span className="text-xl font-bold text-[#2E2E32]" style={{ letterSpacing: 1 }}>
                 Reward:
               </span>
               <div className="flex flex-col space-y-2">
-                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">$294.3</span>
+                <span className="text-xl font-medium leading-[20px] text-[#0F1419]">$294.3</span>
                 <div className="flex items-center space-x-1">
                   <Icon />
-                  <span className="text-[#919099] text-sm font-medium">0.2</span>
+                  <span className="text-sm font-medium text-[#919099]">0.2</span>
                 </div>
               </div>
             </div>
@@ -231,14 +169,14 @@ const Claim = () => {
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {/* {row.creator} */}
+                      {row.creator}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {/* {row.rank} */}
+                      {row.rank}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -247,7 +185,9 @@ const Claim = () => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-                        <span className="text-[#0F1419] text-xs">0.234</span>
+                        <span className="text-xs text-[#0F1419]">
+                          <NumberDisplayer text={row.totalRewardAmount} />
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell
@@ -257,7 +197,9 @@ const Claim = () => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-                        <span className="text-[#0F1419] text-xs">1.35</span>
+                        <span className="text-xs text-[#0F1419]">
+                          <NumberDisplayer text={row.ethAmount} />
+                        </span>
                       </div>
                     </TableCell>
                   </TableRow>
