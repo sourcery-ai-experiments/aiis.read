@@ -7,10 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
+import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetReward } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
 
@@ -86,11 +88,13 @@ const rows = [
   },
 ];
 
-const Claim = () => {
+const Claim = (props: { price?: string }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { tweetRewardList } = useTweetStore((state) => ({ ...state }));
 
   const { run: getReward } = useTweetReward();
+  const totalPrice =
+    tweetRewardList?.reduce((total, item) => total + Number(item.totalRewardAmount), 0) ?? 0;
 
   useEffect(() => {
     getReward();
@@ -117,10 +121,19 @@ const Claim = () => {
                 Reward:
               </span>
               <div className="flex flex-col space-y-2">
-                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">$294.3</span>
+                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">
+                  $
+                  {new BigNumber(totalPrice)
+                    .dividedBy(new BigNumber(Math.pow(10, 18)))
+                    .multipliedBy(new BigNumber(props.price ?? 0))
+                    .toNumber()}
+                </span>
                 <div className="flex items-center space-x-1">
                   <Icon />
-                  <span className="text-[#919099] text-sm font-medium">0.2</span>
+                  <NumberDisplayer
+                    className="text-[#919099] text-sm font-medium"
+                    text={String(totalPrice) ?? ''}
+                  />
                 </div>
               </div>
             </div>
@@ -197,21 +210,21 @@ const Claim = () => {
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {dayjs(row.createdAt).format('YYYY/MM/DD HH:mm')}
+                      {dayjs(row.claimedAt).format('YYYY/MM/DD HH:mm')}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {/* {row.creator} */}
+                      {row.creator}
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {/* {row.rank} */}
+                      {row.rank}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -220,7 +233,10 @@ const Claim = () => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-                        <span className="text-[#0F1419] text-xs">0.234</span>
+                        <NumberDisplayer
+                          className="text-[#0F1419] text-xs"
+                          text={row.totalRewardAmount}
+                        />
                       </div>
                     </TableCell>
                     <TableCell
@@ -230,7 +246,7 @@ const Claim = () => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-                        <span className="text-[#0F1419] text-xs">1.35</span>
+                        <NumberDisplayer className="text-[#0F1419] text-xs" text={row.ethAmount} />
                       </div>
                     </TableCell>
                   </TableRow>

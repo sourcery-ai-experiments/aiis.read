@@ -35,10 +35,14 @@ declare global {
   export interface TweetRewardProps {
     address?: string;
     createdAt?: number;
-    ethAmount?: { [key: string]: any };
+    ethAmount?: string;
     isClaimed?: boolean;
     proof?: Array<number[]>;
     stageId?: number;
+    claimedAt: string;
+    creator?: string;
+    rank?: number;
+    totalRewardAmount?: string;
   }
 
   /**
@@ -50,6 +54,7 @@ declare global {
     rank?: number;
     rewardAmount?: string;
     totalRewardAmount?: string;
+    ethAmount?: string;
   }
 
   /**
