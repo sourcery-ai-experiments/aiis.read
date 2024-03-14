@@ -6,7 +6,6 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { useAsyncEffect } from 'ahooks';
-import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { NumberDisplayer } from '../../components/NumberDisplayer';
@@ -17,7 +16,6 @@ import useUserStore from '../../store/useUserStore';
 
 import Claim from './Claim';
 import History from './History';
-import { reward } from './mock';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none">
@@ -40,7 +38,7 @@ const Icon = () => (
 const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
-  const [priceMap, setPriceMap] = useState<Record<string, any>>({});
+  const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
   const { run: getTweet } = useTweetList();
   const { tweetList } = useTweetStore((state) => ({ ...state }));
@@ -81,8 +79,6 @@ const Reward = () => {
     setPriceMap(list);
   }, []);
 
-  console.log(priceMap);
-
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
@@ -108,8 +104,8 @@ const Reward = () => {
         </div>
 
         <div className="flex items-center space-x-[14px]">
-          <Claim />
-          <History />
+          <Claim price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
+          <History price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
         </div>
       </div>
 

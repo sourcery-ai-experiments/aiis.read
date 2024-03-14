@@ -41,10 +41,9 @@ declare global {
     proof?: Array<string[]>;
     index?: number;
     creator?: string;
-    rank?: string;
-    stageId?: string;
     totalRewardAmount?: string;
     tweetId?: string;
+    rank?: string;
   }
 
   /**
@@ -56,6 +55,7 @@ declare global {
     rank?: number;
     rewardAmount?: string;
     totalRewardAmount?: string;
+    ethAmount?: string;
   }
 
   /**
