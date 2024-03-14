@@ -35,14 +35,15 @@ declare global {
   export interface TweetRewardProps {
     address?: string;
     createdAt?: number;
+    claimedAt?: number;
     ethAmount?: string;
     isClaimed?: boolean;
-    proof?: Array<number[]>;
-    stageId?: number;
-    claimedAt: string;
+    proof?: Array<string[]>;
+    index?: number;
     creator?: string;
-    rank?: number;
     totalRewardAmount?: string;
+    tweetId?: string;
+    rank?: string;
   }
 
   /**

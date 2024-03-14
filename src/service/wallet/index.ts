@@ -16,5 +16,27 @@ const useWalletAccounts = () => {
 
   return result;
 };
+type ClaimSuccessFunctionType = () => void;
+type ClaimFailedFunctionType = () => void;
 
-export { useWalletAccounts };
+const useWalletClaimReward = (
+  list: TweetRewardProps[] | null,
+  success: ClaimSuccessFunctionType,
+  failed: ClaimFailedFunctionType
+) => {
+  const result = useRequest(
+    () =>
+      contractRequestHttp.post('/xfans/api/pool/claim', {
+        list,
+      }),
+    {
+      manual: true,
+      onSuccess: success,
+      onError: failed,
+    }
+  );
+
+  return result;
+};
+
+export { useWalletAccounts, useWalletClaimReward };

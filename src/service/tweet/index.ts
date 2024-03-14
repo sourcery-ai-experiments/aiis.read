@@ -21,7 +21,7 @@ const useTweetList = () => {
 
 const useTweetReward = () => {
   const result = useRequest<ResultData<ItemsResponse<TweetRewardProps>>, unknown[]>(
-    () => http.get('/api/twitter/rewards'),
+    () => http.get('/api/twitter/rewards', { status: 1 }),
     {
       manual: true,
       onSuccess(response) {
