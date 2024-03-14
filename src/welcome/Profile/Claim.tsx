@@ -13,6 +13,7 @@ import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { useTweetReward } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
+import useUserStore from '../../store/useUserStore';
 import { useWalletClaimReward } from '../../service/wallet';
 
 const Icon = () => (
@@ -37,6 +38,7 @@ const Claim = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { tweetRewardList } = useTweetStore((state) => ({ ...state }));
   const { run: getReward } = useTweetReward();
+  const { userInfo } = useUserStore((state) => ({ ...state }));
 
   /*
   (index=2,address=0x9eB08EE3f22bFe5c75FBa5cdd7465eE4c162e07E,amount=1000000000000, proof=["877c7a6afac7a1fb0ef4579e11d4585cb37842b5f0031649cc0528d902a82596","702a8c1786ae8aef1ee2322a325247897950a17c8de6d04edb78e096b272f0c4","e43a4e96371d12aba133cc4349d77d570db6b2776a37c9d5cd2e1e25acdbde08"])
@@ -46,8 +48,12 @@ const Claim = () => {
   */
   const { loading, run: claimReward } = useWalletClaimReward(
     tweetRewardList,
-    () => {},
-    () => {}
+    () => {
+      getReward();
+    },
+    () => {
+      getReward();
+    }
   );
 
   useEffect(() => {
@@ -78,7 +84,12 @@ const Claim = () => {
                 <span className="text-xl font-medium leading-[20px] text-[#0F1419]">$294.3</span>
                 <div className="flex items-center space-x-1">
                   <Icon />
-                  <span className="text-sm font-medium text-[#919099]">0.2</span>
+                  <span className="text-sm font-medium text-[#919099]">
+                    <NumberDisplayer
+                      className="text-xs font-medium text-[#0F1419]"
+                      text={userInfo?.rewardUnClaimed}
+                    />
+                  </span>
                 </div>
               </div>
             </div>
