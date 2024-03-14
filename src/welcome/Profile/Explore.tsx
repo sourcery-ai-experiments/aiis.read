@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
+import Loading from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
@@ -53,10 +54,10 @@ const Up = () => (
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const { run: getShareList } = useShareList();
-  const { run: getTopList } = useTopList();
-  const { run: getNewList } = useNewList();
-  const { run: getRecentList } = useRecentList();
+  const { run: getShareList, loading: loading1 } = useShareList();
+  const { run: getTopList, loading: loading2 } = useTopList();
+  const { run: getNewList, loading: loading3 } = useNewList();
+  const { run: getRecentList, loading: loading4 } = useRecentList();
   const { shareList, topList, newList, recentList } = useShareStore((state) => ({ ...state }));
 
   const [value, setValue] = React.useState('1');
@@ -74,16 +75,11 @@ const Explore = () => {
   };
 
   useEffect(() => {
-    if (value === '1') {
-      getTopList();
-      getNewList();
-      getRecentList();
-      getShareList();
-    }
+    fetchMap[value]();
   }, []);
 
   return (
-    <div className="px-4">
+    <div className="px-4 flex-1 flex flex-col">
       <TabContext value={value}>
         <Box>
           <TabList
@@ -145,198 +141,221 @@ const Explore = () => {
             />
           </TabList>
         </Box>
-        <TabPanel
-          value="1"
-          sx={{
-            padding: 0,
-          }}
-        >
-          <ul>
-            {topList?.map((item, i) => (
-              <li
-                key={item.id}
-                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
-                onClick={() => openProfile(item)}
+        <>
+          {loading1 || loading2 || loading3 || loading4 ? (
+            <div className="flex items-center justify-center flex-1">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              <TabPanel
+                value="1"
+                sx={{
+                  padding: 0,
+                }}
               >
-                <span className="text-[#0F1419]">{i + 1}</span>
-                <img
-                  src={item.avatar}
-                  alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
-                />
-                <div className="flex-1 flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
-                    <span className="text-[#5B7083]">@{item.twitterUsername}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099] text-sm">Price</span>
-                      <Icon />
-                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
-                    </div>
-
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099] text-sm">Tweet Avg Rank:</span>
-                      <span className="text-[#919099] text-[15px]">#{i + 1}</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </TabPanel>
-        <TabPanel
-          value="2"
-          sx={{
-            padding: 0,
-          }}
-        >
-          <ul>
-            {newList?.map((item, i) => (
-              <li
-                key={item.id}
-                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
-                onClick={() => openProfile(item)}
-              >
-                <span className="text-[#0F1419]">{i + 1}</span>
-                <img
-                  src={item.avatar}
-                  alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
-                />
-                <div className="flex-1 flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
-                    <span className="text-[#5B7083]">@{item.twitterUsername}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099] text-sm">Price</span>
-                      <Icon />
-                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
-                    </div>
-
-                    <span className="text-[#919099] text-sm">
-                      {getTimeDistanceFromDate(item.createdAt)} ago
-                    </span>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </TabPanel>
-        <TabPanel
-          value="3"
-          sx={{
-            padding: 0,
-          }}
-        >
-          <ul>
-            {recentList?.map((item, i) => (
-              <li
-                key={item.id}
-                className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
-                onClick={() => openProfile(item)}
-              >
-                <span className="text-[#0F1419]">{i + 1}</span>
-                <img
-                  src={item.avatar}
-                  alt="avatar"
-                  className="w-[44px] h-[44px] mx-[14px] rounded-full"
-                />
-                <div className="flex-1 flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
-                    <span className="text-[#5B7083]">@{item.twitterUsername}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <span className="text-[#919099] text-sm">Price</span>
-                      <Icon />
-                      <NumberDisplayer className="text-[#919099] text-[15px]" text={item.price} />
-                    </div>
-
-                    <div className="flex items-center space-x-1">
-                      <Up />
-                      <span className="text-[#16B364] text-[15px]">{item.increaseRate24h}%</span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </TabPanel>
-        <TabPanel
-          value="4"
-          sx={{
-            padding: 0,
-          }}
-        >
-          <ul>
-            {shareList?.map((item, i: any) => (
-              <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
-                <span className="text-[#A1A1AA] text-sm">
-                  {dayjs(item.createdAt).format('YYYY/MM/DD HH:mm')}
-                </span>
-                <div className="flex items-center justify-between pl-5">
-                  <div className="flex space-x-9 items-center">
-                    <div className="flex flex-col items-center w-9">
-                      <img
-                        onClick={() => openProfile(item.traderUser)}
-                        src={item.traderUser?.avatar}
-                        alt="avatar"
-                        className="w-9 h-9 rounded-full cursor-pointer"
-                      />
-                      <span className="text-[#919099] text-sm max-w-[80px] truncate">
-                        @{item.traderUser?.username}
-                      </span>
-                    </div>
-
-                    <span className="font-bold w-12 text-center text-sm">
-                      {item.isBuy ? 'Bought' : 'Sold'}
-                    </span>
-
-                    <div className="flex flex-col items-center w-9">
-                      <img
-                        onClick={() => openProfile(item.subjectUser)}
-                        src={item.subjectUser?.avatar}
-                        alt="avatar"
-                        className="w-9 h-9 rounded-full cursor-pointer"
-                      />
-                      <span className="text-[#919099] text-sm max-w-[80px] truncate">
-                        @{item.subjectUser?.username}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end">
-                    <span
-                      className={`text-base font-bold ${
-                        item.isBuy ? 'text-[#16B364]' : 'text-[#FF2E00]'
-                      }`}
+                <ul>
+                  {topList?.map((item, i) => (
+                    <li
+                      key={item.id}
+                      className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                      onClick={() => openProfile(item)}
                     >
-                      {item.isBuy ? '+' : '-'}
-                      {item.shareAmount} Shares
-                    </span>
-                    <div className="space-x-1 flex items-center">
-                      <Icon />
-                      <span
-                        className={`text-xs ${!item.isBuy ? 'text-[#FF2E00]' : 'text-[#16B364]'}`}
-                      >
-                        {item.isBuy ? '-' : '+'}
-                        <NumberDisplayer text={item.ethAmount} />
+                      <span className="text-[#0F1419]">{i + 1}</span>
+                      <img
+                        src={item.avatar}
+                        alt="avatar"
+                        className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                      />
+                      <div className="flex-1 flex flex-col space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
+                          <span className="text-[#5B7083]">@{item.twitterUsername}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-[6px]">
+                            <span className="text-[#919099] text-sm">Price</span>
+                            <Icon />
+                            <NumberDisplayer
+                              className="text-[#919099] text-[15px]"
+                              text={item.price}
+                            />
+                          </div>
+
+                          <div className="flex items-center space-x-[6px]">
+                            <span className="text-[#919099] text-sm">Tweet Avg Rank:</span>
+                            <span className="text-[#919099] text-[15px]">#{i + 1}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </TabPanel>
+              <TabPanel
+                value="2"
+                sx={{
+                  padding: 0,
+                }}
+              >
+                <ul>
+                  {newList?.map((item, i) => (
+                    <li
+                      key={item.id}
+                      className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                      onClick={() => openProfile(item)}
+                    >
+                      <span className="text-[#0F1419]">{i + 1}</span>
+                      <img
+                        src={item.avatar}
+                        alt="avatar"
+                        className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                      />
+                      <div className="flex-1 flex flex-col space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
+                          <span className="text-[#5B7083]">@{item.twitterUsername}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-[6px]">
+                            <span className="text-[#919099] text-sm">Price</span>
+                            <Icon />
+                            <NumberDisplayer
+                              className="text-[#919099] text-[15px]"
+                              text={item.price}
+                            />
+                          </div>
+
+                          <span className="text-[#919099] text-sm">
+                            {getTimeDistanceFromDate(item.createdAt)} ago
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </TabPanel>
+              <TabPanel
+                value="3"
+                sx={{
+                  padding: 0,
+                }}
+              >
+                <ul>
+                  {recentList?.map((item, i) => (
+                    <li
+                      key={item.id}
+                      className="pt-[18px] pb-2 flex items-center border-t border-t-[#EBEEF0] cursor-pointer"
+                      onClick={() => openProfile(item)}
+                    >
+                      <span className="text-[#0F1419]">{i + 1}</span>
+                      <img
+                        src={item.avatar}
+                        alt="avatar"
+                        className="w-[44px] h-[44px] mx-[14px] rounded-full"
+                      />
+                      <div className="flex-1 flex flex-col space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[#0F1419] font-bold text-sm">{item.username}</span>
+                          <span className="text-[#5B7083]">@{item.twitterUsername}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-[6px]">
+                            <span className="text-[#919099] text-sm">Price</span>
+                            <Icon />
+                            <NumberDisplayer
+                              className="text-[#919099] text-[15px]"
+                              text={item.price}
+                            />
+                          </div>
+
+                          <div className="flex items-center space-x-1">
+                            <Up />
+                            <span className="text-[#16B364] text-[15px]">
+                              {item.increaseRate24h}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </TabPanel>
+              <TabPanel
+                value="4"
+                sx={{
+                  padding: 0,
+                }}
+              >
+                <ul>
+                  {shareList?.map((item, i: any) => (
+                    <li key={i} className="pt-[10px] pb-2 space-y-2 border-t border-t-[#EBEEF0]">
+                      <span className="text-[#A1A1AA] text-sm">
+                        {dayjs(item.createdAt).format('YYYY/MM/DD HH:mm')}
                       </span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </TabPanel>
+                      <div className="flex items-center justify-between pl-5">
+                        <div className="flex space-x-9 items-center">
+                          <div className="flex flex-col items-center w-9">
+                            <img
+                              onClick={() => openProfile(item.traderUser)}
+                              src={item.traderUser?.avatar}
+                              alt="avatar"
+                              className="w-9 h-9 rounded-full cursor-pointer"
+                            />
+                            <span className="text-[#919099] text-sm max-w-[80px] truncate">
+                              @{item.traderUser?.username}
+                            </span>
+                          </div>
+
+                          <span className="font-bold w-12 text-center text-sm">
+                            {item.isBuy ? 'Bought' : 'Sold'}
+                          </span>
+
+                          <div className="flex flex-col items-center w-9">
+                            <img
+                              onClick={() => openProfile(item.subjectUser)}
+                              src={item.subjectUser?.avatar}
+                              alt="avatar"
+                              className="w-9 h-9 rounded-full cursor-pointer"
+                            />
+                            <span className="text-[#919099] text-sm max-w-[80px] truncate">
+                              @{item.subjectUser?.username}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-end">
+                          <span
+                            className={`text-base font-bold ${
+                              item.isBuy ? 'text-[#16B364]' : 'text-[#FF2E00]'
+                            }`}
+                          >
+                            {item.isBuy ? '+' : '-'}
+                            {item.shareAmount} Shares
+                          </span>
+                          <div className="space-x-1 flex items-center">
+                            <Icon />
+                            <span
+                              className={`text-xs ${
+                                !item.isBuy ? 'text-[#FF2E00]' : 'text-[#16B364]'
+                              }`}
+                            >
+                              {item.isBuy ? '-' : '+'}
+                              <NumberDisplayer text={item.ethAmount} />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </TabPanel>
+            </>
+          )}
+        </>
       </TabContext>
     </div>
   );
