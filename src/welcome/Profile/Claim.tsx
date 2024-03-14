@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetReward } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
@@ -85,7 +84,7 @@ const Claim = (props: { price?: string }) => {
                 Reward:
               </span>
               <div className="flex flex-col space-y-2">
-                <span className="text-xl leading-[20px] font-medium text-[#0F1419]">
+                <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
                   $
                   {new BigNumber(totalPrice)
                     .dividedBy(new BigNumber(Math.pow(10, 18)))
@@ -95,7 +94,7 @@ const Claim = (props: { price?: string }) => {
                 <div className="flex items-center space-x-1">
                   <Icon />
                   <NumberDisplayer
-                    className="text-[#919099] text-sm font-medium"
+                    className="text-sm font-medium text-[#919099]"
                     text={String(totalPrice) ?? ''}
                   />
                 </div>
@@ -204,16 +203,10 @@ const Claim = (props: { price?: string }) => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-<<<<<<< HEAD
-                        <span className="text-xs text-[#0F1419]">
-                          <NumberDisplayer text={row.totalRewardAmount} />
-                        </span>
-=======
                         <NumberDisplayer
-                          className="text-[#0F1419] text-xs"
+                          className="text-xs text-[#0F1419]"
                           text={row.totalRewardAmount}
                         />
->>>>>>> main
                       </div>
                     </TableCell>
                     <TableCell
@@ -223,13 +216,7 @@ const Claim = (props: { price?: string }) => {
                     >
                       <div className="flex items-center space-x-1">
                         <Icon />
-<<<<<<< HEAD
-                        <span className="text-xs text-[#0F1419]">
-                          <NumberDisplayer text={row.ethAmount} />
-                        </span>
-=======
-                        <NumberDisplayer className="text-[#0F1419] text-xs" text={row.ethAmount} />
->>>>>>> main
+                        <NumberDisplayer className="text-xs text-[#0F1419]" text={row.ethAmount} />
                       </div>
                     </TableCell>
                   </TableRow>
