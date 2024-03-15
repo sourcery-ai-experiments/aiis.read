@@ -103,7 +103,6 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
       ref={ref}
       className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
       onClick={(e) => {
-        console.log(123);
         requestVote();
         e.preventDefault();
         e.stopPropagation();
