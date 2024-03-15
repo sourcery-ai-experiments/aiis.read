@@ -11,7 +11,7 @@ const useLocalStore = create<State>()(
       isShowPrice: false,
     }),
     {
-      name: 'UserConfig',
+      name: 'xfans-user-config',
     }
   )
 );
