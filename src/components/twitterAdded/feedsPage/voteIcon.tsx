@@ -104,6 +104,11 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
       className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
       onClick={(e) => {
         requestVote();
+        useGlobalStore.setState({
+          message: '投票成功',
+          messageType: 'succes',
+          messageOpen: true,
+        });
         e.preventDefault();
         e.stopPropagation();
       }}
