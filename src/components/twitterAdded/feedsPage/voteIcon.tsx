@@ -10,6 +10,47 @@ interface VoteTwitterProps {
   userName: string;
 }
 
+export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
+  const [voted, setVoted] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const { run: requestVote } = useTweetVote(
+    twitterId,
+    userName,
+    () => {
+      setVoted(true);
+      useGlobalStore.setState({
+        message: '投票成功',
+        messageType: 'succes',
+        messageOpen: true,
+      });
+    },
+    () => {
+      setVoted(false);
+    }
+  );
+
+  const isHover = useHover(ref);
+
+  return (
+    <div
+      ref={ref}
+      className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
+      onClick={(e) => {
+        requestVote();
+        useGlobalStore.setState({
+          message: '投票成功',
+          messageType: 'succes',
+          messageOpen: true,
+        });
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      {voted || isHover ? <VoidedIcon /> : <VoidIcon />}
+    </div>
+  );
+};
+
 const VoidIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
     <g clipPath="url(#clip0_707_19677)">
@@ -76,44 +117,3 @@ const VoidedIcon = () => (
     </defs>
   </svg>
 );
-
-export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
-  const [voted, setVoted] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
-  const { run: requestVote } = useTweetVote(
-    twitterId,
-    userName,
-    () => {
-      setVoted(true);
-      useGlobalStore.setState({
-        message: '投票成功',
-        messageType: 'succes',
-        messageOpen: true,
-      });
-    },
-    () => {
-      setVoted(false);
-    }
-  );
-
-  const isHover = useHover(ref);
-
-  return (
-    <div
-      ref={ref}
-      className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
-      onClick={(e) => {
-        requestVote();
-        useGlobalStore.setState({
-          message: '投票成功',
-          messageType: 'succes',
-          messageOpen: true,
-        });
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      {voted || isHover ? <VoidedIcon /> : <VoidIcon />}
-    </div>
-  );
-};
