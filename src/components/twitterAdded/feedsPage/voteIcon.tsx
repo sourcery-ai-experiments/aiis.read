@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { useTweetVote } from '../../../service/tweet';
+import useGlobalStore from '../../../store/useGlobalStore';
 
 import '../../../tailwind.css';
 interface VoteTwitterProps {
@@ -22,9 +23,14 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   );
   return (
     <div
-      className="justify-center items-center text-center w-auto ml-[55px] !cursor-pointer !z-[999]"
+      className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
       onClick={(e) => {
         requestVote();
+        useGlobalStore.setState({
+          message: '投票成功',
+          messageType: 'succes',
+          messageOpen: true,
+        });
         e.preventDefault();
         e.stopPropagation();
       }}
