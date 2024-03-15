@@ -1,22 +1,185 @@
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-import { useAsyncEffect } from 'ahooks';
 
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import TruncateText from '../../components/TruncateText';
-import useWallet from '../../hooks/useWallet';
 import { useUserInfo } from '../../service/user';
 import { useWalletAccounts } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import useLocalStore from '../../store/useLocalStore';
 import useProfileModal from '../../store/useProfileModal';
 import useUserStore from '../../store/useUserStore';
 
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
+
+const Wallet = (props: { back?: () => void; logout?: () => void }) => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+
+  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
+  const { userInfo } = useUserStore((state) => ({ ...state }));
+  const { run: getUserInfo } = useUserInfo();
+
+  const { run: getWalletAccounts } = useWalletAccounts();
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const { balance, accounts } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
+
+  useEffect(() => {
+    getWalletAccounts();
+  }, []);
+  return (
+    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
+      <div className="flex items-center space-x-[10px] py-3 pl-4">
+        <div className="cursor-pointer" onClick={() => props.back?.()}>
+          <GoBack />
+        </div>
+        <span className="text-xl font-medium">Home</span>
+      </div>
+      <div className="px-3 py-[30px]">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center space-x-[14px]">
+            <img
+              onClick={() => openProfile(userInfo)}
+              src={userInfo?.avatar}
+              alt="avatar"
+              className="h-[70px] w-[70px] cursor-pointer rounded-full"
+            />
+            <div className="flex flex-col">
+              <span className="#0F1419 text-[20px] font-bold leading-[20px]">
+                @{userInfo?.twitterUsername}
+              </span>
+              <CopyToClipboard
+                text={accounts[0] ?? '0x0'}
+                onCopy={() => {
+                  useGlobalStore.setState({
+                    messageOpen: true,
+                    messageType: 'succes',
+                    message: 'copy successfully',
+                  });
+                }}
+              >
+                <div className="flex cursor-pointer items-center space-x-2">
+                  <span className="text-base font-medium text-[#919099]">
+                    <TruncateText text={accounts[0] ?? ''} />
+                  </span>
+                  <Copy />
+                </div>
+              </CopyToClipboard>
+
+              <div className="flex items-center space-x-1">
+                <span className="text-[#919099]">Network:Blast Testnet</span>
+                <Network />
+              </div>
+            </div>
+          </div>
+          <InviteFriends />
+        </div>
+
+        <div className="mt-10">
+          <div className="space-y-[15px]">
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <UserIcon />
+                <span className="text-base font-medium">Portfolio Value</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.holdValue}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <WalletIcon />
+                <span className="text-base font-medium">Wallet Balance</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                {balance}
+                {/* <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} /> */}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Fire />
+                <span className="text-base font-medium">Transaction Fee Earned</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.tradingFeeEarned}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Gift />
+                <span className="text-base font-medium">Reward Earned</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.rewardEarned}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Setting />
+                <span className="text-base font-medium">Hide Twitter Price Tags</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <PurpleSwitch
+                  checked={isShowPrice}
+                  onChange={(_e, checked) => {
+                    useLocalStore.setState({
+                      isShowPrice: checked,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          {/* <div className="flex items-center justify-between">
+            <InviteFriends />
+            <ProfileModal />
+          </div> */}
+          <div className="flex items-center justify-between">
+            <Deposit />
+            <WithDraw />
+          </div>
+
+          <div
+            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-[15px] font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
+            onClick={() => props.logout?.()}
+          >
+            Log Out
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -208,159 +371,5 @@ const PurpleSwitch = styled(Switch)(({ theme }) => ({
     backgroundColor: '#C5A9FF',
   },
 }));
-
-const Wallet = (props: { back?: () => void; logout?: () => void }) => {
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const { userInfo } = useUserStore((state) => ({ ...state }));
-  const { run: getUserInfo } = useUserInfo();
-  const { run: getWalletAccounts } = useWalletAccounts();
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  const { balance, accounts } = useGlobalUserStore((state) => ({
-    ...state,
-  }));
-
-  useEffect(() => {
-    getWalletAccounts();
-  }, []);
-  return (
-    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
-      <div className="flex items-center space-x-[10px] py-3 pl-4">
-        <div className="cursor-pointer" onClick={() => props.back?.()}>
-          <GoBack />
-        </div>
-        <span className="text-xl font-medium">Home</span>
-      </div>
-      <div className="px-3 py-[30px]">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-[14px]">
-            <img
-              onClick={() => openProfile(userInfo)}
-              src={userInfo?.avatar}
-              alt="avatar"
-              className="h-[70px] w-[70px] cursor-pointer rounded-full"
-            />
-            <div className="flex flex-col">
-              <span className="#0F1419 text-[20px] font-bold leading-[20px]">
-                @{userInfo?.twitterUsername}
-              </span>
-              <CopyToClipboard
-                text={accounts[0] ?? '0x0'}
-                onCopy={() => {
-                  useGlobalStore.setState({
-                    messageOpen: true,
-                    messageType: 'succes',
-                    message: 'copy successfully',
-                  });
-                }}
-              >
-                <div className="flex cursor-pointer items-center space-x-2">
-                  <span className="text-base font-medium text-[#919099]">
-                    <TruncateText text={accounts[0] ?? ''} />
-                  </span>
-                  <Copy />
-                </div>
-              </CopyToClipboard>
-
-              <div className="flex items-center space-x-1">
-                <span className="text-[#919099]">Network:Blast Testnet</span>
-                <Network />
-              </div>
-            </div>
-          </div>
-          <InviteFriends />
-        </div>
-
-        <div className="mt-10">
-          <div className="space-y-[15px]">
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
-              <div className="flex items-center space-x-3">
-                <UserIcon />
-                <span className="text-base font-medium">Portfolio Value</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Icon />
-                <NumberDisplayer
-                  className="text-base font-bold text-[#9A6CF9]"
-                  text={userInfo?.holdValue}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
-              <div className="flex items-center space-x-3">
-                <WalletIcon />
-                <span className="text-base font-medium">Wallet Balance</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Icon />
-                {balance}
-                {/* <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} /> */}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
-              <div className="flex items-center space-x-3">
-                <Fire />
-                <span className="text-base font-medium">Transaction Fee Earned</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Icon />
-                <NumberDisplayer
-                  className="text-base font-bold text-[#9A6CF9]"
-                  text={userInfo?.tradingFeeEarned}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
-              <div className="flex items-center space-x-3">
-                <Gift />
-                <span className="text-base font-medium">Reward Earned</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Icon />
-                <NumberDisplayer
-                  className="text-base font-bold text-[#9A6CF9]"
-                  text={userInfo?.rewardEarned}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
-              <div className="flex items-center space-x-3">
-                <Setting />
-                <span className="text-base font-medium">Hide Twitter Price Tags</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <PurpleSwitch />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10">
-          {/* <div className="flex items-center justify-between">
-            <InviteFriends />
-            <ProfileModal />
-          </div> */}
-          <div className="flex items-center justify-between">
-            <Deposit />
-            <WithDraw />
-          </div>
-
-          <div
-            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-[15px] font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
-            onClick={() => props.logout?.()}
-          >
-            Log Out
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default Wallet;

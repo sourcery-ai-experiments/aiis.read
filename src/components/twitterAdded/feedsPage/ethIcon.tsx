@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useLocalStore from '../../../store/useLocalStore';
 import useProfileModal from '../../../store/useProfileModal';
 import { NumberDisplayer } from '../../NumberDisplayer';
 
@@ -12,6 +13,7 @@ interface FriendPriceProps {
 export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const [userInfo, setUserInfo] = useState({ price: '0' });
+  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [twitterUsername],
     (result) => {
@@ -19,15 +21,14 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
       setUserInfo(result?.data?.items?.[0]);
     },
     () => undefined
-
   );
 
   useEffect(() => {
     batchUserInfo(userInfo);
   }, []);
-  return (
+  return isShowPrice ? (
     <div
-      className="justify-center items-center text-center w-auto"
+      className="w-auto items-center justify-center text-center"
       onClick={(e) => {
         openProfile(userInfo);
         e.preventDefault();
@@ -92,9 +93,9 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
           </clipPath>
         </defs>
       </svg>
-      <p className="font-medium text-[12px] mx-auto">
+      <p className="mx-auto text-[12px] font-medium">
         <NumberDisplayer text={userInfo?.price} />
       </p>
     </div>
-  );
+  ) : null;
 };
