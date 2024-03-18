@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { TableFooter, TablePagination } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,7 +11,8 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import TruncateText, { truncateText } from '../../components/TruncateText';
+import TruncateText from '../../components/TruncateText';
+import { PAGE_PER_ROW } from '../../constants';
 import { useUserInvite } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
@@ -34,34 +36,21 @@ const Copy = () => (
   </svg>
 );
 
-const rows = [
-  {
-    time: 'Jan 05 2024, 14:32',
-    user: 'Cody Fisher',
-    value: 2,
-  },
-  {
-    time: 'Apr 06 2023, 20:13',
-    user: 'Cody Fisher',
-    value: 2,
-  },
-  {
-    time: 'Jan 12 2023, 13:42',
-    user: 'Cody Fisher',
-    value: 2,
-  },
-];
-
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const accounts = useGlobalUserStore((state) => state.accounts);
+  const [page, setPage] = useState(0);
 
-  const { run: getInvite } = useUserInvite();
+  const { run: getInvite, loading } = useUserInvite();
   const { inviteInfo } = useUserStore((state) => ({ ...state }));
 
   useEffect(() => {
-    getInvite();
-  }, []);
+    getInvite({ offset: page * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+  }, [getInvite, page]);
+
+  function handlePageChange(nextPage: number) {
+    setPage(nextPage);
+  }
 
   return (
     <>
@@ -76,26 +65,26 @@ const InviteFriends = () => {
       <Modal onClose={close} open={isOpen} width={553}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Invite Friends</h2>
-          <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
+          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
 
           <div
-            className="mt-6 w-full bg-[#F7F9FA] rounded-[8px] border border-[#EBECED] py-[10px] relative"
+            className="relative mt-6 w-full rounded-[8px] border border-[#EBECED] bg-[#F7F9FA] py-[10px]"
             style={{ boxShadow: '3px 2px 3.5px 0px rgba(0, 0, 0, 0.05)' }}
           >
             <div className="flex">
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
-                  <span className="text-[#919099] text-sm font-medium">Your Invite</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">
+                  <span className="text-sm font-medium text-[#919099]">Your Invite</span>
+                  <span className="text-xl font-bold leading-[20px] text-[#1A1D1F]">
                     {inviteInfo?.inviteCount}
                   </span>
                 </div>
               </div>
-              <div className="h-[50px] w-[1px] bg-[#EBECED] absolute left-1/2 top-[12px]"></div>
+              <div className="absolute left-1/2 top-[12px] h-[50px] w-[1px] bg-[#EBECED]"></div>
               <div className="w-1/2">
                 <div className="flex flex-col items-center space-y-[14px]">
-                  <span className="text-[#919099] text-sm font-medium">Invite Points</span>
-                  <span className="text-[#1A1D1F] text-xl leading-[20px] font-bold">
+                  <span className="text-sm font-medium text-[#919099]">Invite Points</span>
+                  <span className="text-xl font-bold leading-[20px] text-[#1A1D1F]">
                     {inviteInfo?.earnedPoints}
                   </span>
                 </div>
@@ -103,8 +92,8 @@ const InviteFriends = () => {
             </div>
           </div>
 
-          <div className="mt-6 w-full flex rounded-[8px] border border-[#EBECED] h-[56px] overflow-hidden text-base">
-            <div className="pl-[26px] text-[#1A1D1F] font-medium flex-1 flex items-center">
+          <div className="mt-6 flex h-[56px] w-full overflow-hidden rounded-[8px] border border-[#EBECED] text-base">
+            <div className="flex flex-1 items-center pl-[26px] font-medium text-[#1A1D1F]">
               <TruncateText text={accounts[0] ?? ''} startLength={7} endLength={7} />
             </div>
             <CopyToClipboard
@@ -117,8 +106,8 @@ const InviteFriends = () => {
                 });
               }}
             >
-              <div className="flex items-center justify-center bg-[#9A6CF9] w-[186px] cursor-pointer">
-                <div className="flex space-x-2 items-center">
+              <div className="flex w-[186px] cursor-pointer items-center justify-center bg-[#9A6CF9]">
+                <div className="flex items-center space-x-2">
                   <span className="text-white">Copy Invite Code</span>
                   <Copy />
                 </div>
@@ -140,16 +129,36 @@ const InviteFriends = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {inviteInfo?.items?.map((row, i) => (
-                  <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      {row.invitedAt}
+                {inviteInfo?.items == null || inviteInfo?.items.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} className="!text-center">
+                      no records found
                     </TableCell>
-                    <TableCell>{row.invitedUsername}</TableCell>
-                    <TableCell>{row.points}</TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  inviteInfo.items.map((row, i) => (
+                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        {row.invitedAt}
+                      </TableCell>
+                      <TableCell>{row.invitedUsername}</TableCell>
+                      <TableCell>{row.points}</TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    disabled={loading}
+                    count={inviteInfo?.inviteCount ?? 0}
+                    page={page}
+                    onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                    rowsPerPage={PAGE_PER_ROW}
+                    rowsPerPageOptions={[]}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </div>

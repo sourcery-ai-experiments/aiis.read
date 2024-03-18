@@ -184,7 +184,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
 
         <div className="mt-6 flex w-full items-center justify-between text-black">
           <div className="flex items-center space-x-[6px]">
-            <span className="text-xl font-bold text-[#2E2E32]">Price:</span>
+            <span className="text-xl font-bold text-[#2E2E32]">Floor Price:</span>
             <Icon />
             <span className="text-xl font-medium">
               <NumberDisplayer text={floorPrice} />

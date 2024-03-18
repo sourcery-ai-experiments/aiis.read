@@ -6,7 +6,9 @@ interface ShareStoreProps {
   newList: TopUserProps[] | null;
   recentList: TopUserProps[] | null;
   holderList: HolderProps[] | null;
+  holderListTotal: number;
   holderingList: HolderProps[] | null;
+  holderingListTotal: number;
 }
 
 const useShareStore = create<ShareStoreProps>((set) => ({
@@ -15,7 +17,9 @@ const useShareStore = create<ShareStoreProps>((set) => ({
   newList: null,
   recentList: null,
   holderList: null,
+  holderListTotal: 0,
   holderingList: null,
+  holderingListTotal: 0,
 }));
 
 export default useShareStore;
