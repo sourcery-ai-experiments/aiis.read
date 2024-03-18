@@ -3,7 +3,7 @@ export {};
 declare global {
   export interface ItemsResponse<T> {
     items: T[];
-    total?: number;
+    total: number;
   }
 
   export interface PageProps {

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Divider, TableFooter, TablePagination } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,11 +13,11 @@ import dayjs from 'dayjs';
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import { PAGE_PER_ROW } from '../../constants';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
-import useTweetStore from '../../store/useTweetStore';
-import useUserStore from '../../store/useUserStore';
 import useGlobalStore from '../../store/useGlobalStore';
+import useTweetStore from '../../store/useTweetStore';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -39,9 +39,13 @@ const Icon = () => (
 
 const Claim = (props: { price?: string }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  const { tweetRewardList } = useTweetStore((state) => ({ ...state }));
-  const { run: getReward } = useTweetReward();
-  const { userInfo } = useUserStore((state) => ({ ...state }));
+  const { tweetRewardList, tweetRewardListTotal, tweetRewardTotalRewardAmount } = useTweetStore(
+    (state) => ({
+      ...state,
+    })
+  );
+  const { run: getReward, loading: isGetRewardLoading } = useTweetReward();
+  const [page, setPage] = useState(0);
 
   const { loading, run: claimReward } = useWalletClaimReward(
     tweetRewardList,
@@ -70,12 +74,14 @@ const Claim = (props: { price?: string }) => {
       getReward();
     }
   );
-  const totalPrice =
-    tweetRewardList?.reduce((total, item) => total + Number(item.totalRewardAmount), 0) ?? 0;
 
   useEffect(() => {
-    getReward();
-  }, []);
+    getReward({ offset: page * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+  }, [getReward, page]);
+
+  function handlePageChange(nextPage: number) {
+    setPage(nextPage);
+  }
 
   return (
     <>
@@ -100,7 +106,7 @@ const Claim = (props: { price?: string }) => {
               <div className="flex flex-col space-y-2">
                 <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
                   $
-                  {new BigNumber(totalPrice)
+                  {new BigNumber(tweetRewardTotalRewardAmount)
                     .dividedBy(new BigNumber(Math.pow(10, 18)))
                     .multipliedBy(new BigNumber(props.price ?? 0))
                     .toNumber()}
@@ -109,7 +115,7 @@ const Claim = (props: { price?: string }) => {
                   <Icon />
                   <NumberDisplayer
                     className="text-sm font-medium text-[#919099]"
-                    text={String(totalPrice) ?? ''}
+                    text={tweetRewardTotalRewardAmount}
                   />
                 </div>
               </div>
@@ -142,11 +148,9 @@ const Claim = (props: { price?: string }) => {
           <TableContainer
             sx={{
               marginTop: 0,
-              maxHeight: '500px', // 设置固定高度
-              overflowY: 'auto', // 添加垂直滚动
             }}
           >
-            <Table aria-label="simple table" stickyHeader={true}>
+            <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell
@@ -187,57 +191,80 @@ const Claim = (props: { price?: string }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tweetRewardList?.map((row, i) => (
-                  <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{
-                        borderColor: '#EBEEF0',
-                      }}
-                    >
-                      {dayjs(row.claimedAt).format('YYYY/MM/DD HH:mm')}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        borderColor: '#EBEEF0',
-                      }}
-                    >
-                      {row.creator}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        borderColor: '#EBEEF0',
-                      }}
-                    >
-                      {row.rank}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        borderColor: '#EBEEF0',
-                      }}
-                    >
-                      <div className="flex items-center space-x-1">
-                        <Icon />
-                        <NumberDisplayer
-                          className="text-xs text-[#0F1419]"
-                          text={row.totalRewardAmount}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        borderColor: '#EBEEF0',
-                      }}
-                    >
-                      <div className="flex items-center space-x-1">
-                        <Icon />
-                        <NumberDisplayer className="text-xs text-[#0F1419]" text={row.ethAmount} />
-                      </div>
+                {tweetRewardList == null || tweetRewardList.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="!text-center">
+                      no records found
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  tweetRewardList?.map((row, i) => (
+                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {dayjs(row.claimedAt).format('YYYY/MM/DD HH:mm')}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {row.creator}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {row.rank}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <Icon />
+                          <NumberDisplayer
+                            className="text-xs text-[#0F1419]"
+                            text={row.totalRewardAmount}
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <Icon />
+                          <NumberDisplayer
+                            className="text-xs text-[#0F1419]"
+                            text={row.ethAmount}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    disabled={isGetRewardLoading}
+                    count={tweetRewardListTotal}
+                    page={page}
+                    onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                    rowsPerPage={PAGE_PER_ROW}
+                    rowsPerPageOptions={[]}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </div>

@@ -18,7 +18,7 @@ const useUserInfo = () => {
 
 const useUserInvite = () => {
   const result = useRequest<ResultData<InviteResponse>, PageProps[]>(
-    () => http.get('/api/user/invites'),
+    (params) => http.get('/api/user/invites', params),
     {
       manual: true,
       onSuccess(response) {

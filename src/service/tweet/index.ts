@@ -11,6 +11,7 @@ const useTweetList = () => {
       onSuccess(response) {
         useTweetStore.setState({
           tweetList: response.data.items,
+          tweetListTotal: response.data.total,
         });
       },
     }
@@ -20,33 +21,37 @@ const useTweetList = () => {
 };
 
 const useTweetReward = () => {
-  const result = useRequest<ResultData<ItemsResponse<TweetRewardProps>>, unknown[]>(
-    () => http.get('/api/twitter/rewards', { status: 1 }),
-    {
-      manual: true,
-      onSuccess(response) {
-        useTweetStore.setState({
-          tweetRewardList: response.data.items,
-        });
-      },
-    }
-  );
+  const result = useRequest<
+    ResultData<ItemsResponse<TweetRewardProps> & { totalRewardAmount: string }>,
+    PageProps[]
+  >((params) => http.get('/api/twitter/rewards', { status: 1, ...params }), {
+    manual: true,
+    onSuccess(response) {
+      useTweetStore.setState({
+        tweetRewardList: response.data.items,
+        tweetRewardListTotal: response.data.total,
+        tweetRewardTotalRewardAmount: response.data.totalRewardAmount,
+      });
+    },
+  });
 
   return result;
 };
 
 const useTweetRewardHistory = () => {
-  const result = useRequest<ResultData<ItemsResponse<RewardHistoryProps>>, PageProps[]>(
-    () => http.get('/api/twitter/reward/claim-history'),
-    {
-      manual: true,
-      onSuccess(response) {
-        useTweetStore.setState({
-          rewardHistoryList: response.data.items,
-        });
-      },
-    }
-  );
+  const result = useRequest<
+    ResultData<ItemsResponse<RewardHistoryProps> & { totalRewardAmount: string }>,
+    PageProps[]
+  >((params) => http.get('/api/twitter/reward/claim-history', params), {
+    manual: true,
+    onSuccess(response) {
+      useTweetStore.setState({
+        rewardHistoryList: response.data.items,
+        rewardHistoryListTotal: response.data.total,
+        rewardHistoryTotalRewardAmount: response.data.totalRewardAmount,
+      });
+    },
+  });
 
   return result;
 };
