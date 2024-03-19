@@ -5,6 +5,7 @@ import { useToggle } from 'ahooks';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
@@ -98,7 +99,7 @@ const WithDraw = () => {
             <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
             <div className="flex items-center space-x-1">
               <Icon />
-              <span className="text-sm font-medium text-[#0F1419]">{balance}</span>
+              <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} />
             </div>
           </div>
           <div className="my-[30px] flex w-full justify-between">
