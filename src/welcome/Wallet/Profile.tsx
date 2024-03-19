@@ -80,7 +80,7 @@ const ProfileModal = () => {
   const [key, setKey] = useState(0);
   const list = [
     {
-      text: `Holders (${holderList?.length})`,
+      text: `Holders (${holderListTotal})`,
     },
     {
       text: 'Holding',

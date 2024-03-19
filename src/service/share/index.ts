@@ -77,11 +77,11 @@ const useHolderList = () => {
           params[0].subject
             ? {
                 holderList: response.data.items,
-                holderListTotal: response.data.total ?? 0,
+                holderListTotal: response.data.total,
               }
             : {
                 holderingList: response.data.items,
-                holderingListTotal: response.data.total ?? 0,
+                holderingListTotal: response.data.total,
               }
         );
       },
