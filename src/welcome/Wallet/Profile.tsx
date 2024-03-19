@@ -358,7 +358,6 @@ const ProfileModal = () => {
                               newTab?.focus();
                             }}
                           >
-                            {' '}
                             {row.text}
                           </span>
                         </TableCell>
