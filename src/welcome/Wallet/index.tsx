@@ -86,7 +86,10 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
 
         <div className="mt-10">
           <div className="space-y-[15px]">
-            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+            <div
+              className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]"
+              onClick={() => openProfile(userInfo)}
+            >
               <div className="flex items-center space-x-3">
                 <UserIcon />
                 <span className="text-base font-medium">Portfolio Value</span>
