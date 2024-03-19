@@ -4,6 +4,8 @@ import { useToggle } from 'ahooks';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
@@ -65,6 +67,9 @@ const Left = () => (
 
 const WithDraw = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { balance, accounts } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
 
   return (
     <>
@@ -80,31 +85,31 @@ const WithDraw = () => {
       <Modal onClose={close} open={isOpen} width={553}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
-          <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
-          <p className="my-6 text-black text-opacity-50 text-sm">
+          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
+          <p className="my-6 text-sm text-black text-opacity-50">
             Send your ETH to another wallet address on the blast network
           </p>
 
-          <div className="w-full space-y-6 mb-6">
+          <div className="mb-6 w-full space-y-6">
             <TextField label="Enter Address" />
             <TextField label="Enter Amount" />
           </div>
 
-          <div className="flex self-end space-x-3">
+          <div className="flex space-x-3 self-end">
             <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
-            <div className="flex space-x-1 items-center">
+            <div className="flex items-center space-x-1">
               <Icon />
-              <span className="text-[#0F1419] font-medium text-sm">30.24</span>
+              <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} />
             </div>
           </div>
-          <div className="flex justify-between w-full my-[30px]">
+          <div className="my-[30px] flex w-full justify-between">
             <BasicButton
               classes={{
                 outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
               }}
               onClick={close}
             >
-              <div className="flex space-x-2 items-center justify-center">
+              <div className="flex items-center justify-center space-x-2">
                 <Left />
                 <span className="text-[15px] font-medium">Go Back</span>
               </div>
