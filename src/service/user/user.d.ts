@@ -20,6 +20,7 @@ declare global {
      * 是否已激活
      */
     isActive?: boolean;
+    isRegistered?: boolean;
     price?: string;
     rewardEarned?: string;
     rewardUnClaimed?: string;
