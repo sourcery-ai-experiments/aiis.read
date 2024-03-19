@@ -359,12 +359,7 @@ const ProfileModal = () => {
                         <TableCell>
                           <div className="flex items-center space-x-1">
                             <Icon />
-                            <span>
-                              {new BigNumber(Number(row.reward))
-                                .dividedBy(new BigNumber(Math.pow(10, 18)))
-                                .toNumber()
-                                .toLocaleString(undefined, { maximumFractionDigits: 20 })}
-                            </span>
+                            <NumberDisplayer className="text-xs text-[#0F1419]" text={row.reward} />
                           </div>
                         </TableCell>
                       </TableRow>
