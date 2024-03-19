@@ -348,12 +348,19 @@ const ProfileModal = () => {
                           {dayjs(row.createdAt).format('YYYY/MM/DD HH:mm')}
                         </TableCell>
                         <TableCell>
-                          <a
-                            className="inline-block max-w-[200px] truncate"
-                            href={`https://twitter.com/${currentInfo?.twitterUsername}/status/${currentInfo?.twitterId}`}
+                          <span
+                            className="inline-block max-w-[200px] truncate hover:cursor-pointer"
+                            onClick={() => {
+                              const newTab = window.open(
+                                `https://twitter.com/${currentInfo?.twitterUsername}/status/${currentInfo?.twitterId}`,
+                                '_blank'
+                              );
+                              newTab?.focus();
+                            }}
                           >
+                            {' '}
                             {row.text}
-                          </a>
+                          </span>
                         </TableCell>
                         <TableCell>#{row.rank}</TableCell>
                         <TableCell>
