@@ -2,7 +2,7 @@ import React from 'react';
 import { styled, TextField as MTextField } from '@mui/material';
 import { useToggle } from 'ahooks';
 
-import { BasicButton, PrimaryButton } from '../../components/Button';
+import { BasicButton, PrimaryButton, BackButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
@@ -46,25 +46,6 @@ const TextField = styled(MTextField)({
   },
 });
 
-const Left = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path
-      d="M3.68799 8H12.438"
-      stroke="#2E2E32"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7.37499 11.75L3.625 8L7.37499 4.25"
-      stroke="#2E2E32"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const WithDraw = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { balance, accounts } = useGlobalUserStore((state) => ({
@@ -80,9 +61,16 @@ const WithDraw = () => {
         }}
         onClick={open}
       >
-        Withdraw
+        <span className="text-base font-medium">Withdraw</span>
       </BasicButton>
-      <Modal onClose={close} open={isOpen} width={553}>
+      <Modal
+        onClose={close}
+        open={isOpen}
+        width={553}
+        closebuttonstyle={{
+          marginTop: '5px',
+        }}
+      >
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
@@ -103,17 +91,7 @@ const WithDraw = () => {
             </div>
           </div>
           <div className="my-[30px] flex w-full justify-between">
-            <BasicButton
-              classes={{
-                outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
-              }}
-              onClick={close}
-            >
-              <div className="flex items-center justify-center space-x-2">
-                <Left />
-                <span className="text-[15px] font-medium">Go Back</span>
-              </div>
-            </BasicButton>
+            <BackButton onButtonClick={close} />
             <PrimaryButton
               classes={{
                 contained: '!py-[10px] !px-[38px] !w-[170px]',
