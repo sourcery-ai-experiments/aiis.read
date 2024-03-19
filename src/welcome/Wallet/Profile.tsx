@@ -77,7 +77,6 @@ const ProfileModal = () => {
   }));
 
   const { open, closeProfile } = useProfileModal((state) => ({ ...state }));
-  const [key, setKey] = useState(0);
   const list = [
     {
       text: `Holders (${holderListTotal})`,
@@ -116,7 +115,6 @@ const ProfileModal = () => {
         subject: currentInfo?.walletAddress,
       });
     } else {
-      setKey(0);
       useProfileModal.setState({ currentKey: 0 });
     }
   }, [currentInfo?.walletAddress, getHolderList, open, currentKey]);
@@ -124,17 +122,13 @@ const ProfileModal = () => {
   const [curPages, setCurPages] = useState([0, 0, 0]);
   function handlePageChange(nextPage: number) {
     const nextPages = [...curPages];
-    nextPages[key] = nextPage;
+    nextPages[currentKey] = nextPage;
     setCurPages(nextPages);
   }
 
   useEffect(() => {
-    fetchMap[key]({ offset: curPages[key] * PAGE_PER_ROW, limit: PAGE_PER_ROW });
-  }, [curPages, fetchMap, key]);
-
-  useEffect(() => {
-    setKey(currentKey);
-  }, [currentKey]);
+    fetchMap[currentKey]({ offset: curPages[currentKey] * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+  }, [curPages, fetchMap, currentKey]);
 
   return (
     <>
@@ -196,11 +190,15 @@ const ProfileModal = () => {
             {list.map((item, i) => (
               <div
                 onClick={() => {
-                  setKey(i);
+                  useProfileModal.setState({
+                    currentKey: i,
+                  });
                 }}
                 key={item.text}
                 className={`rounded-full border border-[#0F1419] py-2 px-[18px] font-medium leading-[18px] ${
-                  key === i ? 'bg-[#2C2A2A] text-white' : 'cursor-pointer bg-white text-[#0F1419]'
+                  currentKey === i
+                    ? 'bg-[#2C2A2A] text-white'
+                    : 'cursor-pointer bg-white text-[#0F1419]'
                 }`}
               >
                 {item.text}
@@ -208,7 +206,7 @@ const ProfileModal = () => {
             ))}
           </div>
 
-          {key === 0 && (
+          {currentKey === 0 && (
             <TableContainer
               sx={{
                 marginTop: 2,
@@ -257,7 +255,7 @@ const ProfileModal = () => {
             </TableContainer>
           )}
 
-          {key === 1 && (
+          {currentKey === 1 && (
             <TableContainer
               sx={{
                 marginTop: 2,
@@ -306,7 +304,7 @@ const ProfileModal = () => {
             </TableContainer>
           )}
 
-          {key === 2 && (
+          {currentKey === 2 && (
             <TableContainer
               sx={{
                 marginTop: 2,
