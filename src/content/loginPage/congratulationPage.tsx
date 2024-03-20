@@ -1,22 +1,24 @@
 import React, { FC, useEffect } from 'react';
+
 import { NextButton, VerifyButton } from '../../components/buttons/loginButton';
-import '../../tailwind.css';
 import {
-  XFANS_TWITTER_HOMEPAGE,
-  XFANS_TWITTES,
-  LOCALSTORAGE_TRUE,
   LOCALSTORAGE_FALSE,
+  LOCALSTORAGE_TRUE,
+  XFANS_CHECK_RETWEET,
+  XFANS_DONE,
+  XFANS_GO,
   XFANS_TWITTER_GO_FOLLOW,
   XFANS_TWITTER_GO_FOLLOW_VERIFY,
   XFANS_TWITTER_GO_RETWEETS,
   XFANS_TWITTER_GO_RETWEETS_VERIFY,
-  XFANS_CHECK_RETWEET,
-  XFANS_DONE,
+  XFANS_TWITTER_HOMEPAGE,
+  XFANS_TWITTES,
   XFANS_VERIFY,
-  XFANS_GO,
 } from '../../constants';
 import http, { ResultData } from '../../service/request';
 import useGlobalStore from '../../store/useGlobalStore';
+
+import '../../tailwind.css';
 interface CongratulationPageProps {
   goProfile: () => void; // 定义一个函数类型的属性
 }
@@ -195,8 +197,8 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
         disableElevation
         style={{
           color: '#fff',
-          backgroundColor: true ? '#9A6CF9' : '#B08DF6',
-          borderColor: true ? '#9A6CF9' : '#B08DF6',
+          backgroundColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
+          borderColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
         }}
         onClick={async () => {
           try {

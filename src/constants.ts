@@ -16,6 +16,7 @@ const XFANS_GO = 'GO';
 const PAGE_PER_ROW = 10;
 
 enum ContractError {
+  InvalidAddress = 'Invalid Address',
   InsufficientBalance = 'Insufficient Balance',
 }
 

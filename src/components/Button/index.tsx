@@ -102,6 +102,6 @@ const BackButton = (props: BackButtonProps) => {
   );
 };
 
-export { BasicButton, PrimaryButton, PrimaryLoadingButton, BackButton };
+export { BackButton, BasicButton, PrimaryButton, PrimaryLoadingButton };
 
 export default MButton;
