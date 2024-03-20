@@ -9,7 +9,7 @@ import NumberInput, { NumberInputRef } from '../../components/NumberInput';
 import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import { ContractError } from '../../constants';
-import useWallet from '../../hooks/useWallet';
+import useAccount from '../../hooks/useAccount';
 import {
   getFloorPrice,
   getSellPrice,
@@ -82,7 +82,7 @@ type SellModalProps = {
 
 const SellModal = ({ onClose }: SellModalProps) => {
   const { currentInfo } = useProfileModal();
-  const wallet = useWallet();
+  const [wallet] = useAccount();
   const [price, setPrice] = useState<string>('0');
   const [gasFee, setGasFee] = useState<string>('0');
   const [amount, setAmount] = useState<number>(0);

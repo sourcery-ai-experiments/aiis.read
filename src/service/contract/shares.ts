@@ -67,3 +67,10 @@ export async function sellShares(address: string, amount: number) {
     address,
   });
 }
+
+export async function transfer(address: string, amount: string) {
+  await http.post<null>('/xfans/api/shares/transfer', {
+    amount,
+    address,
+  });
+}
