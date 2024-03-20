@@ -3,6 +3,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 
+import { BasicButton } from '../../components/Button';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import TruncateText from '../../components/TruncateText';
 import { useUserInfo } from '../../service/user';
@@ -23,6 +24,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
   const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const { run: getUserInfo } = useUserInfo();
+  const [isWithDrawOpen, setIsWithDrawOpen] = useState(false);
 
   const { run: getWalletAccounts } = useWalletAccounts();
   useEffect(() => {
@@ -173,7 +175,16 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
           </div> */}
           <div className="flex items-center justify-between">
             <Deposit />
-            <WithDraw />
+            <BasicButton
+              classes={{
+                outlined:
+                  '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419] hover:!border-[#9A6CF9]',
+              }}
+              onClick={() => setIsWithDrawOpen(true)}
+            >
+              <span className="text-base font-medium">Withdraw</span>
+            </BasicButton>
+            {isWithDrawOpen && <WithDraw onClose={() => setIsWithDrawOpen(false)} />}
           </div>
 
           <div
