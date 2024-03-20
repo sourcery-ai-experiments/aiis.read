@@ -12,7 +12,7 @@ import { useToggle } from 'ahooks';
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import TruncateText from '../../components/TruncateText';
-import { PAGE_PER_ROW } from '../../constants';
+import { ROWS_PER_PAGE } from '../../constants';
 import { useUserInvite } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
@@ -45,7 +45,7 @@ const InviteFriends = () => {
   const { inviteInfo } = useUserStore((state) => ({ ...state }));
 
   useEffect(() => {
-    getInvite({ offset: page * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+    getInvite({ offset: page * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
   }, [getInvite, page]);
 
   function handlePageChange(nextPage: number) {
@@ -147,18 +147,20 @@ const InviteFriends = () => {
                   ))
                 )}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    disabled={loading}
-                    count={inviteInfo?.inviteCount ?? 0}
-                    page={page}
-                    onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                    rowsPerPage={PAGE_PER_ROW}
-                    rowsPerPageOptions={[]}
-                  />
-                </TableRow>
-              </TableFooter>
+              {(inviteInfo?.inviteCount ?? 0) > ROWS_PER_PAGE && (
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      disabled={loading}
+                      count={inviteInfo?.inviteCount ?? 0}
+                      page={page}
+                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                      rowsPerPage={ROWS_PER_PAGE}
+                      rowsPerPageOptions={[]}
+                    />
+                  </TableRow>
+                </TableFooter>
+              )}
             </Table>
           </TableContainer>
         </div>

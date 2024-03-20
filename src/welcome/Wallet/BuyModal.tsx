@@ -10,7 +10,6 @@ import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import { ContractError } from '../../constants';
 import useWallet from '../../hooks/useWallet';
-
 import {
   buyShares,
   getBuyPrice,
@@ -151,7 +150,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
       setIsBuying(false);
       refresh();
       useGlobalStore.setState({
-        message: '购买成功！',
+        message: 'Transaction completed',
         messageType: 'succes',
         messageOpen: true,
       });

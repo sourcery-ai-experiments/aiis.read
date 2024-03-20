@@ -60,5 +60,5 @@ export default forwardRef<NumberInputRef, NumberInputProps>(function NumberInput
     },
     []
   );
-  return <TextField value={value} onChange={handleChange} {...restProps} />;
+  return <TextField autoComplete="off" value={value} onChange={handleChange} {...restProps} />;
 });

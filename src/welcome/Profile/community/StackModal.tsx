@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import { useRequest } from 'ahooks';
 
 import { BasicButton, PrimaryButton } from '../../../components/Button';
 import Modal from '../../../components/Modal';
 import NumberInput from '../../../components/NumberInput';
+import { success } from '../../../components/Toaster';
+import {
+  getSharesBalance,
+  getStakeBalance,
+  stake,
+  unstake,
+} from '../../../service/contract/shares';
 
 type ModalProps = {
   onClose(): void;
+  community: Community;
 };
-export default function StackModal({ onClose }: ModalProps) {
+export default function StackModal({ onClose, community }: ModalProps) {
   const [currentTab, setCurrentTab] = useState<'stack' | 'unstack'>('stack');
   const activedTabNavClassName = 'bg-[#9A6CF9] text-white';
+  const [sharesBalance, setSharesBalance] = useState('0');
+  const [stakeBalance, setStakeBalance] = useState('0');
+
+  useEffect(() => {
+    getSharesBalance(community.subject).then(setSharesBalance);
+    getStakeBalance(community.subject).then(setStakeBalance);
+  }, [community.subject]);
+
   return (
     <Modal
       open
@@ -27,11 +45,13 @@ export default function StackModal({ onClose }: ModalProps) {
           <br /> creator’s community
         </p>
 
-        <ProgressBar />
+        <ProgressBar percentage={+community.stakedShares / +community.requiredStakedShares} />
         <p className="mt-[14px] w-full text-right text-sm text-[#919099]">
-          Community total staked:3
+          Community total staked: {+community.stakedShares / 100}
         </p>
-        <p className="w-full text-right text-sm text-[#919099]">you staked:2</p>
+        <p className="w-full text-right text-sm text-[#919099]">
+          you staked: {+stakeBalance / 100}
+        </p>
 
         {/* tab bar */}
         <div className="flex w-full justify-start">
@@ -56,66 +76,135 @@ export default function StackModal({ onClose }: ModalProps) {
           </div>
         </div>
 
-        {currentTab === 'stack' ? <StackPanel /> : <UnstackPanel />}
-
-        <div className="mt-[30px] mb-0 flex w-full justify-between">
-          <BasicButton
-            classes={{
-              outlined: '!w-[184px] !h-[46px] !text-[#0F1419] !border-[#9A6CF9] !text-[#9A6CF9]',
-            }}
-            onClick={onClose}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <span className="text-[15px] font-medium">Cancel</span>
-            </div>
-          </BasicButton>
-          {/* TODO loading */}
-          <PrimaryButton
-            classes={{
-              contained: '!py-[10px] !px-[38px] !w-[184px] whitespace-nowrap',
-            }}
-          >
-            <span className="text-[15px] font-medium">Confirm unstake</span>
-          </PrimaryButton>
-        </div>
+        {currentTab === 'stack' ? (
+          <StackPanel onClose={onClose} address={community.subject} sharesBalance={sharesBalance} />
+        ) : (
+          <UnstackPanel onClose={onClose} address={community.subject} stakeBalance={stakeBalance} />
+        )}
       </div>
     </Modal>
   );
 }
 
-function StackPanel() {
+type StackPanelProps = {
+  address: string;
+  sharesBalance: string;
+  onClose(): void;
+};
+
+function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
+  const [amount, setAmount] = useState(0);
+  const { run: runStake, loading } = useRequest(() => stake(address, amount), {
+    manual: true,
+    onSuccess() {
+      onClose();
+      success('stake successful');
+    },
+  });
+  function handleConfirmClick() {
+    runStake();
+  }
   return (
-    <div className="mt-[25px] w-full">
-      <p className="flex justify-between text-base font-medium text-[#0F1419]">
-        <span>Shares you hold:10</span>
-        <span>Max stake:8</span>
-      </p>
-      <NumberInput
-        className="!mt-[16px]"
-        size="small"
-        fullWidth
-        label="Amount"
-        onChange={() => undefined}
-      />
-    </div>
+    <>
+      <div className="mt-[25px] w-full">
+        <p className="flex justify-between text-base font-medium text-[#0F1419]">
+          <span>Shares you hold: {+sharesBalance / 100}</span>
+          <span>Max stake: {+sharesBalance / 100}</span>
+        </p>
+        <NumberInput
+          className="!mt-[16px]"
+          size="small"
+          fullWidth
+          label="Amount"
+          min={0}
+          max={+sharesBalance / 100}
+          onChange={(v) => setAmount(v ?? 0)}
+        />
+      </div>
+      <div className="mt-[30px] mb-0 flex w-full justify-between">
+        <BasicButton
+          classes={{
+            outlined: '!w-[184px] !h-[46px] !text-[#0F1419] !border-[#9A6CF9] !text-[#9A6CF9]',
+          }}
+          onClick={onClose}
+        >
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-[15px] font-medium">Cancel</span>
+          </div>
+        </BasicButton>
+        <PrimaryButton
+          classes={{
+            contained: '!py-[10px] !px-[38px] !w-[184px] whitespace-nowrap',
+          }}
+          disabled={amount === 0 || loading}
+          startIcon={loading && <CircularProgress color="inherit" size={15} />}
+          onClick={handleConfirmClick}
+        >
+          <span className="text-[15px] font-medium">Confirm stake</span>
+        </PrimaryButton>
+      </div>
+    </>
   );
 }
 
-function UnstackPanel() {
+type UnstackPanelProps = {
+  address: string;
+  stakeBalance: string;
+  onClose(): void;
+};
+
+function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
+  const [amount, setAmount] = useState(0);
+  const { run: runUnstake, loading } = useRequest(() => unstake(address, amount), {
+    manual: true,
+    onSuccess() {
+      onClose();
+      success('unstake successful');
+    },
+  });
+  function handleConfirmClick() {
+    runUnstake();
+  }
   return (
-    <div className="mt-[25px] w-full">
-      <p className="flex justify-between text-base font-medium text-[#0F1419]">
-        <span>Shares you staked:2</span>
-        <span>Max unstake:8</span>
-      </p>
-      <NumberInput
-        className="!mt-[16px]"
-        size="small"
-        fullWidth
-        label="Amount"
-        onChange={() => undefined}
-      />
-    </div>
+    <>
+      <div className="mt-[25px] w-full">
+        <p className="flex justify-between text-base font-medium text-[#0F1419]">
+          <span>Shares you staked: {+stakeBalance / 100}</span>
+          <span>Max unstake: {+stakeBalance / 100}</span>
+        </p>
+        <NumberInput
+          className="!mt-[16px]"
+          size="small"
+          fullWidth
+          label="Amount"
+          min={0}
+          max={+stakeBalance / 100}
+          onChange={(v) => setAmount(v ?? 0)}
+        />
+      </div>
+      <div className="mt-[30px] mb-0 flex w-full justify-between">
+        <BasicButton
+          classes={{
+            outlined: '!w-[184px] !h-[46px] !text-[#0F1419] !border-[#9A6CF9] !text-[#9A6CF9]',
+          }}
+          onClick={onClose}
+        >
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-[15px] font-medium">Cancel</span>
+          </div>
+        </BasicButton>
+        <PrimaryButton
+          classes={{
+            contained: '!py-[10px] !px-[38px] !w-[184px] whitespace-nowrap',
+          }}
+          disabled={amount === 0 || loading}
+          startIcon={loading && <CircularProgress color="inherit" size={15} />}
+          onClick={handleConfirmClick}
+        >
+          <span className="text-[15px] font-medium">Confirm unstake</span>
+        </PrimaryButton>
+      </div>
+    </>
   );
 }
 
@@ -124,7 +213,8 @@ function ProgressBar({ percentage = 0.0 }: { percentage?: number }) {
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
       <div
-        className={`item-center absolute left-0 top-0 flex h-[20px] w-[${percentage}px] rounded-full bg-[#9A6CF969] pl-[10px] pr-[10px]`}
+        className={`item-center absolute left-0 top-0 flex h-[20px] rounded-full bg-[#9A6CF969] pl-[10px] pr-[10px]`}
+        style={{ width: `calc(${percentage * 100}%)` }}
       />
       <div className="item-center absolute right-0 top-[1px] flex h-[18px] w-[18px] justify-center rounded-full border border-[#9A6CF9] bg-white text-xs text-[#2E2E32]">
         5

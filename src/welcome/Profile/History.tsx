@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { BasicButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
-import { PAGE_PER_ROW } from '../../constants';
+import { ROWS_PER_PAGE } from '../../constants';
 import { useTweetRewardHistory } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
 
@@ -44,7 +44,7 @@ const History = (props: { price?: string }) => {
   const { run: getRewardHistory, loading } = useTweetRewardHistory();
 
   useEffect(() => {
-    getRewardHistory({ offset: page * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+    getRewardHistory({ offset: page * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
   }, [getRewardHistory, page]);
 
   function handlePageChange(nextPage: number) {
@@ -213,18 +213,20 @@ const History = (props: { price?: string }) => {
                   ))
                 )}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    disabled={loading}
-                    count={rewardHistoryListTotal}
-                    page={page}
-                    onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                    rowsPerPage={PAGE_PER_ROW}
-                    rowsPerPageOptions={[]}
-                  />
-                </TableRow>
-              </TableFooter>
+              {rewardHistoryListTotal > ROWS_PER_PAGE && (
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      disabled={loading}
+                      count={rewardHistoryListTotal}
+                      page={page}
+                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                      rowsPerPage={ROWS_PER_PAGE}
+                      rowsPerPageOptions={[]}
+                    />
+                  </TableRow>
+                </TableFooter>
+              )}
             </Table>
           </TableContainer>
         </div>
