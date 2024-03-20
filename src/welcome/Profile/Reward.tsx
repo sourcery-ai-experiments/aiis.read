@@ -41,7 +41,7 @@ const Reward = () => {
   const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
   const { run: getTweet } = useTweetList();
-  const { tweetList } = useTweetStore((state) => ({ ...state }));
+  const { tweetList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.id === userInfo?.id)
@@ -96,7 +96,7 @@ const Reward = () => {
               <Icon />
               <NumberDisplayer
                 className="text-xs font-medium text-[#0F1419]"
-                text={userInfo?.rewardEarned}
+                text={tweetRewardTotalRewardAmount}
               />
             </div>
             <span className="text-[15px] font-medium text-[#919099]">Your Reward</span>
