@@ -284,10 +284,10 @@ const Explore = () => {
                 <ul>
                   {shareList?.map((item, i: any) => (
                     <li key={i} className="space-y-2 border-t border-t-[#EBEEF0] pt-[10px] pb-2">
-                      <span className="text-sm text-[#A1A1AA]">
+                      <span className="text-[14px] font-normal text-[#A1A1AA]">
                         {dayjs(item.createdAt).format('YYYY/MM/DD HH:mm')}
                       </span>
-                      <div className="flex items-center justify-between pl-5">
+                      <div className="flex items-center justify-between pl-4">
                         <div className="flex items-center space-x-9">
                           <div className="flex w-9 flex-col items-center">
                             <img
@@ -296,12 +296,12 @@ const Explore = () => {
                               alt="avatar"
                               className="h-9 w-9 cursor-pointer rounded-full"
                             />
-                            <span className="max-w-[80px] truncate text-sm text-[#919099]">
+                            <span className=" max-w-[80px] truncate text-[14px] font-normal text-[#919099]">
                               @{item.traderUser?.username}
                             </span>
                           </div>
 
-                          <span className="w-12 text-center text-sm font-bold">
+                          <span className="h-[14px] w-12 text-center text-[14px] font-bold">
                             {item.isBuy ? 'Bought' : 'Sold'}
                           </span>
 
@@ -312,7 +312,7 @@ const Explore = () => {
                               alt="avatar"
                               className="h-9 w-9 cursor-pointer rounded-full"
                             />
-                            <span className="max-w-[80px] truncate text-sm text-[#919099]">
+                            <span className=" max-w-[80px] truncate text-[14px] font-normal text-[#919099]">
                               @{item.subjectUser?.username}
                             </span>
                           </div>
