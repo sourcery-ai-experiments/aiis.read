@@ -47,7 +47,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
       id={id}
       onClick={openProfile}
       style={{ left: `${useWidth + 12}px` }}
-      className="absolute top-[-1px] flex w-[110px] h-[25px] grow-0 justify-center items-center text-center cursor-pointer !px-[17px] bg-[#9A6CF9] rounded-full"
+      className="absolute top-[-1px] flex h-[25px] w-[110px] grow-0 cursor-pointer items-center justify-center rounded-full bg-[#9A6CF9] !px-[17px] text-center"
     >
       <svg
         width="11"
@@ -74,7 +74,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
         </defs>
       </svg>
 
-      <p className="font-medium text-[12px] text-white ml-[4px]">{price}</p>
+      <p className="ml-[4px] text-[12px] font-medium text-white">{price}</p>
     </span>
   );
 };

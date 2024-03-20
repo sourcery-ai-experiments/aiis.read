@@ -62,7 +62,7 @@ type BuyModalProps = {
 
 const BuyModal = ({ onClose }: BuyModalProps) => {
   const { currentInfo } = useProfileModal();
-  const [wallet] = useAccount();
+  const { wallet, refresh: refreshAccount } = useAccount();
   const [price, setPrice] = useState<string>('0');
   const [gasFee, setGasFee] = useState<string>('0');
   const [amount, setAmount] = useState<number>(0);
@@ -132,6 +132,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   // 刷新数据, 可能有顺序问题
   function refresh() {
     numberInputRef.current?.reset();
+    refreshAccount();
     getBalance().then((balance) => {
       setBalance(balance.toString());
     });

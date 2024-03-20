@@ -63,7 +63,7 @@ type SellModalProps = {
 
 const SellModal = ({ onClose }: SellModalProps) => {
   const { currentInfo } = useProfileModal();
-  const [wallet] = useAccount();
+  const { wallet, refresh: refreshAccount } = useAccount();
   const [price, setPrice] = useState<string>('0');
   const [gasFee, setGasFee] = useState<string>('0');
   const [amount, setAmount] = useState<number>(0);
@@ -133,6 +133,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
   // 刷新数据,可能有顺序问题
   function refresh() {
     numberInputRef.current?.reset();
+    refreshAccount();
     if (currentInfo?.walletAddress) {
       getSharesBalance(currentInfo?.walletAddress).then((balance) => {
         setShareBalance(balance);

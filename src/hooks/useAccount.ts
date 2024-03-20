@@ -1,15 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useRequest } from 'ahooks';
 
 import { getAccounts } from '../service/contract/user';
+import { useUserInfo, useUserInvite } from '../service/user';
+import useGlobalUserStore from '../store/useGlobalUserStore';
+import useUserStore from '../store/useUserStore';
 
-type Address = string;
-type Balance = string;
+// 账户相关的全局状态
 export default function useAccount() {
-  const [account, setAccount] = useState<[Address, Balance]>(['0x0', '0']);
+  const { accounts, balance } = useGlobalUserStore();
+  const { userInfo, inviteInfo } = useUserStore((state) => ({ ...state }));
+  const { run: getUserInfo } = useUserInfo();
+  const { run: getUserInviteInfo } = useUserInvite();
+
+  const { run: getWallet } = useRequest(() => getAccounts(), {
+    manual: true,
+    onSuccess(response) {
+      useGlobalUserStore.setState({
+        accounts: response.accounts,
+        balance: response.balance,
+      });
+    },
+  });
+
+  const refresh = useCallback(() => {
+    getWallet();
+    getUserInfo();
+    getUserInviteInfo();
+  }, [getUserInfo, getUserInviteInfo, getWallet]);
+
   useEffect(() => {
-    getAccounts().then((response) => {
-      setAccount([response.accounts[0], response.balance]);
-    });
-  }, []);
-  return account;
+    refresh();
+  }, [refresh]);
+
+  return {
+    wallet: accounts[0],
+    balance,
+    userInfo,
+    inviteInfo,
+    refresh,
+  };
 }

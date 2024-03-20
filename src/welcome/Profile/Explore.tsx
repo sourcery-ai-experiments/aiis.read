@@ -11,11 +11,11 @@ import ETHIcon from '../../components/icons/ETHIcon';
 import UpIcon from '../../components/icons/UpIcon';
 import Loading from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import UserName from '../../components/User';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import { getTimeDistanceFromDate } from '../../utils';
-import UserName from '../../components/User';
 
 const Explore = () => {
   const list = Array(7).fill('');

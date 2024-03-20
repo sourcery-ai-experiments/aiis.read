@@ -41,13 +41,14 @@ type Props = {
 };
 
 const WithDraw = ({ onClose }: Props) => {
-  const [, balance] = useAccount();
+  const { balance, refresh } = useAccount();
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
   const { run: transfer, loading } = useRequest(() => transferApi(address, amount), {
     manual: true,
     onSuccess() {
       success('Submitted successfully');
+      refresh();
     },
   });
   const addressHelperText = useMemo(() => {
