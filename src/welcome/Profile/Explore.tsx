@@ -6,6 +6,9 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import dayjs from 'dayjs';
 
+import DownIcon from '../../components/icons/DownIcon';
+import ETHIcon from '../../components/icons/ETHIcon';
+import UpIcon from '../../components/icons/UpIcon';
 import Loading from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
@@ -143,7 +146,7 @@ const Explore = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
                             <span className="text-sm text-[#919099]">Price</span>
-                            <Icon />
+                            <ETHIcon />
                             <NumberDisplayer
                               className="text-[15px] font-bold text-[#919099]"
                               text={item.price}
@@ -188,7 +191,7 @@ const Explore = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
                             <span className="text-sm text-[#919099]">Price</span>
-                            <Icon />
+                            <ETHIcon />
                             <NumberDisplayer
                               className="text-[15px] text-[#919099]"
                               text={item.price}
@@ -232,7 +235,7 @@ const Explore = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
                             <span className="text-sm text-[#919099]">Price</span>
-                            <Icon />
+                            <ETHIcon />
                             <NumberDisplayer
                               className="text-[15px] text-[#919099]"
                               text={item.price}
@@ -240,7 +243,7 @@ const Explore = () => {
                           </div>
 
                           <div className="flex items-center space-x-1">
-                            {Number(item.increaseRate24h) >= 0 ? <Up /> : <Down />}
+                            {Number(item.increaseRate24h) >= 0 ? <UpIcon /> : <DownIcon />}
                             <span
                               className={`text-[15px] ${
                                 Number(item.increaseRate24h) >= 0
@@ -310,7 +313,7 @@ const Explore = () => {
                             {Number(item.shareAmount) / 100} Shares
                           </span>
                           <div className="flex items-center space-x-1">
-                            <Icon />
+                            <ETHIcon />
                             <span
                               className={`text-xs ${
                                 !item.isBuy ? 'text-[#FF2E00]' : 'text-[#16B364]'
@@ -333,61 +336,5 @@ const Explore = () => {
     </div>
   );
 };
-
-const Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
-    <g clipPath="url(#clip0_209_9369)">
-      <path d="M5.00032 17.4065V13.1882L0.142578 10.1367L5.00032 17.4065Z" fill="#C7C7E0" />
-      <path d="M5.0166 17.4065V13.1882L9.87443 10.1367L5.01669 17.4065H5.0166Z" fill="#A3A3D2" />
-      <path d="M5.00048 12.1399V6.75635L0.0869141 9.11963L5.00048 12.1399Z" fill="#C7C7E0" />
-      <path d="M5.0166 12.1399V6.75635L9.93017 9.11972L5.0166 12.1399Z" fill="#A3A3D2" />
-      <path d="M0.0869141 9.12L5.00039 0.59375V6.75662L0.0869141 9.12Z" fill="#C7C7E0" />
-      <path d="M9.93008 9.12L5.0166 0.59375V6.75662L9.93008 9.12Z" fill="#A3A3D2" />
-    </g>
-    <defs>
-      <clipPath id="clip0_209_9369">
-        <rect width="10" height="17" fill="white" transform="translate(0 0.5)" />
-      </clipPath>
-    </defs>
-  </svg>
-);
-
-const Up = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path
-      d="M1 9.9173L3.82845 7.08885L6.02245 9.2777L11.2801 4"
-      stroke="#16B364"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7.28027 4H11.2803V8"
-      stroke="#16B364"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const Down = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path
-      d="M1 4.00018L3.82845 6.82863L6.5 5L11.2801 9.91748"
-      stroke="#D85550"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M8 10H12V6"
-      stroke="#D85550"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 export default Explore;
