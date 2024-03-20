@@ -42,7 +42,7 @@ const Community = () => {
                     <span className="w-[210px] text-sm font-medium text-black">
                       {item.ownerUser.username}‘s Community
                     </span>
-                    <span className="ml-10 text-xs text-[#A1A1AA]">21:22</span>
+                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">21:22</span>
                   </div>
                   {/* TODO 用真实数据 */}
                   <p className="truncate text-xs text-[#5B7083]">new message</p>

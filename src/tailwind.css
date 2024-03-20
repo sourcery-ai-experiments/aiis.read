@@ -4,7 +4,9 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf');
+  /* src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf'); */
+  /* https://cloudconvert.com/otf-to-woff2 */
+  src: url('../public/SF-Pro-Display-Regular.woff2');
 
   /* src: url('./welcome/assets/SF-Pro-Display-Thin.otf'); */
 
