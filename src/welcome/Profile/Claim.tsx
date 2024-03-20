@@ -47,6 +47,10 @@ const Claim = (props: { price?: string }) => {
   const { run: getReward, loading: isGetRewardLoading } = useTweetReward();
   const [page, setPage] = useState(0);
 
+  const rewardUSD = new BigNumber(tweetRewardTotalRewardAmount)
+    .dividedBy(new BigNumber(Math.pow(10, 18)))
+    .multipliedBy(new BigNumber(props.price ?? 0));
+
   const { loading, run: claimReward } = useWalletClaimReward(
     tweetRewardList,
     (resp) => {
@@ -105,11 +109,7 @@ const Claim = (props: { price?: string }) => {
               </span>
               <div className="flex flex-col space-y-2">
                 <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
-                  $
-                  {new BigNumber(tweetRewardTotalRewardAmount)
-                    .dividedBy(new BigNumber(Math.pow(10, 18)))
-                    .multipliedBy(new BigNumber(props.price ?? 0))
-                    .toNumber()}
+                  ${rewardUSD.toString()}
                 </span>
                 <div className="flex items-center space-x-1">
                   <Icon />
@@ -128,7 +128,7 @@ const Claim = (props: { price?: string }) => {
               onClick={() => {
                 claimReward();
               }}
-              disabled={loading}
+              disabled={loading || rewardUSD.isZero()}
               loading={loading}
               loadingPosition="end"
               endIcon={<span />}
