@@ -11,6 +11,7 @@ const BasicStyleButton = styled(MButton)({
   borderRadius: '9999px',
   textTransform: 'none',
   lineHeight: '1.5',
+  fontFamily: 'SF Pro Display, sans-serif',
   '&:hover': {
     borderColor: '#9A6CF9',
     backgroundColor: '#FFFFFF',
@@ -24,6 +25,7 @@ const primaryStyle = {
   borderRadius: '9999px',
   textTransform: 'none',
   lineHeight: '1.5',
+  fontFamily: 'SF Pro Display, sans-serif',
   '&:hover': {
     boxShadow: 'none',
     backgroundColor: '#9A6CF9',

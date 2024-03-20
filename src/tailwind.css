@@ -19,10 +19,6 @@ body {
   font-size: 16px !important;
 }
 
-* {
-  font-family: inherit !important;
-}
-
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
