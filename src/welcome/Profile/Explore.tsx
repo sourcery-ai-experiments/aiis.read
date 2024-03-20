@@ -12,6 +12,7 @@ import { useNewList, useRecentList, useShareList, useTopList } from '../../servi
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import { getTimeDistanceFromDate } from '../../utils';
+import UserName from '../../components/User';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
@@ -168,14 +169,7 @@ const Explore = () => {
                         className="mx-[14px] h-[44px] w-[44px] rounded-full"
                       />
                       <div className="flex flex-1 flex-col space-y-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-[17px] font-bold text-[#0F1419]">
-                            {item.username}
-                          </span>
-                          <span className="mt-[1px] text-[14px] text-[#5B7083]">
-                            @{item.twitterUsername}
-                          </span>
-                        </div>
+                        <UserName username={item.username} twitterUsername={item.twitterUsername} />
 
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
@@ -217,10 +211,7 @@ const Explore = () => {
                         className="mx-[14px] h-[44px] w-[44px] rounded-full"
                       />
                       <div className="flex flex-1 flex-col space-y-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-bold text-[#0F1419]">{item.username}</span>
-                          <span className="text-[#5B7083]">@{item.twitterUsername}</span>
-                        </div>
+                        <UserName username={item.username} twitterUsername={item.twitterUsername} />
 
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
@@ -261,11 +252,7 @@ const Explore = () => {
                         className="mx-[14px] h-[44px] w-[44px] rounded-full"
                       />
                       <div className="flex flex-1 flex-col space-y-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-bold text-[#0F1419]">{item.username}</span>
-                          <span className="text-[#5B7083]">@{item.twitterUsername}</span>
-                        </div>
-
+                        <UserName username={item.username} twitterUsername={item.twitterUsername} />
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-[6px]">
                             <span className="text-sm text-[#919099]">Price</span>
