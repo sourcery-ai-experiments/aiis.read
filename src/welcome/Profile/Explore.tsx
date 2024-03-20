@@ -8,11 +8,11 @@ import dayjs from 'dayjs';
 
 import Loading from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import UserName from '../../components/User';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import { getTimeDistanceFromDate } from '../../utils';
-import UserName from '../../components/User';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">

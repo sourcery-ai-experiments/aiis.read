@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import useAccount from '../../hooks/useAccount';
 import { useUserInfo } from '../../service/user';
-import useUserStore from '../../store/useUserStore';
 import useProfileModal from '../../store/useProfileModal';
 
 import Community from './Community';
@@ -13,7 +13,7 @@ import Reward from './Reward';
 const Profile = (props: { handleButtonClick?: () => void }) => {
   const [key, setKey] = useState('explore');
   const { run: getUserInfo } = useUserInfo();
-  const { userInfo } = useUserStore((state) => ({ ...state }));
+  const { userInfo } = useAccount();
   const { openProfile } = useProfileModal((state) => ({ ...state }));
 
   const tapMap = [

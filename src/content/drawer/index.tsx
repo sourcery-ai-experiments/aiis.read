@@ -18,6 +18,7 @@ import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
 
 import LogoButton from './logoButton';
+
 import '../../tailwind.css';
 
 const drawerWidth = 463;
