@@ -154,7 +154,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
       setIsSelling(false);
       refresh();
       useGlobalStore.setState({
-        message: '出售成功！',
+        message: 'Transaction completed',
         messageType: 'succes',
         messageOpen: true,
       });

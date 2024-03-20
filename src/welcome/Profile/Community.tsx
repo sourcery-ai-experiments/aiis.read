@@ -1,61 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { getList } from '../../service/community';
 
 import ChatRoomDrawer from './community/ChatRoomDrawer';
 import StackModal from './community/StackModal';
 
-const list = [
-  {
-    avatar:
-      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
-    title: 'Damo‘s  Community',
-    text: '[12] frank：hi frens',
-  },
-  {
-    avatar:
-      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
-    title: 'Esther‘s  Community',
-    text: '[16] Cook：Over 30M was collected from free mium ',
-  },
-  {
-    avatar:
-      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
-    title: 'Bessie‘s  Community',
-    text: '[18] Poing：2024 will be a fruitful year for  stakers 2024 will be a fruitful year for  stakers',
-  },
-  {
-    avatar:
-      'https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5',
-    title: 'Richards‘s  Community',
-    text: '[20] Moke：hi frens',
-  },
-];
-
 const Community = () => {
-  const [isStackModalOpen, setIsStackModalOpen] = useState(false);
-  const list1 = Array(4).fill('');
   const [isChatRootOpen, setIsChatRootOpen] = useState(false);
+  const [lockedCommunities, setLockedCommunities] = useState<Community[]>([]);
+  const [unlockedCommunities, setUnlockedCommunities] = useState<Community[]>([]);
+  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
+
+  useEffect(() => {
+    getList(0).then(setLockedCommunities);
+    getList(1).then(setUnlockedCommunities);
+  }, []);
+
+  function handleStakeModalClose() {
+    setSelectedCommunity(null);
+    // 刷新列表获取最新状态
+    getList(0).then(setLockedCommunities);
+    getList(1).then(setUnlockedCommunities);
+  }
 
   return (
     <div className="relative mx-4">
       <ul>
-        {list.map((item, i) => (
+        {unlockedCommunities.map((item, i) => (
           <li
             key={i}
             className={`px-1 py-[10px] ${
-              i === list1.length - 1 ? '' : 'border-b border-b-[#EBEEF0]'
+              i === unlockedCommunities.length - 1 ? '' : 'border-b border-b-[#EBEEF0]'
             }`}
             onClick={() => setIsChatRootOpen(true)}
           >
             <div className="ml-3 flex cursor-pointer items-center">
-              <img src={item.avatar} alt="" className="w-[44px] rounded-full" />
+              <img src={item.ownerUser.avatar} alt="" className="w-[44px] rounded-full" />
               <div className="ml-[28px] flex-1 overflow-hidden">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center">
-                    <span className="w-[210px] text-sm font-medium text-black">{item.title}</span>
+                    <span className="w-[210px] text-sm font-medium text-black">
+                      {item.ownerUser.username}‘s Community
+                    </span>
                     <span className="ml-10 text-xs font-normal text-[#A1A1AA]">21:22</span>
                   </div>
-
-                  <p className="truncate text-xs  font-normal text-[#5B7083]">{item.text}</p>
+                  {/* TODO 用真实数据 */}
+                  <p className="truncate text-xs text-[#5B7083]">new message</p>
                 </div>
               </div>
             </div>
@@ -68,22 +58,22 @@ const Community = () => {
       </p>
 
       <ul className="mt-4 space-y-[10px]">
-        {list1.map((item, i) => (
+        {lockedCommunities.map((item, i) => (
           <li
             key={i}
             className="relative flex cursor-pointer items-center space-x-[14px] overflow-hidden rounded-[8px] bg-[#F7F9FA] py-2 px-3"
-            onClick={() => setIsStackModalOpen(true)}
+            onClick={() => setSelectedCommunity(item)}
           >
-            <img
-              src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-              alt=""
-              className="w-[44px] rounded-full"
-            />
+            <img src={item.ownerUser.avatar} alt="avatar" className="w-[44px] rounded-full" />
             <div className="flex w-full flex-col">
-              <span className="text-sm font-medium text-black">Barlend‘ Community</span>
+              <span className="text-sm font-medium text-black">
+                {item.ownerUser.username}‘s Community
+              </span>
               <div className="flex items-start justify-between">
-                <span className="text-xs text-[#5B7083]">Unlock Requires Staking: 5</span>
-                <span className="text-xs text-[#5B7083]">Staked: 0</span>
+                <span className="text-xs text-[#5B7083]">
+                  Unlock Requires Staking: {item.requiredStakedShares}
+                </span>
+                <span className="text-xs text-[#5B7083]">Staked: {item.stakedShares}</span>
               </div>
             </div>
             <LockBackgroundIcon className="absolute top-0 left-[-14px]" />
@@ -91,8 +81,16 @@ const Community = () => {
           </li>
         ))}
       </ul>
-      {isStackModalOpen && <StackModal onClose={() => setIsStackModalOpen(false)} />}
-      <ChatRoomDrawer open={isChatRootOpen} onClose={() => setIsChatRootOpen(false)} />
+      {selectedCommunity && selectedCommunity.status === 0 && (
+        <StackModal community={selectedCommunity} onClose={handleStakeModalClose} />
+      )}
+      {selectedCommunity && selectedCommunity.status === 1 && (
+        <ChatRoomDrawer
+          community={selectedCommunity}
+          open={isChatRootOpen}
+          onClose={() => setIsChatRootOpen(false)}
+        />
+      )}
     </div>
   );
 };

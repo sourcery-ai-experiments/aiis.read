@@ -11,18 +11,17 @@ interface SignInWithXPageProps {
 
 const SignInWithXPage: FC<SignInWithXPageProps> = ({ handleButtonClick, showLoading }) => {
   return (
-    <div className="w-full justify-center text-center items-center min-h-screen">
+    <div className="min-h-screen w-full items-center justify-center text-center">
       <img
-        className="mx-auto mt-[81px] mb-[32px] w-[120px] h-[120px]"
+        className="mx-auto mt-[81px] mb-[32px] h-[120px] w-[120px]"
         src="https://ik.imagekit.io/pqilkfzt7wb/xfans/logo_SPGs-kd5v.png?updatedAt=1706859358184"
         alt="Logo"
       />
-      <p className="text-[#0F1419] text-[24px] leading-[38px] font-bold text-center">
+      <p className="text-center text-[24px] font-bold leading-[38px] text-[#0F1419]">
         Login to your account
       </p>
-      <p className="text-[#5B7083] text-[14px] leading-[24px] font-normal text-center mb-[44px] px-[30px]">
-        Empower early creators, make the creator economy thrive, and build a simple, yet excellent
-        crypto social experience on Twitter.
+      <p className="mb-[44px] px-[30px] text-center text-[14px] font-normal leading-[24px] text-[#5B7083]">
+        Invest and earn rewards while using Twitter.
       </p>
       <NextButton
         variant="contained"
@@ -34,7 +33,7 @@ const SignInWithXPage: FC<SignInWithXPageProps> = ({ handleButtonClick, showLoad
           <div className="px-[60px]">
             <svg
               aria-hidden="true"
-              className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+              className="h-7 w-7 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
