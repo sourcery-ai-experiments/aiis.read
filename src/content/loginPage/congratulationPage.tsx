@@ -197,10 +197,8 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
         disableElevation
         style={{
           color: '#fff',
-          // eslint-disable-next-line no-constant-condition
-          backgroundColor: true ? '#9A6CF9' : '#B08DF6',
-          // eslint-disable-next-line no-constant-condition
-          borderColor: true ? '#9A6CF9' : '#B08DF6',
+          backgroundColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
+          borderColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
         }}
         onClick={async () => {
           try {

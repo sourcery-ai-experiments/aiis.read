@@ -1,17 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { styled, TextField as MTextField } from '@mui/material';
-import { useToggle } from 'ahooks';
+import { CircularProgress, styled, TextField as MTextField } from '@mui/material';
+import { useRequest, useToggle } from 'ahooks';
+import BigNumber from 'bignumber.js';
 import { isAddress } from 'web3-validator';
 
 import { BackButton, BasicButton, PrimaryButton } from '../../components/Button';
 import ETHIcon from '../../components/icons/ETHIcon';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
-import NumberInput from '../../components/NumberInput';
+import { error, success } from '../../components/Toaster';
 import { ContractError } from '../../constants';
 import useAccount from '../../hooks/useAccount';
-import { transfer } from '../../service/contract/shares';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
+import { transfer as transferApi } from '../../service/contract/shares';
 
 const TextField = styled(MTextField)({
   width: '493px',
@@ -34,22 +34,49 @@ const TextField = styled(MTextField)({
   },
 });
 
+const pattern = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+
 const WithDraw = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const [, balance] = useAccount();
   const [address, setAddress] = useState('');
-  const [amount, setAmount] = useState('0');
+  const [amount, setAmount] = useState('');
+  const { run: transfer, loading } = useRequest(() => transferApi(address, amount), {
+    manual: true,
+    onSuccess() {
+      success('Submitted successfully');
+    },
+  });
   const addressHelperText = useMemo(() => {
-    if (!isAddress(address)) {
+    if (address !== '' && !isAddress(address)) {
       return ContractError.InvalidAddress;
     }
   }, [address]);
 
-  // function handleAmountChange() {}
+  function handleAmountChange(nextAmount: string) {
+    if (nextAmount === '') {
+      setAmount('');
+      return;
+    }
+    if (pattern.test(nextAmount)) {
+      setAmount(nextAmount);
+    }
+  }
 
   function handleTransferClick() {
-    transfer(address, amount);
+    if (new BigNumber(balance).isLessThan(amount)) {
+      error('Insufficient Balance');
+      return;
+    }
+
+    transfer();
   }
+
+  const isValidAmount = useMemo(() => {
+    if (amount === '') return false;
+    if (amount == null) return false;
+    return true;
+  }, [amount]);
 
   return (
     <>
@@ -82,13 +109,15 @@ const WithDraw = () => {
               label="Enter Address"
               error={address !== '' && !isAddress(address)}
               helperText={addressHelperText}
+              autoComplete="off"
               onChange={(event) => setAddress(event.target.value)}
             />
             <TextField
               label="Enter Amount"
               fullWidth
               value={amount}
-              onChange={(event) => setAmount(event.target.value === '' ? '0' : event.target.value)}
+              autoComplete="off"
+              onChange={(event) => handleAmountChange(event.target.value)}
             />
           </div>
 
@@ -109,6 +138,8 @@ const WithDraw = () => {
               classes={{
                 contained: '!py-[10px] !px-[38px] !w-[170px]',
               }}
+              disabled={loading || !isAddress(address) || !isValidAmount}
+              startIcon={loading && <CircularProgress color="inherit" size={15} />}
               onClick={handleTransferClick}
             >
               <span className="text-[15px] font-medium">Transfer</span>
