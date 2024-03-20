@@ -52,10 +52,10 @@ const Community = () => {
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center">
                     <span className="w-[210px] text-sm font-medium text-black">{item.title}</span>
-                    <span className="ml-10 text-xs text-[#A1A1AA]">21:22</span>
+                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">21:22</span>
                   </div>
 
-                  <p className="truncate text-xs text-[#5B7083]">{item.text}</p>
+                  <p className="truncate text-xs  font-normal text-[#5B7083]">{item.text}</p>
                 </div>
               </div>
             </div>
