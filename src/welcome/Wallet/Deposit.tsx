@@ -2,7 +2,7 @@ import React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useToggle } from 'ahooks';
 
-import { BasicButton, PrimaryButton, BackButton } from '../../components/Button';
+import { BackButton, BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import TruncateText from '../../components/TruncateText';
 import useGlobalStore from '../../store/useGlobalStore';

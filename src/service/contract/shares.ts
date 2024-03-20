@@ -87,3 +87,9 @@ export async function unstake(address: string, amount: number) {
     amount: BigNumber(amount).times(100).toFixed(),
   });
 }
+export async function transfer(address: string, amount: string) {
+  await http.post<null>('/xfans/api/shares/transfer', {
+    amount,
+    address,
+  });
+}

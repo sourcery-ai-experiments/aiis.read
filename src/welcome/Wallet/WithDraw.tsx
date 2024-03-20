@@ -1,29 +1,17 @@
-import React from 'react';
-import { styled, TextField as MTextField } from '@mui/material';
-import { useToggle } from 'ahooks';
+import React, { useMemo, useState } from 'react';
+import { CircularProgress, styled, TextField as MTextField } from '@mui/material';
+import { useRequest } from 'ahooks';
+import BigNumber from 'bignumber.js';
+import { isAddress } from 'web3-validator';
 
-import { BasicButton, PrimaryButton, BackButton } from '../../components/Button';
+import { BackButton, PrimaryButton } from '../../components/Button';
+import ETHIcon from '../../components/icons/ETHIcon';
 import Modal from '../../components/Modal';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
-
-const Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
-    <g clipPath="url(#clip0_410_42042)">
-      <path d="M5.00056 16.9065V12.6882L0.142822 9.63672L5.00056 16.9065Z" fill="#C7C7E0" />
-      <path d="M5.0166 16.9065V12.6882L9.87443 9.63672L5.01669 16.9065H5.0166Z" fill="#A3A3D2" />
-      <path d="M5.00048 11.6404V6.25684L0.0869141 8.62012L5.00048 11.6404Z" fill="#C7C7E0" />
-      <path d="M5.0166 11.6404V6.25684L9.93017 8.62021L5.0166 11.6404Z" fill="#A3A3D2" />
-      <path d="M0.0869141 8.62L5.00039 0.09375V6.25662L0.0869141 8.62Z" fill="#C7C7E0" />
-      <path d="M9.93008 8.62L5.0166 0.09375V6.25662L9.93008 8.62Z" fill="#A3A3D2" />
-    </g>
-    <defs>
-      <clipPath id="clip0_410_42042">
-        <rect width="10" height="17" fill="white" />
-      </clipPath>
-    </defs>
-  </svg>
-);
+import { error, success } from '../../components/Toaster';
+import { ContractError } from '../../constants';
+import useAccount from '../../hooks/useAccount';
+import { transfer as transferApi } from '../../service/contract/shares';
 
 const TextField = styled(MTextField)({
   width: '493px',
@@ -46,63 +34,112 @@ const TextField = styled(MTextField)({
   },
 });
 
-const WithDraw = () => {
-  const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  const { balance, accounts } = useGlobalUserStore((state) => ({
-    ...state,
-  }));
+const pattern = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+
+type Props = {
+  onClose(): void;
+};
+
+const WithDraw = ({ onClose }: Props) => {
+  const [, balance] = useAccount();
+  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState('');
+  const { run: transfer, loading } = useRequest(() => transferApi(address, amount), {
+    manual: true,
+    onSuccess() {
+      success('Submitted successfully');
+    },
+  });
+  const addressHelperText = useMemo(() => {
+    if (address !== '' && !isAddress(address)) {
+      return ContractError.InvalidAddress;
+    }
+  }, [address]);
+
+  function handleAmountChange(nextAmount: string) {
+    if (nextAmount === '') {
+      setAmount('');
+      return;
+    }
+    if (pattern.test(nextAmount)) {
+      setAmount(nextAmount);
+    }
+  }
+
+  function handleTransferClick() {
+    if (new BigNumber(balance).isLessThan(amount)) {
+      error('Insufficient Balance');
+      return;
+    }
+
+    transfer();
+  }
+
+  const isValidAmount = useMemo(() => {
+    if (amount === '') return false;
+    if (amount == null) return false;
+    return true;
+  }, [amount]);
 
   return (
-    <>
-      <BasicButton
-        classes={{
-          outlined:
-            '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419] hover:!border-[#9A6CF9]',
-        }}
-        onClick={open}
-      >
-        <span className="text-base font-medium">Withdraw</span>
-      </BasicButton>
-      <Modal
-        onClose={close}
-        open={isOpen}
-        width={553}
-        closebuttonstyle={{
-          marginTop: '5px',
-        }}
-      >
-        <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
-          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
-          <p className="my-6 text-sm text-black text-opacity-50">
-            Send your ETH to another wallet address on the blast network
-          </p>
+    <Modal
+      onClose={onClose}
+      open
+      width={553}
+      closebuttonstyle={{
+        marginTop: '5px',
+      }}
+    >
+      <div className="relative flex flex-col items-center">
+        <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
+        <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
+        <p className="my-6 text-sm text-black text-opacity-50">
+          Send your ETH to another wallet address on the blast network
+        </p>
 
-          <div className="mb-6 w-full space-y-6">
-            <TextField label="Enter Address" />
-            <TextField label="Enter Amount" />
-          </div>
+        <div className="mb-6 w-full space-y-6">
+          <TextField
+            label="Enter Address"
+            error={address !== '' && !isAddress(address)}
+            helperText={addressHelperText}
+            autoComplete="off"
+            onChange={(event) => setAddress(event.target.value)}
+          />
+          <TextField
+            label="Enter Amount"
+            fullWidth
+            value={amount}
+            autoComplete="off"
+            onChange={(event) => handleAmountChange(event.target.value)}
+          />
+        </div>
 
-          <div className="flex space-x-3 self-end">
-            <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
-            <div className="flex items-center space-x-1">
-              <Icon />
-              <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} />
-            </div>
-          </div>
-          <div className="my-[30px] flex w-full justify-between">
-            <BackButton onButtonClick={close} />
-            <PrimaryButton
-              classes={{
-                contained: '!py-[10px] !px-[38px] !w-[170px]',
-              }}
-            >
-              <span className="text-[15px] font-medium">Transfer</span>
-            </PrimaryButton>
+        <div className="flex space-x-3 self-end">
+          <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
+          <div className="flex items-center space-x-1">
+            <ETHIcon />
+            <NumberDisplayer
+              className="text-base font-bold text-[#9A6CF9]"
+              text={balance.toString()}
+              isBigNumber={false}
+            />
           </div>
         </div>
-      </Modal>
-    </>
+        <div className="my-[30px] flex w-full justify-between">
+          <BackButton onButtonClick={onClose} />
+          <PrimaryButton
+            classes={{
+              contained: '!py-[10px] !px-[38px] !w-[170px]',
+            }}
+            disabled={loading || !isAddress(address) || !isValidAmount}
+            startIcon={loading && <CircularProgress color="inherit" size={15} />}
+            onClick={handleTransferClick}
+          >
+            <span className="text-[15px] font-medium">Transfer</span>
+          </PrimaryButton>
+        </div>
+      </div>
+    </Modal>
   );
 };
 
