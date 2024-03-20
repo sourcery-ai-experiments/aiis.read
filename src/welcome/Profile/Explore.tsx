@@ -333,7 +333,7 @@ const Explore = () => {
                             }`}
                           >
                             {item.isBuy ? '+' : '-'}
-                            <NumberDisplayer text={item.shareAmount} /> Shares
+                            {Number(item.shareAmount) / 100} Shares
                           </span>
                           <div className="flex items-center space-x-1">
                             <Icon />
