@@ -150,7 +150,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
       setIsBuying(false);
       refresh();
       useGlobalStore.setState({
-        message: '购买成功！',
+        message: 'Transaction completed',
         messageType: 'succes',
         messageOpen: true,
       });

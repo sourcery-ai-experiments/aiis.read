@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Divider, TableFooter, TablePagination } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Divider } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,7 +13,6 @@ import dayjs from 'dayjs';
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
-import { PAGE_PER_ROW } from '../../constants';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
@@ -39,13 +38,10 @@ const Icon = () => (
 
 const Claim = (props: { price?: string }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  const { tweetRewardList, tweetRewardListTotal, tweetRewardTotalRewardAmount } = useTweetStore(
-    (state) => ({
-      ...state,
-    })
-  );
-  const { run: getReward, loading: isGetRewardLoading } = useTweetReward();
-  const [page, setPage] = useState(0);
+  const { tweetRewardList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({
+    ...state,
+  }));
+  const { run: getReward } = useTweetReward();
 
   const rewardUSD = new BigNumber(tweetRewardTotalRewardAmount)
     .dividedBy(new BigNumber(Math.pow(10, 18)))
@@ -80,12 +76,8 @@ const Claim = (props: { price?: string }) => {
   );
 
   useEffect(() => {
-    getReward({ offset: page * PAGE_PER_ROW, limit: PAGE_PER_ROW });
-  }, [getReward, page]);
-
-  function handlePageChange(nextPage: number) {
-    setPage(nextPage);
-  }
+    getReward();
+  }, [getReward]);
 
   return (
     <>
@@ -255,18 +247,6 @@ const Claim = (props: { price?: string }) => {
                   ))
                 )}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    disabled={isGetRewardLoading}
-                    count={tweetRewardListTotal}
-                    page={page}
-                    onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                    rowsPerPage={PAGE_PER_ROW}
-                    rowsPerPageOptions={[]}
-                  />
-                </TableRow>
-              </TableFooter>
             </Table>
           </TableContainer>
         </div>

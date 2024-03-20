@@ -7,11 +7,12 @@ import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
 
 type Props = {
+  community: Community;
   open?: boolean;
   onClose(): void;
 };
 
-export default function ChatRoomDrawer({ open = false, onClose }: Props) {
+export default function ChatRoomDrawer({ open = false, community, onClose }: Props) {
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
   return (
@@ -54,7 +55,9 @@ export default function ChatRoomDrawer({ open = false, onClose }: Props) {
           <MessageFromOtherItem />
         </div>
         <SendMessageBox />
-        {isStackModalOpen && <StackModal onClose={() => setIsStackModalOpen(false)} />}
+        {isStackModalOpen && (
+          <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
+        )}
         <MembersDrawer open={isMembersDrawerOpen} onClose={() => setIsMembersDrawerOpen(false)} />
       </div>
     </Drawer>

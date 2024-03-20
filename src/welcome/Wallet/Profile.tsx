@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
-import { PAGE_PER_ROW } from '../../constants';
+import { ROWS_PER_PAGE } from '../../constants';
 import { useHolderList } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
@@ -127,7 +127,7 @@ const ProfileModal = () => {
   }
 
   useEffect(() => {
-    fetchMap[currentKey]({ offset: curPages[currentKey] * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+    fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
   }, [curPages, fetchMap, currentKey]);
 
   return (
@@ -239,18 +239,20 @@ const ProfileModal = () => {
                     ))
                   )}
                 </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      disabled={isGetHolderListLoading}
-                      count={holderListTotal}
-                      page={curPages[0]}
-                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                      rowsPerPage={PAGE_PER_ROW}
-                      rowsPerPageOptions={[]}
-                    />
-                  </TableRow>
-                </TableFooter>
+                {holderListTotal > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={isGetHolderListLoading}
+                        count={holderListTotal}
+                        page={curPages[0]}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                )}
               </Table>
             </TableContainer>
           )}
@@ -288,18 +290,20 @@ const ProfileModal = () => {
                     ))
                   )}
                 </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      disabled={isGetHolderListLoading}
-                      count={holderingListTotal}
-                      page={curPages[1]}
-                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                      rowsPerPage={PAGE_PER_ROW}
-                      rowsPerPageOptions={[]}
-                    />
-                  </TableRow>
-                </TableFooter>
+                {holderingListTotal > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={isGetHolderListLoading}
+                        count={holderingListTotal}
+                        page={curPages[1]}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                )}
               </Table>
             </TableContainer>
           )}
@@ -357,18 +361,20 @@ const ProfileModal = () => {
                     ))
                   )}
                 </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      disabled={isGetTweetListLoading}
-                      count={tweetListTotal}
-                      page={curPages[2]}
-                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                      rowsPerPage={PAGE_PER_ROW}
-                      rowsPerPageOptions={[]}
-                    />
-                  </TableRow>
-                </TableFooter>
+                {tweetListTotal > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={isGetTweetListLoading}
+                        count={tweetListTotal}
+                        page={curPages[2]}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                )}
               </Table>
             </TableContainer>
           )}

@@ -68,6 +68,25 @@ export async function sellShares(address: string, amount: number) {
   });
 }
 
+export async function getStakeBalance(address: string) {
+  return await http.get<string>('/xfans/api/shares/stakeBalance', {
+    address,
+  });
+}
+
+export async function stake(address: string, amount: number) {
+  return await http.post<string>('/xfans/api/shares/stake', {
+    address,
+    amount: BigNumber(amount).times(100).toFixed(),
+  });
+}
+
+export async function unstake(address: string, amount: number) {
+  return await http.post<string>('/xfans/api/shares/unstake', {
+    address,
+    amount: BigNumber(amount).times(100).toFixed(),
+  });
+}
 export async function transfer(address: string, amount: string) {
   await http.post<null>('/xfans/api/shares/transfer', {
     amount,
