@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { CircularProgress, styled, TextField as MTextField } from '@mui/material';
-import { useRequest, useToggle } from 'ahooks';
+import { useRequest } from 'ahooks';
 import BigNumber from 'bignumber.js';
 import { isAddress } from 'web3-validator';
 
-import { BackButton, BasicButton, PrimaryButton } from '../../components/Button';
+import { BackButton, PrimaryButton } from '../../components/Button';
 import ETHIcon from '../../components/icons/ETHIcon';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
@@ -36,8 +36,11 @@ const TextField = styled(MTextField)({
 
 const pattern = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
-const WithDraw = () => {
-  const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+type Props = {
+  onClose(): void;
+};
+
+const WithDraw = ({ onClose }: Props) => {
   const [, balance] = useAccount();
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
@@ -79,75 +82,64 @@ const WithDraw = () => {
   }, [amount]);
 
   return (
-    <>
-      <BasicButton
-        classes={{
-          outlined:
-            '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419] hover:!border-[#9A6CF9]',
-        }}
-        onClick={open}
-      >
-        <span className="text-base font-medium">Withdraw</span>
-      </BasicButton>
-      <Modal
-        onClose={close}
-        open={isOpen}
-        width={553}
-        closebuttonstyle={{
-          marginTop: '5px',
-        }}
-      >
-        <div className="relative flex flex-col items-center">
-          <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
-          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
-          <p className="my-6 text-sm text-black text-opacity-50">
-            Send your ETH to another wallet address on the blast network
-          </p>
+    <Modal
+      onClose={onClose}
+      open
+      width={553}
+      closebuttonstyle={{
+        marginTop: '5px',
+      }}
+    >
+      <div className="relative flex flex-col items-center">
+        <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
+        <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
+        <p className="my-6 text-sm text-black text-opacity-50">
+          Send your ETH to another wallet address on the blast network
+        </p>
 
-          <div className="mb-6 w-full space-y-6">
-            <TextField
-              label="Enter Address"
-              error={address !== '' && !isAddress(address)}
-              helperText={addressHelperText}
-              autoComplete="off"
-              onChange={(event) => setAddress(event.target.value)}
-            />
-            <TextField
-              label="Enter Amount"
-              fullWidth
-              value={amount}
-              autoComplete="off"
-              onChange={(event) => handleAmountChange(event.target.value)}
-            />
-          </div>
+        <div className="mb-6 w-full space-y-6">
+          <TextField
+            label="Enter Address"
+            error={address !== '' && !isAddress(address)}
+            helperText={addressHelperText}
+            autoComplete="off"
+            onChange={(event) => setAddress(event.target.value)}
+          />
+          <TextField
+            label="Enter Amount"
+            fullWidth
+            value={amount}
+            autoComplete="off"
+            onChange={(event) => handleAmountChange(event.target.value)}
+          />
+        </div>
 
-          <div className="flex space-x-3 self-end">
-            <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
-            <div className="flex items-center space-x-1">
-              <ETHIcon />
-              <NumberDisplayer
-                className="text-base font-bold text-[#9A6CF9]"
-                text={balance.toString()}
-                isBigNumber={false}
-              />
-            </div>
-          </div>
-          <div className="my-[30px] flex w-full justify-between">
-            <BackButton onButtonClick={close} />
-            <PrimaryButton
-              classes={{
-                contained: '!py-[10px] !px-[38px] !w-[170px]',
-              }}
-              disabled={loading || !isAddress(address) || !isValidAmount}
-              startIcon={loading && <CircularProgress color="inherit" size={15} />}
-              onClick={handleTransferClick}
-            >
-              <span className="text-[15px] font-medium">Transfer</span>
-            </PrimaryButton>
+        <div className="flex space-x-3 self-end">
+          <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
+          <div className="flex items-center space-x-1">
+            <ETHIcon />
+            <NumberDisplayer
+              className="text-base font-bold text-[#9A6CF9]"
+              text={balance.toString()}
+              isBigNumber={false}
+            />
           </div>
         </div>
-      </Modal>
-    </>
+        <div className="my-[30px] flex w-full justify-between">
+          <BackButton onButtonClick={onClose} />
+          <PrimaryButton
+            classes={{
+              contained: '!py-[10px] !px-[38px] !w-[170px]',
+            }}
+            disabled={loading || !isAddress(address) || !isValidAmount}
+            startIcon={loading && <CircularProgress color="inherit" size={15} />}
+            onClick={handleTransferClick}
+          >
+            <span className="text-[15px] font-medium">Transfer</span>
+          </PrimaryButton>
+        </div>
+      </div>
+    </Modal>
   );
 };
 
