@@ -88,7 +88,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
           <div className="space-y-[15px]">
             <div
               className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]"
-              onClick={() => openProfile(userInfo)}
+              onClick={() => openProfile(userInfo, 1)}
             >
               <div className="flex items-center space-x-3">
                 <UserIcon />
@@ -177,7 +177,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
           </div>
 
           <div
-            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-[15px] font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
+            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-base font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
             onClick={() => props.logout?.()}
           >
             Log Out

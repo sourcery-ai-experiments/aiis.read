@@ -93,7 +93,7 @@ const Claim = (props: { price?: string }) => {
       >
         Claim
       </BasicButton>
-      <Modal onClose={close} open={isOpen} width={626}>
+      <Modal onClose={close} open={isOpen} width={626} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Claim Reward</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
@@ -148,9 +148,11 @@ const Claim = (props: { price?: string }) => {
           <TableContainer
             sx={{
               marginTop: 0,
+              maxHeight: '500px', // 设置固定高度
+              overflowY: 'auto', // 添加垂直滚动
             }}
           >
-            <Table aria-label="simple table">
+            <Table aria-label="simple table" stickyHeader={true}>
               <TableHead>
                 <TableRow>
                   <TableCell

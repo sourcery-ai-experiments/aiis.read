@@ -23,26 +23,8 @@ import useTweetStore from '../../store/useTweetStore';
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';
 
-const Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
-    <g clipPath="url(#clip0_410_42042)">
-      <path d="M5.00056 16.9065V12.6882L0.142822 9.63672L5.00056 16.9065Z" fill="#C7C7E0" />
-      <path d="M5.0166 16.9065V12.6882L9.87443 9.63672L5.01669 16.9065H5.0166Z" fill="#A3A3D2" />
-      <path d="M5.00048 11.6404V6.25684L0.0869141 8.62012L5.00048 11.6404Z" fill="#C7C7E0" />
-      <path d="M5.0166 11.6404V6.25684L9.93017 8.62021L5.0166 11.6404Z" fill="#A3A3D2" />
-      <path d="M0.0869141 8.62L5.00039 0.09375V6.25662L0.0869141 8.62Z" fill="#C7C7E0" />
-      <path d="M9.93008 8.62L5.0166 0.09375V6.25662L9.93008 8.62Z" fill="#A3A3D2" />
-    </g>
-    <defs>
-      <clipPath id="clip0_410_42042">
-        <rect width="10" height="17" fill="white" />
-      </clipPath>
-    </defs>
-  </svg>
-);
-
 const ProfileModal = () => {
-  const { openProfile, currentInfo } = useProfileModal((state) => ({ ...state }));
+  const { openProfile, currentInfo, currentKey } = useProfileModal((state) => ({ ...state }));
   const { run: getHolderList, loading: isGetHolderListLoading } = useHolderList();
   const { run: getTweetList, loading: isGetTweetListLoading } = useTweetList();
   const { holderList, holderListTotal, holderingList, holderingListTotal } = useShareStore(
@@ -95,10 +77,9 @@ const ProfileModal = () => {
   }));
 
   const { open, closeProfile } = useProfileModal((state) => ({ ...state }));
-  const [key, setKey] = useState(0);
   const list = [
     {
-      text: `Holders (${holderList?.length})`,
+      text: `Holders (${holderListTotal})`,
     },
     {
       text: 'Holding',
@@ -134,20 +115,20 @@ const ProfileModal = () => {
         subject: currentInfo?.walletAddress,
       });
     } else {
-      setKey(0);
+      useProfileModal.setState({ currentKey: 0 });
     }
-  }, [currentInfo?.walletAddress, getHolderList, open]);
+  }, [currentInfo?.walletAddress, getHolderList, open, currentKey]);
 
   const [curPages, setCurPages] = useState([0, 0, 0]);
   function handlePageChange(nextPage: number) {
     const nextPages = [...curPages];
-    nextPages[key] = nextPage;
+    nextPages[currentKey] = nextPage;
     setCurPages(nextPages);
   }
 
   useEffect(() => {
-    fetchMap[key]({ offset: curPages[key] * PAGE_PER_ROW, limit: PAGE_PER_ROW });
-  }, [curPages, fetchMap, key]);
+    fetchMap[currentKey]({ offset: curPages[currentKey] * PAGE_PER_ROW, limit: PAGE_PER_ROW });
+  }, [curPages, fetchMap, currentKey]);
 
   return (
     <>
@@ -209,11 +190,15 @@ const ProfileModal = () => {
             {list.map((item, i) => (
               <div
                 onClick={() => {
-                  setKey(i);
+                  useProfileModal.setState({
+                    currentKey: i,
+                  });
                 }}
                 key={item.text}
                 className={`rounded-full border border-[#0F1419] py-2 px-[18px] font-medium leading-[18px] ${
-                  key === i ? 'bg-[#2C2A2A] text-white' : 'cursor-pointer bg-white text-[#0F1419]'
+                  currentKey === i
+                    ? 'bg-[#2C2A2A] text-white'
+                    : 'cursor-pointer bg-white text-[#0F1419]'
                 }`}
               >
                 {item.text}
@@ -221,7 +206,7 @@ const ProfileModal = () => {
             ))}
           </div>
 
-          {key === 0 && (
+          {currentKey === 0 && (
             <TableContainer
               sx={{
                 marginTop: 2,
@@ -270,7 +255,7 @@ const ProfileModal = () => {
             </TableContainer>
           )}
 
-          {key === 1 && (
+          {currentKey === 1 && (
             <TableContainer
               sx={{
                 marginTop: 2,
@@ -319,7 +304,7 @@ const ProfileModal = () => {
             </TableContainer>
           )}
 
-          {key === 2 && (
+          {currentKey === 2 && (
             <TableContainer
               sx={{
                 marginTop: 2,
@@ -392,5 +377,23 @@ const ProfileModal = () => {
     </>
   );
 };
+
+const Icon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="17" viewBox="0 0 10 17" fill="none">
+    <g clipPath="url(#clip0_410_42042)">
+      <path d="M5.00056 16.9065V12.6882L0.142822 9.63672L5.00056 16.9065Z" fill="#C7C7E0" />
+      <path d="M5.0166 16.9065V12.6882L9.87443 9.63672L5.01669 16.9065H5.0166Z" fill="#A3A3D2" />
+      <path d="M5.00048 11.6404V6.25684L0.0869141 8.62012L5.00048 11.6404Z" fill="#C7C7E0" />
+      <path d="M5.0166 11.6404V6.25684L9.93017 8.62021L5.0166 11.6404Z" fill="#A3A3D2" />
+      <path d="M0.0869141 8.62L5.00039 0.09375V6.25662L0.0869141 8.62Z" fill="#C7C7E0" />
+      <path d="M9.93008 8.62L5.0166 0.09375V6.25662L9.93008 8.62Z" fill="#A3A3D2" />
+    </g>
+    <defs>
+      <clipPath id="clip0_410_42042">
+        <rect width="10" height="17" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
 export default ProfileModal;

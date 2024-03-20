@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useLocalStore from '../../../store/useLocalStore';
 import useProfileModal from '../../../store/useProfileModal';
+import useUserStore from '../../../store/useUserStore';
 import { NumberDisplayer } from '../../NumberDisplayer';
 
 import '../../../tailwind.css';
@@ -12,7 +13,8 @@ interface FriendPriceProps {
 
 export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const [userInfo, setUserInfo] = useState({ price: '0' });
+  const { userInfo: currentUserInfo } = useUserStore((state) => ({ ...state }));
+  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
   const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [twitterUsername],
@@ -26,7 +28,7 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   useEffect(() => {
     batchUserInfo(userInfo);
   }, []);
-  return !isShowPrice ? (
+  return !isShowPrice && currentUserInfo?.isRegistered ? (
     <div
       className="w-auto items-center justify-center text-center"
       onClick={(e) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { CircularProgress, Divider } from '@mui/material';
 import BigNumber from 'bignumber.js';
 
-import { BasicButton, PrimaryButton } from '../../components/Button';
+import { BackButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import NumberInput, { NumberInputRef } from '../../components/NumberInput';
@@ -54,25 +54,6 @@ const Icon1 = () => (
         <rect width="10" height="17" fill="white" transform="translate(0 0.5)" />
       </clipPath>
     </defs>
-  </svg>
-);
-
-const Left = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path
-      d="M3.68799 8H12.438"
-      stroke="#2E2E32"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7.37499 11.75L3.625 8L7.37499 4.25"
-      stroke="#2E2E32"
-      strokeWidth="1.25"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
   </svg>
 );
 
@@ -164,7 +145,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
   }
 
   function handleSellClick() {
-    if (new BigNumber(gasFee).isGreaterThan(new BigNumber(balance))) {
+    if (new BigNumber(gasFee).dividedBy(Math.pow(10, 18)).isGreaterThan(new BigNumber(balance))) {
       toaster.error(ContractError.InsufficientBalance);
       return;
     }
@@ -291,17 +272,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
         </div>
 
         <div className="my-[30px] flex w-full justify-between">
-          <BasicButton
-            classes={{
-              outlined: '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419]',
-            }}
-            onClick={onClose}
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <Left />
-              <span className="text-[15px] font-medium">Go Back</span>
-            </div>
-          </BasicButton>
+          <BackButton onButtonClick={onClose} />
           <PrimaryButton
             classes={{
               contained: '!py-[10px] !px-[38px] !w-[170px]',
