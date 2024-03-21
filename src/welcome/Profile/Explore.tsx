@@ -184,7 +184,7 @@ const Explore = () => {
                             <span className="text-sm text-[#919099]">Price</span>
                             <ETHIcon />
                             <NumberDisplayer
-                              className="text-[15px] text-[#919099]"
+                              className="text-[15px] font-bold text-[#919099]"
                               text={item.price}
                             />
                           </div>
@@ -224,7 +224,7 @@ const Explore = () => {
                             <span className="text-sm text-[#919099]">Price</span>
                             <ETHIcon />
                             <NumberDisplayer
-                              className="text-[15px] text-[#919099]"
+                              className="text-[15px] font-bold text-[#919099]"
                               text={item.price}
                             />
                           </div>

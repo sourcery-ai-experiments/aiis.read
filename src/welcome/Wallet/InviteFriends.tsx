@@ -17,6 +17,7 @@ import { useUserInvite } from '../../service/user';
 import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
+import TableEmptyWidget from '../../components/Empty';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -120,23 +121,22 @@ const InviteFriends = () => {
               marginTop: 2,
             }}
           >
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Time</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>invite Points</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {inviteInfo?.items == null || inviteInfo?.items.length === 0 ? (
+            {inviteInfo?.items == null || inviteInfo?.items.length === 0 ? (
+              <TableEmptyWidget
+                containerClassName="pt-[30px] pb-[30px]"
+                label="No information available at this time"
+              />
+            ) : (
+              <Table aria-label="simple table">
+                <TableHead>
                   <TableRow>
-                    <TableCell colSpan={3} className="!text-center">
-                      no records found
-                    </TableCell>
+                    <TableCell>Time</TableCell>
+                    <TableCell>User</TableCell>
+                    <TableCell>invite Points</TableCell>
                   </TableRow>
-                ) : (
-                  inviteInfo.items.map((row, i) => (
+                </TableHead>
+                <TableBody>
+                  {inviteInfo.items.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
                         {row.invitedAt}
@@ -144,24 +144,25 @@ const InviteFriends = () => {
                       <TableCell>{row.invitedUsername}</TableCell>
                       <TableCell>{row.points}</TableCell>
                     </TableRow>
-                  ))
+                  ))}
+                </TableBody>
+
+                {(inviteInfo?.inviteCount ?? 0) > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={loading}
+                        count={inviteInfo?.inviteCount ?? 0}
+                        page={page}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
                 )}
-              </TableBody>
-              {(inviteInfo?.inviteCount ?? 0) > ROWS_PER_PAGE && (
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      disabled={loading}
-                      count={inviteInfo?.inviteCount ?? 0}
-                      page={page}
-                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                      rowsPerPage={ROWS_PER_PAGE}
-                      rowsPerPageOptions={[]}
-                    />
-                  </TableRow>
-                </TableFooter>
-              )}
-            </Table>
+              </Table>
+            )}
           </TableContainer>
         </div>
       </Modal>

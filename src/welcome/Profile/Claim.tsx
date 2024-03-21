@@ -11,12 +11,14 @@ import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
+
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
 import useTweetStore from '../../store/useTweetStore';
+import TableEmptyWidget from '../../components/Empty';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -144,55 +146,54 @@ const Claim = (props: { price?: string }) => {
               overflowY: 'auto', // 添加垂直滚动
             }}
           >
-            <Table aria-label="simple table" stickyHeader={true}>
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Date
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Creator
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Rank
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Total Reward
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Your Reward
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tweetRewardList == null || tweetRewardList.length === 0 ? (
+            {tweetRewardList == null || tweetRewardList.length === 0 ? (
+              <TableEmptyWidget
+                containerClassName="pt-[80px] pb-[80px]"
+                label="You have no rewards available to claim"
+              />
+            ) : (
+              <Table aria-label="simple table" stickyHeader={true}>
+                <TableHead>
                   <TableRow>
-                    <TableCell colSpan={5} className="!text-center">
-                      no records found
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Date
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Creator
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Rank
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Total Reward
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Your Reward
                     </TableCell>
                   </TableRow>
-                ) : (
-                  tweetRewardList?.map((row, i) => (
+                </TableHead>
+                <TableBody>
+                  {tweetRewardList?.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell
                         component="th"
@@ -244,10 +245,10 @@ const Claim = (props: { price?: string }) => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </TableContainer>
         </div>
       </Modal>
