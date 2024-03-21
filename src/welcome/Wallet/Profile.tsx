@@ -215,8 +215,8 @@ const ProfileModal = () => {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Holder</TableCell>
-                    <TableCell>Hold shares</TableCell>
+                    <TableCell className="w-[30%]">Holder</TableCell>
+                    <TableCell className="w-[30%]">Hold shares</TableCell>
                     <TableCell>Shares Value</TableCell>
                   </TableRow>
                 </TableHead>
@@ -266,8 +266,8 @@ const ProfileModal = () => {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Creator</TableCell>
-                    <TableCell>Hold shares</TableCell>
+                    <TableCell className="w-[30%]">Creator</TableCell>
+                    <TableCell className="w-[30%]">Hold shares</TableCell>
                     <TableCell>Shares Value</TableCell>
                   </TableRow>
                 </TableHead>
@@ -317,9 +317,9 @@ const ProfileModal = () => {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Post</TableCell>
-                    <TableCell>Rank</TableCell>
+                    <TableCell className="w-[30%]">Date</TableCell>
+                    <TableCell className="w-[20%]">Post</TableCell>
+                    <TableCell className="w-[20%]">Rank</TableCell>
                     <TableCell>Reward</TableCell>
                   </TableRow>
                 </TableHead>
