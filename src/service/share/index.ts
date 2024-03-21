@@ -73,17 +73,19 @@ const useHolderList = () => {
     {
       manual: true,
       onSuccess(response, params) {
-        useShareStore.setState(
-          params[0].subject
-            ? {
-                holderList: response.data.items,
-                holderListTotal: response.data.total,
-              }
-            : {
-                holderingList: response.data.items,
-                holderingListTotal: response.data.total,
-              }
-        );
+        if (typeof params[0].subject === 'string') {
+          useShareStore.setState({
+            holderList: response.data.items,
+            holderListTotal: response.data.total,
+          });
+        }
+
+        if (typeof params[0].holder === 'string') {
+          useShareStore.setState({
+            holderingList: response.data.items,
+            holderingListTotal: response.data.total,
+          });
+        }
       },
     }
   );
