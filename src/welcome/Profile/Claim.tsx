@@ -11,7 +11,6 @@ import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
-import TableEmptyWidgetProps from '../../components/Empty';
 
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
