@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { ListEmpty } from '../../components/Empty';
 import { getList } from '../../service/community';
 
 import ChatRoomDrawer from './community/ChatRoomDrawer';
@@ -23,8 +24,25 @@ const Community = () => {
     getList(1).then(setUnlockedCommunities);
   }
 
-  return (
-    <div className="relative mx-4">
+  if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
+    return (
+      <div className="flex flex-col items-center">
+        <ListEmpty className="mt-[50px]" />
+        <p className="mt-[10px] text-[#00000080]">You haven&apos;t bought any shares yet.</p>
+      </div>
+    );
+  }
+
+  function renderUnlocked() {
+    if (unlockedCommunities.length === 0)
+      return (
+        <div className="flex flex-col items-center">
+          <ListEmpty className="mt-[50px]" />
+          <p className="mt-[10px] text-[#00000080]">No unlocked communities available.</p>
+        </div>
+      );
+
+    return (
       <ul>
         {unlockedCommunities.map((item, i) => (
           <li
@@ -52,35 +70,54 @@ const Community = () => {
           </li>
         ))}
       </ul>
+    );
+  }
 
-      <p className="mt-10 text-center text-[15px] font-medium text-[#9A6CF9]">
-        The Following Are Locked Communities
-      </p>
+  function renderLocked() {
+    if (lockedCommunities.length === 0) return null;
 
-      <ul className="mt-4 space-y-[10px]">
-        {lockedCommunities.map((item, i) => (
-          <li
-            key={i}
-            className="relative flex cursor-pointer items-center space-x-[14px] overflow-hidden rounded-[8px] bg-[#F7F9FA] py-2 px-3"
-            onClick={() => setSelectedCommunity(item)}
-          >
-            <img src={item.ownerUser.avatar} alt="avatar" className="w-[44px] rounded-full" />
-            <div className="flex w-full flex-col">
-              <span className="text-sm font-medium text-black">
-                {item.ownerUser.username}‘s Community
-              </span>
-              <div className="flex items-start justify-between">
-                <span className="text-xs text-[#5B7083]">
-                  Unlock Requires Staking: {item.requiredStakedShares}
-                </span>
-                <span className="text-xs text-[#5B7083]">Staked: {item.stakedShares}</span>
-              </div>
-            </div>
-            <LockBackgroundIcon className="absolute top-0 left-[-14px]" />
-            <LockIcon className="absolute top-[3px] left-[-11px]" />
-          </li>
-        ))}
-      </ul>
+    return (
+      <>
+        <p className="mt-[100px] text-center text-[15px] font-medium text-[#9A6CF9]">
+          The Following Are Locked Communities
+        </p>
+
+        <div>
+          <ul className="mt-4 space-y-[10px]">
+            {lockedCommunities.map((item, i) => (
+              <li
+                key={i}
+                className="relative flex cursor-pointer items-center space-x-[14px] overflow-hidden rounded-[8px] bg-[#F7F9FA] py-2 px-3"
+                onClick={() => setSelectedCommunity(item)}
+              >
+                <img src={item.ownerUser.avatar} alt="avatar" className="w-[44px] rounded-full" />
+                <div className="flex w-full flex-col">
+                  <span className="text-sm font-medium text-black">
+                    {item.ownerUser.username}‘s Community
+                  </span>
+                  <div className="flex items-start justify-between">
+                    <span className="text-xs text-[#5B7083]">
+                      Unlock Requires Staking: {+item.requiredStakedShares / 100}
+                    </span>
+                    <span className="text-xs text-[#5B7083]">
+                      Staked: {+item.stakedShares / 100}
+                    </span>
+                  </div>
+                </div>
+                <LockBackgroundIcon className="absolute top-0 left-[-14px]" />
+                <LockIcon className="absolute top-[3px] left-[-11px]" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4">
+      {renderUnlocked()}
+      {renderLocked()}
       {selectedCommunity && selectedCommunity.status === 0 && (
         <StackModal community={selectedCommunity} onClose={handleStakeModalClose} />
       )}
