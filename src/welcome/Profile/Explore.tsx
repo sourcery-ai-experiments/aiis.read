@@ -45,7 +45,7 @@ const Explore = () => {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col px-4">
+    <div className="flex h-0 flex-1 flex-col px-4">
       <TabContext value={value}>
         <Box>
           <TabList
@@ -120,6 +120,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
+                className="flex-1 overflow-y-auto"
               >
                 <ul>
                   {topList?.map((item, i) => (
@@ -162,6 +163,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
+                className="flex-1 overflow-y-auto"
               >
                 <ul>
                   {newList?.map((item, i) => (
@@ -203,6 +205,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
+                className="flex-1 overflow-y-auto"
               >
                 <ul>
                   {recentList?.map((item, i) => (
@@ -252,6 +255,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
+                className="flex-1 overflow-y-auto"
               >
                 <ul>
                   {shareList?.map((item, i: any) => (
