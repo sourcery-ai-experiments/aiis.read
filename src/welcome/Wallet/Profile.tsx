@@ -213,7 +213,10 @@ const ProfileModal = () => {
               }}
             >
               {rows == null || rows.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No one has purchased your shares yet."
+                />
               ) : (
                 <Table aria-label="simple table">
                   <TableHead>
@@ -260,8 +263,11 @@ const ProfileModal = () => {
               }}
             >
               {holding == null || holding.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
-                ) : (
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No shares purchased yet."
+                />
+              ) : (
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
@@ -307,8 +313,11 @@ const ProfileModal = () => {
               }}
             >
               {tweetList == null || tweetList.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
-                ) : (
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No records found. Vote to join weekly rankings."
+                />
+              ) : (
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>

@@ -109,7 +109,7 @@ const History = (props: { price?: string }) => {
             {rewardHistoryList == null || rewardHistoryList.length === 0 ? (
               <TableEmptyWidget
                 containerClassName="pt-[80px] pb-[80px]"
-                label="You have no rewards available to claim"
+                label="No claim history found."
               />
             ) : (
               <Table aria-label="simple table">
