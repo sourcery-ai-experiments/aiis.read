@@ -9,8 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import TableEmptyWidget from '../../components/Empty';
+
 import { BasicButton, PrimaryButton } from '../../components/Button';
+import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { ROWS_PER_PAGE } from '../../constants';
@@ -221,7 +222,10 @@ const ProfileModal = () => {
               }}
             >
               {rows == null || rows.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No records found"
+                />
               ) : (
                 <Table aria-label="simple table">
                   <TableHead>
@@ -268,8 +272,11 @@ const ProfileModal = () => {
               }}
             >
               {holding == null || holding.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
-                ) : (
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No records found"
+                />
+              ) : (
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
@@ -315,8 +322,11 @@ const ProfileModal = () => {
               }}
             >
               {tweetList == null || tweetList.length === 0 ? (
-                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
-                ) : (
+                <TableEmptyWidget
+                  containerClassName="pt-[30px] pb-[30px]"
+                  label="No records found"
+                />
+              ) : (
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
