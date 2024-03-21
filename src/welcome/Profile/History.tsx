@@ -11,6 +11,7 @@ import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton } from '../../components/Button';
+import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { ROWS_PER_PAGE } from '../../constants';
@@ -105,55 +106,54 @@ const History = (props: { price?: string }) => {
               marginTop: 0,
             }}
           >
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Date
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Creator
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Rank
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Total Reward
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Your Reward
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rewardHistoryList == null || rewardHistoryList.length === 0 ? (
+            {rewardHistoryList == null || rewardHistoryList.length === 0 ? (
+              <TableEmptyWidget
+                containerClassName="pt-[80px] pb-[80px]"
+                label="You have no rewards available to claim"
+              />
+            ) : (
+              <Table aria-label="simple table">
+                <TableHead>
                   <TableRow>
-                    <TableCell colSpan={5} className="!text-center">
-                      no records found
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Date
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Creator
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Rank
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Total Reward
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderColor: '#EBEEF0',
+                      }}
+                    >
+                      Your Reward
                     </TableCell>
                   </TableRow>
-                ) : (
-                  rewardHistoryList?.map((row, i) => (
+                </TableHead>
+                <TableBody>
+                  {rewardHistoryList?.map((row, i) => (
                     <TableRow
                       key={i}
                       sx={{
@@ -210,24 +210,24 @@ const History = (props: { price?: string }) => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))
+                  ))}
+                </TableBody>
+                {rewardHistoryListTotal > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={loading}
+                        count={rewardHistoryListTotal}
+                        page={page}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
                 )}
-              </TableBody>
-              {rewardHistoryListTotal > ROWS_PER_PAGE && (
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      disabled={loading}
-                      count={rewardHistoryListTotal}
-                      page={page}
-                      onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                      rowsPerPage={ROWS_PER_PAGE}
-                      rowsPerPageOptions={[]}
-                    />
-                  </TableRow>
-                </TableFooter>
-              )}
-            </Table>
+              </Table>
+            )}
           </TableContainer>
         </div>
       </Modal>
