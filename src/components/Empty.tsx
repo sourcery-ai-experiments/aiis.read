@@ -141,9 +141,10 @@ export function ListEmpty(props: { className?: string }) {
   );
 }
 
-export function TableEmpty() {
+export function TableEmpty(props: { className?: string }) {
   return (
     <svg
+      {...props}
       width="516"
       height="474"
       viewBox="0 0 516 474"
@@ -424,3 +425,21 @@ export function TableEmpty() {
     </svg>
   );
 }
+
+interface TableEmptyWidgetProps {
+  label?: string;
+  containerClassName?: string;
+}
+
+const TableEmptyWidget = (props: TableEmptyWidgetProps) => {
+  return (
+    <div
+      className={'jusitfy-center flex flex-col items-center space-x-2 ' + props.containerClassName}
+    >
+      <TableEmpty className="h-[184px] w-[200px]" />
+      <span className="mt-[10px] text-[14px] text-[#919099]">{props.label}</span>
+    </div>
+  );
+};
+
+export default TableEmptyWidget;

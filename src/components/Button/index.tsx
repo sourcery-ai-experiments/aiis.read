@@ -6,14 +6,15 @@ import { styled } from '@mui/material/styles';
 const BasicStyleButton = styled(MButton)({
   border: '1px soild',
   borderColor: '#9A6CF9',
-  color: '#A67CFE',
+  color: '#9A6CF9',
   backgroundColor: '#FFFFFF',
   borderRadius: '9999px',
   textTransform: 'none',
   lineHeight: '1.5',
   fontFamily: 'SF Pro Display, sans-serif',
   '&:hover': {
-    borderColor: '#9A6CF9',
+    borderColor: '#A67CFE',
+    color: '#A67CFE',
     backgroundColor: '#FFFFFF',
   },
 });
@@ -28,7 +29,7 @@ const primaryStyle = {
   fontFamily: 'SF Pro Display, sans-serif',
   '&:hover': {
     boxShadow: 'none',
-    backgroundColor: '#9A6CF9',
+    backgroundColor: '#A67CFE',
   },
 };
 
