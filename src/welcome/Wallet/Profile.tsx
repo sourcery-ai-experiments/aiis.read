@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-
+import TableEmptyWidget from '../../components/Empty';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
@@ -212,23 +212,19 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Holder</TableCell>
-                    <TableCell>Hold shares</TableCell>
-                    <TableCell>Shares Value</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows == null || rows.length === 0 ? (
+              {rows == null || rows.length === 0 ? (
+                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
+              ) : (
+                <Table aria-label="simple table">
+                  <TableHead>
                     <TableRow>
-                      <TableCell colSpan={3} className="!text-center">
-                        no records found
-                      </TableCell>
+                      <TableCell>Holder</TableCell>
+                      <TableCell>Hold shares</TableCell>
+                      <TableCell>Shares Value</TableCell>
                     </TableRow>
-                  ) : (
-                    rows.map((row, i) => (
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row, i) => (
                       <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell component="th" scope="row">
                           {row.holder}
@@ -236,24 +232,24 @@ const ProfileModal = () => {
                         <TableCell>{row.shares}</TableCell>
                         <TableCell>{row.value}</TableCell>
                       </TableRow>
-                    ))
+                    ))}
+                  </TableBody>
+                  {holderListTotal > ROWS_PER_PAGE && (
+                    <TableFooter>
+                      <TableRow>
+                        <TablePagination
+                          disabled={isGetHolderListLoading}
+                          count={holderListTotal}
+                          page={curPages[0]}
+                          onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                          rowsPerPage={ROWS_PER_PAGE}
+                          rowsPerPageOptions={[]}
+                        />
+                      </TableRow>
+                    </TableFooter>
                   )}
-                </TableBody>
-                {holderListTotal > ROWS_PER_PAGE && (
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        disabled={isGetHolderListLoading}
-                        count={holderListTotal}
-                        page={curPages[0]}
-                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                        rowsPerPage={ROWS_PER_PAGE}
-                        rowsPerPageOptions={[]}
-                      />
-                    </TableRow>
-                  </TableFooter>
-                )}
-              </Table>
+                </Table>
+              )}
             </TableContainer>
           )}
 
@@ -263,23 +259,19 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Creator</TableCell>
-                    <TableCell>Hold shares</TableCell>
-                    <TableCell>Shares Value</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {holding == null || holding.length === 0 ? (
+              {holding == null || holding.length === 0 ? (
+                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
+                ) : (
+                <Table aria-label="simple table">
+                  <TableHead>
                     <TableRow>
-                      <TableCell colSpan={3} className="!text-center">
-                        no records found
-                      </TableCell>
+                      <TableCell>Creator</TableCell>
+                      <TableCell>Hold shares</TableCell>
+                      <TableCell>Shares Value</TableCell>
                     </TableRow>
-                  ) : (
-                    holding.map((row, i) => (
+                  </TableHead>
+                  <TableBody>
+                    {holding.map((row, i) => (
                       <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell component="th" scope="row">
                           {row.holder}
@@ -287,24 +279,24 @@ const ProfileModal = () => {
                         <TableCell>{row.shares}</TableCell>
                         <TableCell>{row.value}</TableCell>
                       </TableRow>
-                    ))
+                    ))}
+                  </TableBody>
+                  {holderingListTotal > ROWS_PER_PAGE && (
+                    <TableFooter>
+                      <TableRow>
+                        <TablePagination
+                          disabled={isGetHolderListLoading}
+                          count={holderingListTotal}
+                          page={curPages[1]}
+                          onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                          rowsPerPage={ROWS_PER_PAGE}
+                          rowsPerPageOptions={[]}
+                        />
+                      </TableRow>
+                    </TableFooter>
                   )}
-                </TableBody>
-                {holderingListTotal > ROWS_PER_PAGE && (
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        disabled={isGetHolderListLoading}
-                        count={holderingListTotal}
-                        page={curPages[1]}
-                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                        rowsPerPage={ROWS_PER_PAGE}
-                        rowsPerPageOptions={[]}
-                      />
-                    </TableRow>
-                  </TableFooter>
-                )}
-              </Table>
+                </Table>
+              )}
             </TableContainer>
           )}
 
@@ -314,24 +306,20 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Post</TableCell>
-                    <TableCell>Rank</TableCell>
-                    <TableCell>Reward</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {tweetList == null || tweetList.length === 0 ? (
+              {tweetList == null || tweetList.length === 0 ? (
+                <TableEmptyWidget containerClassName="pt-[30px] pb-[30px]"  label='No records found'/>
+                ) : (
+                <Table aria-label="simple table">
+                  <TableHead>
                     <TableRow>
-                      <TableCell colSpan={4} className="!text-center">
-                        no records found
-                      </TableCell>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Post</TableCell>
+                      <TableCell>Rank</TableCell>
+                      <TableCell>Reward</TableCell>
                     </TableRow>
-                  ) : (
-                    tweetList.map((row, i) => (
+                  </TableHead>
+                  <TableBody>
+                    {tweetList.map((row, i) => (
                       <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell component="th" scope="row" width={180}>
                           {dayjs(row.createdAt).format('YYYY/MM/DD HH:mm')}
@@ -358,24 +346,24 @@ const ProfileModal = () => {
                           </div>
                         </TableCell>
                       </TableRow>
-                    ))
+                    ))}
+                  </TableBody>
+                  {tweetListTotal > ROWS_PER_PAGE && (
+                    <TableFooter>
+                      <TableRow>
+                        <TablePagination
+                          disabled={isGetTweetListLoading}
+                          count={tweetListTotal}
+                          page={curPages[2]}
+                          onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                          rowsPerPage={ROWS_PER_PAGE}
+                          rowsPerPageOptions={[]}
+                        />
+                      </TableRow>
+                    </TableFooter>
                   )}
-                </TableBody>
-                {tweetListTotal > ROWS_PER_PAGE && (
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        disabled={isGetTweetListLoading}
-                        count={tweetListTotal}
-                        page={curPages[2]}
-                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
-                        rowsPerPage={ROWS_PER_PAGE}
-                        rowsPerPageOptions={[]}
-                      />
-                    </TableRow>
-                  </TableFooter>
-                )}
-              </Table>
+                </Table>
+              )}
             </TableContainer>
           )}
         </div>
