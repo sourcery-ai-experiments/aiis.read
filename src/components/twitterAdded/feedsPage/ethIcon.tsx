@@ -19,7 +19,6 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [twitterUsername],
     (result) => {
-      console.log('batchUserInfo', result);
       setUserInfo(result?.data?.items?.[0]);
     },
     () => undefined

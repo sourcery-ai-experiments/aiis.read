@@ -90,6 +90,14 @@ export default function PersistentDrawerRight() {
         checkProfileData();
       }
     }
+
+    setInterval(() => {
+      const currentUrl = window.location.href.toLowerCase();
+      if (currentUrl.includes('/?logout=')) {
+        console.log('checkTwitterLogout');
+        logout();
+      }
+    }, 1000);
   }, []);
 
   const checkProfileData = async () => {
