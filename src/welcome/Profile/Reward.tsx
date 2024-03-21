@@ -171,8 +171,10 @@ const Reward = () => {
                     <div className="flex items-center space-x-[6px]">
                       <img
                         onClick={() => {
-                          console.log(item.author);
-                          openProfile(item.author);
+                          window.open(
+                            `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
+                            '_blank'
+                          );
                         }}
                         src={item.author?.avatar}
                         alt=""
