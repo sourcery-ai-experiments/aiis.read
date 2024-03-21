@@ -4,7 +4,9 @@
 
 @font-face {
   font-family: 'SF Pro Display';
+
   /* src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf'); */
+
   /* https://cloudconvert.com/otf-to-woff2 */
   src: url('../public/SF-Pro-Display-Regular.woff2');
 
@@ -37,4 +39,31 @@ body {
 
 .xfans-basic-button:hover .xfans-left-icon {
   transform: translateX(-4px);
+}
+
+.xfans-scrollbar {
+  /* twiter body 上有个 scrollbar-color 这里重置下; */
+  scrollbar-color: initial;
+}
+
+/* width */
+.xfans-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.xfans-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+
+/* Handle */
+.xfans-scrollbar::-webkit-scrollbar-thumb {
+  background: #eaecf0;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+.xfans-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #eaecf0;
 }
