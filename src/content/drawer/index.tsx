@@ -106,8 +106,6 @@ export default function PersistentDrawerRight() {
         const cookieTwid = decodeURIComponent(cookieObj.twid)?.split('=')?.[1];
         if (userInfo?.twitterId !== cookieTwid) {
           logout();
-        } else {
-          console.log('match');
         }
       }
     }, 1000);
