@@ -11,14 +11,13 @@ import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
-
+import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
 import useTweetStore from '../../store/useTweetStore';
-import TableEmptyWidget from '../../components/Empty';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
