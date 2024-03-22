@@ -139,7 +139,7 @@ const ProfileModal = () => {
 
   return (
     <>
-      <Modal onClose={closeProfile} open={open} width={626}>
+      <Modal onClose={closeProfile} open={open} width={626} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Profile</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
@@ -229,7 +229,7 @@ const ProfileModal = () => {
               {rows == null || rows.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
-                  label="No records found"
+                  label="No one has purchased your shares yet."
                 />
               ) : (
                 <Table aria-label="simple table">
@@ -279,7 +279,7 @@ const ProfileModal = () => {
               {holding == null || holding.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
-                  label="No records found"
+                  label="No shares purchased yet."
                 />
               ) : (
                 <Table aria-label="simple table">
@@ -329,7 +329,7 @@ const ProfileModal = () => {
               {tweetList == null || tweetList.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
-                  label="No records found"
+                  label="No records found. Vote to join weekly rankings."
                 />
               ) : (
                 <Table aria-label="simple table">

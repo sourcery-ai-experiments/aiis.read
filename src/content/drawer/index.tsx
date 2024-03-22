@@ -16,6 +16,7 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
+import { XFANS_USERINFO } from '../../constants';
 
 import LogoButton from './logoButton';
 
@@ -90,6 +91,24 @@ export default function PersistentDrawerRight() {
         checkProfileData();
       }
     }
+
+    // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
+    // 针对登出或者切换账号的情况
+    setInterval(() => {
+      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO!) ?? '');
+      if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
+        // 读取所有的 cookie
+        const cookies = document.cookie;
+        // 将获取的 cookie 字符串转换为对象形式
+        const cookieObj = Object.fromEntries(
+          cookies.split(';').map((cookie) => cookie.trim().split('='))
+        );
+        const cookieTwid = decodeURIComponent(cookieObj.twid)?.split('=')?.[1];
+        if (userInfo?.twitterId !== cookieTwid) {
+          logout();
+        }
+      }
+    }, 1000);
   }, []);
 
   const checkProfileData = async () => {
@@ -151,6 +170,7 @@ export default function PersistentDrawerRight() {
     useGlobalStore.setState({ token: '' });
     localStorage.setItem('xfans-token', '');
     localStorage.setItem('xfans-login-state', '');
+    localStorage.setItem(XFANS_USERINFO, '');
   };
 
   return (

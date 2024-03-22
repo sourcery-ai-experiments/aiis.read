@@ -163,7 +163,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
   }
 
   return (
-    <Modal onClose={onClose} open width={553}>
+    <Modal onClose={onClose} open width={553} closebuttonstyle={{ marginTop: '5px' }}>
       <div className="relative flex flex-col items-center">
         <h2 className="text-[24px] font-medium text-[#2E2E32]">
           Sell Shares of {currentInfo?.username}

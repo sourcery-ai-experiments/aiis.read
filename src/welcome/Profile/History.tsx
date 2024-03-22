@@ -64,7 +64,7 @@ const History = (props: { price?: string }) => {
       >
         History
       </BasicButton>
-      <Modal onClose={close} open={isOpen} width={626}>
+      <Modal onClose={close} open={isOpen} width={626} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Claim History</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
@@ -109,7 +109,7 @@ const History = (props: { price?: string }) => {
             {rewardHistoryList == null || rewardHistoryList.length === 0 ? (
               <TableEmptyWidget
                 containerClassName="pt-[80px] pb-[80px]"
-                label="You have no rewards available to claim"
+                label="No claim history found."
               />
             ) : (
               <Table aria-label="simple table">

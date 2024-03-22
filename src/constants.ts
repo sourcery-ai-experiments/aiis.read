@@ -11,6 +11,7 @@ const XFANS_CHECK_RETWEET = 'xfans_check_retweet';
 const XFANS_DONE = 'Done';
 const XFANS_VERIFY = 'Verify';
 const XFANS_GO = 'GO';
+const XFANS_USERINFO = 'xfans-userinfo';
 
 // table
 const ROWS_PER_PAGE = 5;
@@ -35,4 +36,5 @@ export {
   XFANS_TWITTER_HOMEPAGE,
   XFANS_TWITTES,
   XFANS_VERIFY,
+  XFANS_USERINFO,
 };
