@@ -46,7 +46,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
       <div className="flex items-center justify-between px-[15px] py-[10px]">
         <div className="flex items-center space-x-2">
           <img
-            src="https://cdn-fe.s3.amazonaws.com/xfans/20240321-160251.png"
+            src="https://cdn-fe.s3.amazonaws.com/xfans/20240322-155619.png"
             alt="logo"
             className="w-[32px] rounded-full"
           />

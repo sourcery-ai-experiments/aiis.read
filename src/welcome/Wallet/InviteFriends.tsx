@@ -63,7 +63,7 @@ const InviteFriends = () => {
       >
         <span className="text-[15px] font-medium">Invite Friends</span>
       </BasicButton>
-      <Modal onClose={close} open={isOpen} width={553}>
+      <Modal onClose={close} open={isOpen} width={553} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Invite Friends</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>

@@ -132,7 +132,7 @@ const ProfileModal = () => {
 
   return (
     <>
-      <Modal onClose={closeProfile} open={open} width={626}>
+      <Modal onClose={closeProfile} open={open} width={626} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Profile</h2>
           <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
