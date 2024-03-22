@@ -7,10 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import TableEmptyWidget from '../../components/Empty';
+
 import { BasicButton, PrimaryButton } from '../../components/Button';
+import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { ROWS_PER_PAGE } from '../../constants';
@@ -34,15 +34,16 @@ const ProfileModal = () => {
   const [isBuyModalOpen, { setLeft: closeBuyModal, setRight: openBuyModal }] = useToggle(false);
   const [isSellModalOpen, { setLeft: closeSellModal, setRight: openSellModal }] = useToggle(false);
 
+  const openTwitterProfile = (username: string | undefined) =>
+    username && window.open(`https://twitter.com/${username}`, '_blank');
+
   const rows = holderList?.map((item) => ({
     holder: (
-      <div className="flex items-center space-x-1">
-        <img
-          onClick={() => openProfile(item)}
-          src={item.holderUser?.avatar}
-          alt=""
-          className="w-5 cursor-pointer rounded-full"
-        />
+      <div
+        className="flex cursor-pointer items-center space-x-1"
+        onClick={() => openTwitterProfile(item.holderUser?.twitterUsername)}
+      >
+        <img src={item.holderUser?.avatar} alt="" className="w-5 rounded-full" />
         <span className="text-xs text-[#0F1419]">{item.holderUser?.username}</span>
       </div>
     ),
@@ -110,14 +111,16 @@ const ProfileModal = () => {
   }, [currentInfo?.twitterId, currentInfo?.walletAddress, getHolderList, getTweetList]);
 
   useEffect(() => {
-    if (open) {
-      getHolderList({
-        subject: currentInfo?.walletAddress,
-      });
-    } else {
+    if (!open) {
       useProfileModal.setState({ currentKey: 0 });
+      useShareStore.setState({
+        holderList: null,
+        holderListTotal: 0,
+        holderingList: null,
+        holderingListTotal: 0,
+      });
     }
-  }, [currentInfo?.walletAddress, getHolderList, open, currentKey]);
+  }, [open]);
 
   const [curPages, setCurPages] = useState([0, 0, 0]);
   function handlePageChange(nextPage: number) {
@@ -127,8 +130,12 @@ const ProfileModal = () => {
   }
 
   useEffect(() => {
-    fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
-  }, [curPages, fetchMap, currentKey]);
+    if (open) {
+      fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
+    }
+  }, [curPages, fetchMap, currentKey, open]);
+
+  console.log(holderList, holderingList);
 
   return (
     <>
@@ -142,13 +149,20 @@ const ProfileModal = () => {
               <img
                 src={currentInfo?.avatar}
                 alt="avatar"
+                onClick={() => openTwitterProfile(currentInfo?.twitterUsername)}
                 className="h-[75px] w-[75px] cursor-pointer rounded-full"
               />
               <div className="flex flex-col space-y-[6px]">
-                <span className="text-[20px] font-bold leading-[20px] text-[#0F1419]">
+                <span
+                  onClick={() => openTwitterProfile(currentInfo?.twitterUsername)}
+                  className="cursor-pointer text-[20px] font-bold leading-[20px] text-[#0F1419]"
+                >
                   {currentInfo?.username}
                 </span>
-                <span className="text-[16px] font-medium leading-[16px] text-[#919099]">
+                <span
+                  onClick={() => openTwitterProfile(currentInfo?.twitterUsername)}
+                  className="cursor-pointer text-[16px] font-medium leading-[16px] text-[#919099]"
+                >
                   @{currentInfo?.twitterUsername}
                 </span>
                 <div className="flex items-center space-x-1">
