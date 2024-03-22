@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryButton } from '../../components/Button';
@@ -112,14 +111,16 @@ const ProfileModal = () => {
   }, [currentInfo?.twitterId, currentInfo?.walletAddress, getHolderList, getTweetList]);
 
   useEffect(() => {
-    if (open) {
-      getHolderList({
-        subject: currentInfo?.walletAddress,
-      });
-    } else {
+    if (!open) {
       useProfileModal.setState({ currentKey: 0 });
+      useShareStore.setState({
+        holderList: null,
+        holderListTotal: 0,
+        holderingList: null,
+        holderingListTotal: 0,
+      });
     }
-  }, [currentInfo?.walletAddress, getHolderList, open, currentKey]);
+  }, [open]);
 
   const [curPages, setCurPages] = useState([0, 0, 0]);
   function handlePageChange(nextPage: number) {
@@ -129,8 +130,12 @@ const ProfileModal = () => {
   }
 
   useEffect(() => {
-    fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
-  }, [curPages, fetchMap, currentKey]);
+    if (open) {
+      fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
+    }
+  }, [curPages, fetchMap, currentKey, open]);
+
+  console.log(holderList, holderingList);
 
   return (
     <>
