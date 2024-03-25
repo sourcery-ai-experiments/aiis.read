@@ -31,7 +31,7 @@ export enum ResultEnum {
 
 const config = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: 'https://test-xfans-api.d.buidlerdao.xyz',
+  baseURL: import.meta.env.VITE_BASE_URL,
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证
@@ -40,7 +40,16 @@ const config = {
 
 const contractConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: 'https://test-mpc-xfans-api.buidlerdao.xyz/',
+  baseURL: import.meta.env.VITE_CONTRACT_BASE_URL,
+  // 设置超时时间
+  timeout: ResultEnum.TIMEOUT as number,
+  // 跨域时候允许携带凭证
+  withCredentials: true,
+};
+
+const roomConfig = {
+  // 默认地址请求地址，可在 .env.** 文件中修改
+  baseURL: import.meta.env.VITE_ROOM_bASE_URL,
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证
@@ -164,3 +173,4 @@ class RequestHttp {
 
 export default new RequestHttp(config);
 export const contractRequestHttp = new RequestHttp(contractConfig);
+export const roomRequestHttp = new RequestHttp(roomConfig);

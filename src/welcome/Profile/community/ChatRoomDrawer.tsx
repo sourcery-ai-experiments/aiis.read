@@ -1,13 +1,16 @@
-import React, { DragEvent, SVGProps, useState } from 'react';
+import React, { DragEvent, SVGProps, useRef, useState } from 'react';
 import { Drawer } from '@mui/material';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
+import useAccount from '../../../hooks/useAccount';
+import useWebSocket from '../../../hooks/useSocket';
+import { NewMessage, SendMessage } from '../../../service/room';
 
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
 
 type Props = {
-  community: Community;
+  community?: Community | null;
   open?: boolean;
   onClose(): void;
 };
@@ -15,6 +18,17 @@ type Props = {
 export default function ChatRoomDrawer({ open = false, community, onClose }: Props) {
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
+  const { wallet } = useAccount();
+  const { messages, sendMessage } = useWebSocket(wallet, community?.subject);
+
+  function renderMessages() {
+    return messages.map((msg) => {
+      if (msg.sender === wallet) {
+        return <MessageFromMeItem key={msg.id} msg={msg} />;
+      }
+      return <MessageFromOtherItem key={msg.id} msg={msg} />;
+    });
+  }
   return (
     <Drawer
       sx={{
@@ -29,8 +43,8 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       anchor="right"
       open={open}
     >
-      <div className="relative h-full w-full bg-[#FDFDFD] px-[16px] pr-[13px]">
-        <header className="flex h-[64px] items-center justify-between">
+      <div className="relative flex h-full w-full flex-col bg-[#FDFDFD]">
+        <header className="flex h-[64px] items-center justify-between  px-[16px] ">
           <div className="flex items-center font-bold text-[#0F1419]">
             <ArrowBackIcon className="cursor-pointer" onClick={onClose} />
             <span className="ml-[8px]">Devon‘ Community</span>
@@ -50,12 +64,9 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
             </div>
           </div>
         </header>
-        <div>
-          <MessageFromMeItem />
-          <MessageFromOtherItem />
-        </div>
-        <SendMessageBox />
-        {isStackModalOpen && (
+        <div className="xfans-scrollbar flex-1 overflow-y-auto px-[16px]">{renderMessages()}</div>
+        <SendMessageBox sendMessage={sendMessage} />
+        {isStackModalOpen && community && (
           <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
         )}
         <MembersDrawer open={isMembersDrawerOpen} onClose={() => setIsMembersDrawerOpen(false)} />
@@ -75,12 +86,13 @@ function FireIcon() {
   );
 }
 
-function MessageFromMeItem() {
+function MessageFromMeItem({ msg }: { msg: NewMessage }) {
   return (
     <div className="mt-[39px] flex items-start justify-end">
       <div className="flex flex-col items-end">
         <div className="max-w-[290px] rounded-[25px] rounded-tr-none bg-[#9A6CF9] p-[16px] text-white">
-          Hello chatGPT,how are you today?
+          {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
+          {msg.message}
         </div>
         <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
       </div>
@@ -92,7 +104,7 @@ function MessageFromMeItem() {
     </div>
   );
 }
-function MessageFromOtherItem() {
+function MessageFromOtherItem({ msg }: { msg: NewMessage }) {
   return (
     <div className="mt-[39px] flex items-start">
       <img
@@ -103,11 +115,10 @@ function MessageFromOtherItem() {
       <div className="flex flex-col">
         <div className="flex max-w-[290px] flex-col rounded-[25px] rounded-tl-none bg-[#EEEEEE] p-[16px]">
           <span className="text-xs text-[#B9B9BA]">Jan coo</span>
-          <p className="text-[#505050]">
-            There are many programming languages in the market that are used in designing and
-            building websites, various applications and other tasks. All these languages are popular
-            in their place and in the way they are used, and many programmers learn and use them.
-          </p>
+          <div className="text-[#505050]">
+            {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
+            {msg.message}
+          </div>
         </div>
         <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
       </div>
@@ -115,8 +126,12 @@ function MessageFromOtherItem() {
   );
 }
 
-function SendMessageBox() {
+type SendMessageBoxProps = {
+  sendMessage(message: SendMessage): void;
+};
+function SendMessageBox({ sendMessage }: SendMessageBoxProps) {
   const [img, setImg] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   async function handleDrop(event: DragEvent<HTMLDivElement>) {
     // 防止新窗口打开图片
     event.preventDefault();
@@ -137,9 +152,17 @@ function SendMessageBox() {
       setImg(reader.result as string);
     };
   }
+  function handleSendMessage() {
+    if (textareaRef.current == null) return;
+    const message = textareaRef.current.value;
+    if (message == null) return;
+    sendMessage({ message, image: img ?? undefined, timestamp: Date.now() });
+    textareaRef.current.value = '';
+    setImg(null);
+  }
   return (
     <div
-      className="w-[calc(100% - 32px)] absolute left-[16px] right-[16px] bottom-[24px] flex overflow-hidden rounded-[30px] bg-white"
+      className="w-[calc(100% - 32px)] mx-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
       style={{ boxShadow: '5px 4px 20px 0px rgba(0, 0, 0, 0.13)' }}
       onDrop={handleDrop}
     >
@@ -154,12 +177,13 @@ function SendMessageBox() {
           </div>
         )}
         <textarea
+          ref={textareaRef}
           placeholder="Write your message"
           className="scrollbar-hide max-h-[180px] min-h-[56px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>
       <div className="flex w-[80px] items-center pl-[16px]">
-        <SendIcon />
+        <SendIcon onClick={handleSendMessage} />
       </div>
     </div>
   );
@@ -194,9 +218,10 @@ function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function SendIcon() {
+function SendIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
+      {...props}
       className="cursor-pointer"
       width="24"
       height="24"

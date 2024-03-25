@@ -1,27 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ListEmpty } from '../../components/Empty';
+import useWebSocket from '../../hooks/useSocket';
 import { getList } from '../../service/community';
+import { getMessagesByRoom, NewMessage } from '../../service/room';
+import { getTimeDistanceFromDate } from '../../utils';
 
 import ChatRoomDrawer from './community/ChatRoomDrawer';
 import StackModal from './community/StackModal';
 
+type CommunityWithMessage = Community & {
+  lastMsg?: NewMessage;
+};
+
 const Community = () => {
-  const [isChatRootOpen, setIsChatRootOpen] = useState(false);
   const [lockedCommunities, setLockedCommunities] = useState<Community[]>([]);
-  const [unlockedCommunities, setUnlockedCommunities] = useState<Community[]>([]);
+  const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     getList(0).then(setLockedCommunities);
-    getList(1).then(setUnlockedCommunities);
+    getList(1).then((items: CommunityWithMessage[]) => {
+      let len = 0;
+      items.forEach((item) => {
+        getMessagesByRoom(item.subject, { count: 1 }).then((msgs) => {
+          console.log(111);
+          item.lastMsg = msgs[0];
+          len++;
+          if (len === items.length) {
+            setUnlockedCommunities(items);
+          }
+        });
+      });
+    });
   }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   function handleStakeModalClose() {
     setSelectedCommunity(null);
-    // 刷新列表获取最新状态
-    getList(0).then(setLockedCommunities);
-    getList(1).then(setUnlockedCommunities);
+    refresh();
   }
 
   if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
@@ -50,7 +70,7 @@ const Community = () => {
             className={`px-1 py-[10px] ${
               i === unlockedCommunities.length - 1 ? '' : 'border-b border-b-[#EBEEF0]'
             }`}
-            onClick={() => setIsChatRootOpen(true)}
+            onClick={() => setSelectedCommunity(item)}
           >
             <div className="ml-3 flex cursor-pointer items-center">
               <img src={item.ownerUser.avatar} alt="" className="w-[44px] rounded-full" />
@@ -60,10 +80,15 @@ const Community = () => {
                     <span className="w-[210px] text-sm font-medium text-black">
                       {item.ownerUser.username}‘s Community
                     </span>
-                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">21:22</span>
+                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">
+                      {item.lastMsg?.createTime
+                        ? getTimeDistanceFromDate(item.lastMsg?.createTime) + ' ago'
+                        : ''}
+                    </span>
                   </div>
-                  {/* TODO 用真实数据 */}
-                  <p className="truncate text-xs text-[#5B7083]">new message</p>
+                  <p className="h-[16px] truncate text-xs text-[#5B7083]">
+                    {item.lastMsg?.message ?? ''}
+                  </p>
                 </div>
               </div>
             </div>
@@ -113,7 +138,6 @@ const Community = () => {
       </>
     );
   }
-
   return (
     <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4">
       {renderUnlocked()}
@@ -121,13 +145,13 @@ const Community = () => {
       {selectedCommunity && selectedCommunity.status === 0 && (
         <StackModal community={selectedCommunity} onClose={handleStakeModalClose} />
       )}
-      {selectedCommunity && selectedCommunity.status === 1 && (
+      {
         <ChatRoomDrawer
           community={selectedCommunity}
-          open={isChatRootOpen}
-          onClose={() => setIsChatRootOpen(false)}
+          open={selectedCommunity != null && selectedCommunity.status === 1}
+          onClose={() => setSelectedCommunity(null)}
         />
-      )}
+      }
     </div>
   );
 };
