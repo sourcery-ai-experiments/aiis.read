@@ -21,7 +21,7 @@ const Deposit = () => {
         }}
         onClick={open}
       >
-        <span className="text-base font-medium">Deposit</span>
+        <span className="xfans-font-sf text-base font-medium">Deposit</span>
       </BasicButton>
       <Modal
         onClose={close}
