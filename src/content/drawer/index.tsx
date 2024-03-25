@@ -10,6 +10,7 @@ import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
 import useGlobalStore from '../../store/useGlobalStore';
+import * as toaster from '../../components/Toaster';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
 import ProfileModal from '../../welcome/Wallet/Profile';
@@ -150,18 +151,10 @@ export default function PersistentDrawerRight() {
       inviteCode: inviteCode,
     })) as ResultData;
     if (activateData.code === 0) {
-      useGlobalStore.setState({
-        message: 'congratulation!',
-        messageType: 'success',
-        messageOpen: true,
-      });
+      toaster.success(toaster.ToastMessage.CONGRATULATION);
       setPageState('congratulation');
     } else {
-      useGlobalStore.setState({
-        message: 'invite code error',
-        messageType: 'error',
-        messageOpen: true,
-      });
+      toaster.error(toaster.ToastMessage.INVITE_CODE_ERROR);
     }
   };
 

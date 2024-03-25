@@ -9,11 +9,10 @@ import TruncateText from '../../components/TruncateText';
 import useAccount from '../../hooks/useAccount';
 import { useUserInfo } from '../../service/user';
 import { useWalletAccounts } from '../../service/wallet';
-import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useLocalStore from '../../store/useLocalStore';
 import useProfileModal from '../../store/useProfileModal';
-
+import * as toaster from '../../components/Toaster';
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
@@ -62,11 +61,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
               <CopyToClipboard
                 text={accounts[0] ?? '0x0'}
                 onCopy={() => {
-                  useGlobalStore.setState({
-                    messageOpen: true,
-                    messageType: 'succes',
-                    message: 'copy successfully',
-                  });
+                  toaster.success(toaster.ToastMessage.COPY_SUCCESS);
                 }}
               >
                 <div className="flex cursor-pointer items-center space-x-2">

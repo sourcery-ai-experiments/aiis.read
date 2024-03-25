@@ -15,9 +15,9 @@ import Modal from '../../components/Modal';
 import TruncateText from '../../components/TruncateText';
 import { ROWS_PER_PAGE } from '../../constants';
 import { useUserInvite } from '../../service/user';
-import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
+import * as toaster from '../../components/Toaster';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -100,11 +100,7 @@ const InviteFriends = () => {
             <CopyToClipboard
               text={accounts[0] ?? ''}
               onCopy={() => {
-                useGlobalStore.setState({
-                  messageOpen: true,
-                  messageType: 'succes',
-                  message: 'copy successfully',
-                });
+                toaster.success(toaster.ToastMessage.COPY_SUCCESS);
               }}
             >
               <div className="flex w-[186px] cursor-pointer items-center justify-center bg-[#9A6CF9]">

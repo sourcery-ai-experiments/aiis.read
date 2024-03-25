@@ -1,13 +1,43 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { Snackbar } from '@mui/material';
-
 import useGlobalStore from '../store/useGlobalStore';
+
+// toaster
+const XFANS_TOASTER_SUCCESS = 'xfans_toaster_success';
+const XFANS_TOASTER_ERROR = 'xfans_toaster_error';
+
+export enum ToastMessage {
+  VOTE_SUCCESS = '投票成功',
+  VOTE_FAILED = '注册失败!',
+  CONGRATULATION = 'congratulation!',
+  INVITE_CODE_ERROR = 'invite code error',
+  REQUEST_FAILURE_RETRY = '请求失败！请您稍后重试',
+  LOGIN_FAILURE_RETRY = '登录失效！请您重新登录',
+  NO_PERMISSION = '当前账号无权限访问！',
+  NO_RESOURCE = '你所访问的资源不存在！',
+  REQUEST_METHOD_ERROR = '请求方式错误！请您稍后重试',
+  REQUEST_TIMEOUT_RETRY = '请求超时！请您稍后重试',
+  NETWORK_ERROR_RETRY = '网络错误！请您稍后重试',
+  SERVICE_ERROR = '服务异常！',
+  GATEWAY_ERROR = '网关错误！',
+  SERVICE_UNAVALIABLE = '服务不可用！',
+  GATEWAY_TIMEOUT = '网关超时！',
+  REQUEST_FAILURE = '请求失败！',
+  CLAIM_FAILURE = 'Claim 失败',
+  CLAIM_SUCCESS = 'Claim 成功',
+  TRAMSACTION_COMPLETED = 'Transaction completed',
+  COPY_SUCCESS = 'copy successfully',
+  // CLAIM_SUCCESS = 'Claim 成功',
+  // CLAIM_SUCCESS = 'Claim 成功',
+  // CLAIM_SUCCESS = 'Claim 成功',
+  // CLAIM_SUCCESS = 'Claim 成功',
+}
 
 export function success(message: string) {
   useGlobalStore.setState({
     message,
-    messageType: 'succes',
+    messageType: XFANS_TOASTER_SUCCESS,
     messageOpen: true,
   });
 }
@@ -15,7 +45,7 @@ export function success(message: string) {
 export function error(message: string) {
   useGlobalStore.setState({
     message,
-    messageType: 'error',
+    messageType: XFANS_TOASTER_ERROR,
     messageOpen: true,
   });
 }
@@ -34,10 +64,10 @@ export default function Toaster() {
     >
       <div
         className={`flex items-center rounded-[15px] border bg-white px-6 py-5 text-black ${
-          messageType === 'succes' ? 'border-[#56B671]' : 'border-[#FF645E]'
+          messageType === XFANS_TOASTER_SUCCESS ? 'border-[#56B671]' : 'border-[#FF645E]'
         }`}
       >
-        {messageType === 'succes' ? <Succes /> : <Error />}
+        {messageType === XFANS_TOASTER_SUCCESS ? <Succes /> : <Error />}
         <span className="ml-1 text-[20px] font-medium">{message}</span>
       </div>
     </Snackbar>,

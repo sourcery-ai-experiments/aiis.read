@@ -9,14 +9,13 @@ import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-
+import * as toaster from '../../components/Toaster';
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
 import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
-import useGlobalStore from '../../store/useGlobalStore';
 import useTweetStore from '../../store/useTweetStore';
 
 const Icon = () => (
@@ -52,26 +51,14 @@ const Claim = (props: { price?: string }) => {
     tweetRewardList,
     (resp) => {
       if (resp.code === 0) {
-        useGlobalStore.setState({
-          message: 'Claim 成功',
-          messageType: 'success',
-          messageOpen: true,
-        });
+        toaster.success(toaster.ToastMessage.CLAIM_SUCCESS);
       } else {
-        useGlobalStore.setState({
-          message: 'Claim 失败',
-          messageType: 'error',
-          messageOpen: true,
-        });
+        toaster.error(toaster.ToastMessage.CLAIM_FAILURE);
       }
       getReward();
     },
     () => {
-      useGlobalStore.setState({
-        message: 'Claim 失败',
-        messageType: 'error',
-        messageOpen: true,
-      });
+      toaster.error(toaster.ToastMessage.CLAIM_FAILURE);
       getReward();
     }
   );

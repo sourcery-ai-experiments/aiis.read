@@ -4,9 +4,8 @@ import { useToggle } from 'ahooks';
 
 import { BackButton, BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import TruncateText from '../../components/TruncateText';
-import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
+import * as toaster from '../../components/Toaster';
 
 const Deposit = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
@@ -60,11 +59,7 @@ const Deposit = () => {
             <CopyToClipboard
               text={accounts[0] ?? '0x0'}
               onCopy={() => {
-                useGlobalStore.setState({
-                  messageOpen: true,
-                  messageType: 'succes',
-                  message: 'copy successfully',
-                });
+                toaster.success(toaster.ToastMessage.COPY_SUCCESS);
               }}
             >
               <PrimaryButton
