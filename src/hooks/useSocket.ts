@@ -6,6 +6,8 @@ import { getMessagesByRoom, NewMessage, SendMessage } from '../service/room';
 export default function useWebSocket(user: string, room?: string) {
   const [messages, setMessages] = useState<NewMessage[]>([]);
   const [socket, setSocket] = useState<Socket>();
+
+  // 建立 socket
   useEffect(() => {
     if (room == null) return;
     const socket = io(import.meta.env.VITE_SOCKET_bASE_URL, {
@@ -13,19 +15,19 @@ export default function useWebSocket(user: string, room?: string) {
       query: { user, room },
     });
     socket.connect();
-    // socket.on('connect', () => {
-    //   socket.send()
-    // });
     setSocket(socket);
     return () => {
+      setMessages([]);
       socket.disconnect();
     };
   }, [room, user]);
 
+  // 处理新消息
   useEffect(() => {
     socket?.on('newMessage', (data: NewMessage) => {
+      // 标记已读
+      socket?.emit('readMessage', { id: data.id });
       const msgs = [...messages, data];
-      console.log('receive', data);
       msgs.sort((a, b) => +a.id - +b.id);
       setMessages(msgs);
     });

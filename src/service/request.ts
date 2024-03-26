@@ -47,7 +47,7 @@ const contractConfig = {
   withCredentials: true,
 };
 
-const roomConfig = {
+const chatConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
   baseURL: import.meta.env.VITE_ROOM_bASE_URL,
   // 设置超时时间
@@ -173,4 +173,4 @@ class RequestHttp {
 
 export default new RequestHttp(config);
 export const contractRequestHttp = new RequestHttp(contractConfig);
-export const roomRequestHttp = new RequestHttp(roomConfig);
+export const roomRequestHttp = new RequestHttp(chatConfig);

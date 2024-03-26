@@ -24,7 +24,6 @@ const Community = () => {
       let len = 0;
       items.forEach((item) => {
         getMessagesByRoom(item.subject, { count: 1 }).then((msgs) => {
-          console.log(111);
           item.lastMsg = msgs[0];
           len++;
           if (len === items.length) {
@@ -139,7 +138,7 @@ const Community = () => {
     );
   }
   return (
-    <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4">
+    <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden px-4">
       {renderUnlocked()}
       {renderLocked()}
       {selectedCommunity && selectedCommunity.status === 0 && (

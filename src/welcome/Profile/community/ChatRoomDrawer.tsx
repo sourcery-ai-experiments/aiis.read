@@ -1,9 +1,12 @@
-import React, { DragEvent, SVGProps, useRef, useState } from 'react';
+import React, { DragEvent, SVGProps, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Drawer } from '@mui/material';
+import { useRequest } from 'ahooks';
+import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import useAccount from '../../../hooks/useAccount';
 import useWebSocket from '../../../hooks/useSocket';
+import { getMyInfo, getUserCount } from '../../../service/community';
 import { NewMessage, SendMessage } from '../../../service/room';
 
 import MembersDrawer from './MembersDrawer';
@@ -20,6 +23,29 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
   const { wallet } = useAccount();
   const { messages, sendMessage } = useWebSocket(wallet, community?.subject);
+  const ref = useRef<HTMLDivElement>(null);
+  const { data: userCount = 0, run: runGetUserCount } = useRequest(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    () => getUserCount(community!.subject),
+    {
+      manual: true,
+    }
+  );
+  const { data: myInfo, run: runGetMyInfo } = useRequest(() => getMyInfo(community!.subject), {
+    manual: true,
+  });
+
+  useLayoutEffect(() => {
+    if (ref.current == null) return;
+    ref.current.scrollTop = 999999999;
+  });
+
+  useEffect(() => {
+    if (open) {
+      runGetUserCount();
+      runGetMyInfo();
+    }
+  }, [open, runGetMyInfo, runGetUserCount]);
 
   function renderMessages() {
     return messages.map((msg) => {
@@ -47,29 +73,37 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
         <header className="flex h-[64px] items-center justify-between  px-[16px] ">
           <div className="flex items-center font-bold text-[#0F1419]">
             <ArrowBackIcon className="cursor-pointer" onClick={onClose} />
-            <span className="ml-[8px]">Devon‘ Community</span>
+            <span className="ml-[8px]">{community?.ownerUser.username}‘ Community</span>
           </div>
           <div className="flex leading-none">
             <div
               className="flex cursor-pointer items-center rounded-full border border-[#9A6CF9] px-[8px] py-[4px] font-medium"
               onClick={() => setIsMembersDrawerOpen(true)}
             >
-              <MembersIcon /> <span className="ml-[2px] text-[#0F1419]">24</span>
+              <MembersIcon /> <span className="ml-[2px] text-[#0F1419]">{userCount}</span>
             </div>
             <div
               className="ml-[18px] flex cursor-pointer items-center rounded-full border border-[#9A6CF9] px-[8px] py-[4px] font-medium"
               onClick={() => setIsStackModalOpen(true)}
             >
-              <FireIcon /> <span className="ml-[2px] text-[#0F1419]">Stack</span>
+              <FireIcon /> <span className="ml-[2px] text-[#0F1419]">Stake</span>
             </div>
           </div>
         </header>
-        <div className="xfans-scrollbar flex-1 overflow-y-auto px-[16px]">{renderMessages()}</div>
+        <div ref={ref} className="xfans-scrollbar relative flex-1 overflow-y-auto px-[16px]">
+          <UnreadBanner />
+          {renderMessages()}
+        </div>
         <SendMessageBox sendMessage={sendMessage} />
         {isStackModalOpen && community && (
           <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
         )}
-        <MembersDrawer open={isMembersDrawerOpen} onClose={() => setIsMembersDrawerOpen(false)} />
+        <MembersDrawer
+          isOwner={myInfo?.address === community?.subject}
+          open={isMembersDrawerOpen}
+          subject={community?.subject}
+          onClose={() => setIsMembersDrawerOpen(false)}
+        />
       </div>
     </Drawer>
   );
@@ -86,6 +120,14 @@ function FireIcon() {
   );
 }
 
+function UnreadBanner() {
+  return (
+    <div className="absolute top-0 left-0 w-full bg-[#D9D9D9]">
+      自从 Jan 05 2024,14：34以来，有30条未读新消息
+    </div>
+  );
+}
+
 function MessageFromMeItem({ msg }: { msg: NewMessage }) {
   return (
     <div className="mt-[39px] flex items-start justify-end">
@@ -94,7 +136,9 @@ function MessageFromMeItem({ msg }: { msg: NewMessage }) {
           {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
           {msg.message}
         </div>
-        <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
+        <span className="mt-[6px] text-xs text-[#A6A6A9]">
+          {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
+        </span>
       </div>
       <img
         className="ml-[12px] w-[44px] rounded-full"
@@ -120,7 +164,9 @@ function MessageFromOtherItem({ msg }: { msg: NewMessage }) {
             {msg.message}
           </div>
         </div>
-        <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
+        <span className="mt-[6px] text-xs text-[#A6A6A9]">
+          {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
+        </span>
       </div>
     </div>
   );
@@ -162,7 +208,7 @@ function SendMessageBox({ sendMessage }: SendMessageBoxProps) {
   }
   return (
     <div
-      className="w-[calc(100% - 32px)] mx-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
+      className="w-[calc(100% - 32px)] mx-[16px] mt-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
       style={{ boxShadow: '5px 4px 20px 0px rgba(0, 0, 0, 0.13)' }}
       onDrop={handleDrop}
     >

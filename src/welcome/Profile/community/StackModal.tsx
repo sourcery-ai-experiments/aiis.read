@@ -45,7 +45,10 @@ export default function StackModal({ onClose, community }: ModalProps) {
           <br /> creator’s community
         </p>
 
-        <ProgressBar percentage={+community.stakedShares / +community.requiredStakedShares} />
+        <ProgressBar
+          staked={+community.stakedShares}
+          stakeRequired={+community.requiredStakedShares}
+        />
         <p className="mt-[14px] w-full text-right text-sm text-[#919099]">
           Community total staked: {+community.stakedShares / 100}
         </p>
@@ -208,16 +211,16 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
   );
 }
 
-function ProgressBar({ percentage = 0.0 }: { percentage?: number }) {
+function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired: number }) {
   return (
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
       <div
         className={`item-center absolute left-0 top-0 flex h-[20px] rounded-full bg-[#9A6CF969] pl-[10px] pr-[10px]`}
-        style={{ width: `calc(${percentage * 100}%)` }}
+        style={{ width: `calc(${Math.min((staked / stakeRequired) * 100, 100)}%)` }}
       />
       <div className="item-center absolute right-0 top-[1px] flex h-[18px] w-[18px] justify-center rounded-full border border-[#9A6CF9] bg-white text-xs text-[#2E2E32]">
-        5
+        {stakeRequired / 100}
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export type NewMessage = {
   image: string;
   room: string;
   sender: string;
-  createTime: number;
+  createTime: string;
   id: string;
 };
 

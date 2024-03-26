@@ -27,7 +27,7 @@ const Close = () => (
 
 const Modal = (props: ExtraModalProps) => {
   return (
-    <MModal {...props}>
+    <MModal disableScrollLock={true} {...props}>
       <div
         style={{
           position: 'absolute',
