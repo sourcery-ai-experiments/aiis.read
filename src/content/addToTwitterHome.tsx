@@ -113,12 +113,14 @@ export const addUserPagePriceComponent = () => {
     XPathResult.FIRST_ORDERED_NODE_TYPE,
     null
   ).singleNodeValue as Element;
-
+  console.log('specificElement', specificElement);
   if (specificElement) {
     const root = createRoot(priceContainer);
-    // root.render(<span id={elementId}>1</span>);
-    root.render(<UserPagePrice price={'1222'} id={elementId} />);
-    // root.render();
+    root.render(
+      <div id={elementId}>
+        <UserPagePrice twitterUsername={username} />
+      </div>
+    );
     specificElement.appendChild(priceContainer);
   }
 };
