@@ -71,6 +71,12 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const [isBuying, setIsBuying] = useState(false);
   const [floorPrice, setFloorPrice] = useState('0');
   const numberInputRef = useRef<NumberInputRef>(null);
+
+  const [loadingFloorPrice, setLoadingFloorPrice] = useState<boolean>(true);
+  const [loadingPrice, setLoadingPrice] = useState<boolean>(true);
+  const [loadingPirceAfterFee, setLoadingPirceAfterFee] = useState<boolean>(true);
+  const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
+
   useEffect(() => {
     if (amount === 0) {
       setGasFee('0');
@@ -80,12 +86,16 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
     let cancel = false;
     if (currentInfo?.walletAddress != null) {
+      setLoadingPrice(true);
       getBuyPrice(currentInfo?.walletAddress, amount).then(({ gasFee, price }) => {
+        setLoadingPrice(false);
         if (cancel) return;
         setGasFee(gasFee);
         setPrice(price);
       });
+      setLoadingPirceAfterFee(true);
       getBuyPriceAfterFee(currentInfo?.walletAddress, amount).then((fee) => {
+        setLoadingPirceAfterFee(false);
         if (cancel) return;
         setPriceAfterFee(fee);
       });
@@ -97,13 +107,19 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
 
   useEffect(() => {
     if (currentInfo?.walletAddress != null) {
-      getFloorPrice(currentInfo?.walletAddress).then(setFloorPrice);
+      setLoadingFloorPrice(true);
+      getFloorPrice(currentInfo?.walletAddress).then((price) => {
+        setLoadingFloorPrice(false);
+        setFloorPrice(price);
+      });
     }
   }, [currentInfo?.walletAddress]);
 
   useEffect(() => {
     if (wallet) {
+      setLoadingBalance(true);
       getBalance().then((balance) => {
+        setLoadingBalance(false);
         setBalance(balance.toString());
       });
     }
@@ -133,11 +149,17 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   function refresh() {
     numberInputRef.current?.reset();
     refreshAccount();
+    setLoadingBalance(true);
     getBalance().then((balance) => {
+      setLoadingBalance(false);
       setBalance(balance.toString());
     });
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    getFloorPrice(currentInfo!.walletAddress!).then(setFloorPrice);
+    setLoadingFloorPrice(true);
+    getFloorPrice(currentInfo!.walletAddress!).then((price) => {
+      setLoadingFloorPrice(false);
+      setFloorPrice(price);
+    });
   }
 
   function handleBuyClick() {
@@ -168,7 +190,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
           <span className="text-xl font-bold text-[#2E2E32]">Floor Price:</span>
           <Icon />
           <span className="text-xl font-medium text-black">
-            <NumberDisplayer text={floorPrice} />
+            <NumberDisplayer text={floorPrice} loading={loadingFloorPrice} />
           </span>
         </div>
 
@@ -213,7 +235,10 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
             <div className="flex items-center space-x-1">
               <Icon1 />
               <span className="text-lg font-medium">
-                <NumberDisplayer text={transactionFee} />
+                <NumberDisplayer
+                  text={transactionFee}
+                  loading={loadingPrice || loadingPirceAfterFee}
+                />
               </span>
             </div>
           </div>
@@ -222,7 +247,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
             <div className="flex items-center space-x-1">
               <Icon1 />
               <span className="text-lg font-medium">
-                <NumberDisplayer text={gasFee} />
+                <NumberDisplayer text={gasFee} loading={loadingPrice} />
               </span>
             </div>
           </div>
@@ -243,7 +268,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
             <div className="flex items-center space-x-1">
               <Icon1 />
               <span className="text-2xl font-bold">
-                <NumberDisplayer text={total} />
+                <NumberDisplayer text={total} loading={loadingPrice || loadingPirceAfterFee} />
               </span>
             </div>
           </div>
@@ -252,7 +277,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
             <div className="flex items-center justify-center space-x-1 rounded-full bg-[#F5F5F5] px-5 py-1">
               <Icon1 />
               <span className="text-lg font-medium">
-                <NumberDisplayer text={balance} isBigNumber={false} />
+                <NumberDisplayer text={balance} isBigNumber={false} loading={loadingBalance} />
               </span>
             </div>
           </div>
