@@ -231,7 +231,7 @@ const ProfileModal = () => {
               {rows == null || rows.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
-                  label="No one has purchased your shares yet."
+                  label="No holders yet."
                 />
               ) : (
                 <Table aria-label="simple table">
