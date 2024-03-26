@@ -37,6 +37,7 @@ const Modal = (props: ExtraModalProps) => {
           width: props.width,
           backgroundColor: '#FFFFFF',
           borderRadius: 12,
+          outline: 'none',
         }}
       >
         <div
