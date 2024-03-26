@@ -8,7 +8,7 @@ import { NumberDisplayer } from '../../NumberDisplayer';
 import '../../../tailwind.css';
 
 interface UserPagePriceProps {
-  twitterUsername: string; // 假设价格是一个数字
+  twitterUsername: string;
 }
 
 export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {

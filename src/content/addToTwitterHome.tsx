@@ -90,6 +90,28 @@ export const addTwitterComponent = () => {
 };
 
 export const addUserPagePriceComponent = () => {
+  const addByXPath = (xpath: string) => {
+    const specificElement = document.evaluate(
+      xpath,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue as Element;
+
+    if (specificElement) {
+      const priceContainer = document.createElement('span');
+      const root = createRoot(priceContainer);
+      root.render(
+        <div id={elementId}>
+          <UserPagePrice twitterUsername={username} />
+        </div>
+      );
+      specificElement.appendChild(priceContainer);
+      return true;
+    }
+    return false;
+  };
   // 获取当前页面的 URL
   const currentUrl = window.location.href.toLowerCase();
   const username = currentUrl.split('/')[currentUrl.split('/').length - 1];
@@ -100,27 +122,8 @@ export const addUserPagePriceComponent = () => {
   if (existingElement) {
     return;
   }
-
-  const priceContainer = document.createElement('span');
-
-  // Update XPath based on your structure
+  // 当用户个人主页有背景图或者没有背景图的时候，xpath不一致。
   const xpath = `/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[1]/div[2]/div[1]/div/div[1]/div/div/span/span[2]`;
-
-  const specificElement = document.evaluate(
-    xpath,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue as Element;
-  console.log('specificElement', specificElement);
-  if (specificElement) {
-    const root = createRoot(priceContainer);
-    root.render(
-      <div id={elementId}>
-        <UserPagePrice twitterUsername={username} />
-      </div>
-    );
-    specificElement.appendChild(priceContainer);
-  }
+  const xpath2 = `/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/span/span[2]`;
+  if (!addByXPath(xpath)) addByXPath(xpath2);
 };
