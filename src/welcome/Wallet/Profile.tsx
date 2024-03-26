@@ -135,8 +135,6 @@ const ProfileModal = () => {
     }
   }, [curPages, fetchMap, currentKey, open]);
 
-  console.log(holderList, holderingList);
-
   return (
     <>
       <Modal onClose={closeProfile} open={open} width={626} closebuttonstyle={{ marginTop: '5px' }}>
