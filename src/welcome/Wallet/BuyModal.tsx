@@ -73,8 +73,8 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const numberInputRef = useRef<NumberInputRef>(null);
 
   const [loadingFloorPrice, setLoadingFloorPrice] = useState<boolean>(true);
-  const [loadingPrice, setLoadingPrice] = useState<boolean>(true);
-  const [loadingPirceAfterFee, setLoadingPirceAfterFee] = useState<boolean>(true);
+  const [loadingPrice, setLoadingPrice] = useState<boolean>(false);
+  const [loadingPirceAfterFee, setLoadingPirceAfterFee] = useState<boolean>(false);
   const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
 
   useEffect(() => {
