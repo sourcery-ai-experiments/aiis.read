@@ -112,11 +112,21 @@ export const addUserPagePriceComponent = () => {
     }
     return false;
   };
+
   // 获取当前页面的 URL
   const currentUrl = window.location.href.toLowerCase();
   const username = currentUrl.split('/')[currentUrl.split('/').length - 1];
   const elementId = `xfans-userPagePrice-${username}`;
   const existingElement = document.getElementById(elementId);
+
+  // 由于个人中心页面有复用，因此在插入之前要删除掉其他price tag
+  var elements = document.querySelectorAll('[id^="xfans-userPagePrice-"]');
+  elements.forEach((x) => {
+    if (x.id !== elementId) {
+      var parent = x.parentNode; // 获取父节点
+      parent?.removeChild(x);
+    }
+  });
 
   // 如果元素已经存在，则不执行后续操作
   if (existingElement) {
