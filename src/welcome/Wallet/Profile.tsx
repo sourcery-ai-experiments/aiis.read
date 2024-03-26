@@ -132,10 +132,9 @@ const ProfileModal = () => {
   useEffect(() => {
     if (open) {
       fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
+      console.log(123);
     }
   }, [curPages, fetchMap, currentKey, open]);
-
-  console.log(holderList, holderingList);
 
   return (
     <>
