@@ -90,35 +90,50 @@ export const addTwitterComponent = () => {
 };
 
 export const addUserPagePriceComponent = () => {
+  const addByXPath = (xpath: string) => {
+    const specificElement = document.evaluate(
+      xpath,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue as Element;
+
+    if (specificElement) {
+      const priceContainer = document.createElement('span');
+      const root = createRoot(priceContainer);
+      root.render(
+        <div id={elementId}>
+          <UserPagePrice twitterUsername={username} />
+        </div>
+      );
+      specificElement.appendChild(priceContainer);
+      return true;
+    }
+    return false;
+  };
+
   // 获取当前页面的 URL
   const currentUrl = window.location.href.toLowerCase();
   const username = currentUrl.split('/')[currentUrl.split('/').length - 1];
   const elementId = `xfans-userPagePrice-${username}`;
   const existingElement = document.getElementById(elementId);
 
+  // 由于个人中心页面有复用，因此在插入之前要删除掉其他price tag
+  var elements = document.querySelectorAll('[id^="xfans-userPagePrice-"]');
+  elements.forEach((x) => {
+    if (x.id !== elementId) {
+      var parent = x.parentNode; // 获取父节点
+      parent?.removeChild(x);
+    }
+  });
+
   // 如果元素已经存在，则不执行后续操作
   if (existingElement) {
     return;
   }
-
-  const priceContainer = document.createElement('span');
-
-  // Update XPath based on your structure
+  // 当用户个人主页有背景图或者没有背景图的时候，xpath不一致。
   const xpath = `/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[1]/div[2]/div[1]/div/div[1]/div/div/span/span[2]`;
-
-  const specificElement = document.evaluate(
-    xpath,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue as Element;
-
-  if (specificElement) {
-    const root = createRoot(priceContainer);
-    // root.render(<span id={elementId}>1</span>);
-    root.render(<UserPagePrice price={'1222'} id={elementId} />);
-    // root.render();
-    specificElement.appendChild(priceContainer);
-  }
+  const xpath2 = `/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/span/span[2]`;
+  if (!addByXPath(xpath)) addByXPath(xpath2);
 };
