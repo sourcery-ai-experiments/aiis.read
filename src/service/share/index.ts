@@ -73,11 +73,6 @@ const useHolderList = () => {
     {
       manual: true,
       onSuccess(response, params) {
-        console.log(
-          'succ',
-          params[0].subject !== undefined && params[0].subject !== null,
-          params[0].holder !== undefined && params[0].holder !== null
-        );
         if (params[0].subject !== undefined && params[0].subject !== null) {
           useShareStore.setState({
             holderList: response.data.items,
