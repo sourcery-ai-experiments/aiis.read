@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
+import useGlobalStore from '../store/useGlobalStore';
 
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
@@ -35,6 +36,8 @@ withProxyStore(<Content />, store).then((component) => {
     setInterval(() => {
       // 使用示例
       const userIsOnProfilePage = whereIsUser();
+      const { token } = useGlobalStore.getState();
+      if (!token) return;
 
       if (userIsOnProfilePage === 'home') {
         addTwitterComponent();

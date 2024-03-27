@@ -44,10 +44,15 @@ export default function MembersDrawer({ isOwner = false, subject, open = false, 
             <span className="ml-[8px]">Members</span>
           </div>
         </header>
-        {/* TODO Search */}
         {userList.map((item) => (
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <MemberItem key={item.address} disabled={!isOwner} subject={subject!} user={item} />
+          <MemberItem
+            key={item.address}
+            disabled={!isOwner || item.address === subject}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            subject={subject!}
+            user={item}
+          />
         ))}
       </div>
     </Drawer>

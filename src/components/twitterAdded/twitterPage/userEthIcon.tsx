@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+
 import useAccount from '../../../hooks/useAccount';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useLocalStore from '../../../store/useLocalStore';
@@ -54,7 +55,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
     setElementWidth(width);
   }, []); // This effect runs only once after the initial render
 
-  return !isShowPrice && currentUserInfo?.isRegistered ? (
+  return !isShowPrice && currentUserInfo?.isActive ? (
     <span
       onClick={(e) => {
         openProfile(userInfo);

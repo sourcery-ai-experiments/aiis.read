@@ -2,7 +2,7 @@ import { roomRequestHttp as http } from '../request';
 
 type Response = {
   count: number;
-  messages: NewMessage[];
+  messages: ReceiveMessage[];
 };
 
 export type SendMessage = {
@@ -11,7 +11,7 @@ export type SendMessage = {
   timestamp: number;
 };
 
-export type NewMessage = {
+export type ReceiveMessage = {
   message: string;
   image: string;
   room: string;
@@ -22,8 +22,21 @@ export type NewMessage = {
 
 export async function getMessagesByRoom(
   room: string,
-  qeury?: { messageId?: string; count?: number }
+  qeury?: { messageId?: string; count?: number; order?: 'asc' | 'desc' }
 ) {
   const response = await http.get<Response>(`/message/${room}`, qeury);
   return response.messages;
+}
+
+type GetUnreadMessageCountResponse = {
+  count: number;
+  since: number;
+  latestMsg: ReceiveMessage;
+};
+
+export async function getUnreadMessageCount(user: string, room: string) {
+  const response = await http.get<GetUnreadMessageCountResponse>(
+    `/message/unread-count/${user}/${room}`
+  );
+  return response;
 }

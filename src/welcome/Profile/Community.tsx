@@ -1,30 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { ListEmpty } from '../../components/Empty';
-import useWebSocket from '../../hooks/useSocket';
+import useAccount from '../../hooks/useAccount';
 import { getList } from '../../service/community';
-import { getMessagesByRoom, NewMessage } from '../../service/room';
+import { getUnreadMessageCount, ReceiveMessage } from '../../service/room';
 import { getTimeDistanceFromDate } from '../../utils';
 
 import ChatRoomDrawer from './community/ChatRoomDrawer';
 import StackModal from './community/StackModal';
 
 type CommunityWithMessage = Community & {
-  lastMsg?: NewMessage;
+  lastMsg?: ReceiveMessage;
+  unreadCount?: number;
 };
 
 const Community = () => {
   const [lockedCommunities, setLockedCommunities] = useState<Community[]>([]);
   const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
+  const { wallet } = useAccount();
 
   const refresh = useCallback(() => {
     getList(0).then(setLockedCommunities);
     getList(1).then((items: CommunityWithMessage[]) => {
+      setUnlockedCommunities(items);
       let len = 0;
       items.forEach((item) => {
-        getMessagesByRoom(item.subject, { count: 1 }).then((msgs) => {
-          item.lastMsg = msgs[0];
+        getUnreadMessageCount(wallet, item.subject).then((res) => {
+          item.lastMsg = res.latestMsg;
+          item.unreadCount = res.count;
           len++;
           if (len === items.length) {
             setUnlockedCommunities(items);
@@ -32,7 +36,7 @@ const Community = () => {
         });
       });
     });
-  }, []);
+  }, [wallet]);
 
   useEffect(() => {
     refresh();
@@ -86,6 +90,7 @@ const Community = () => {
                     </span>
                   </div>
                   <p className="h-[16px] truncate text-xs text-[#5B7083]">
+                    {(item.unreadCount ?? 0) > 0 ? `[${item.unreadCount}]` : ''}
                     {item.lastMsg?.message ?? ''}
                   </p>
                 </div>

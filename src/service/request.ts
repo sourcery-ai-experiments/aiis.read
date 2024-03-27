@@ -70,8 +70,7 @@ class RequestHttp {
      */
     this.service.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token =
-          useGlobalStore.getState().token ?? JSON.parse(localStorage.getItem('token')!).state.token;
+        const token = useGlobalStore.getState().token;
         if (config.headers && typeof config.headers.set === 'function') {
           config.headers.set('Authorization', 'Bearer ' + token);
         }

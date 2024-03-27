@@ -6,6 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import { XFANS_USERINFO } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -16,7 +17,6 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-import { XFANS_USERINFO } from '../../constants';
 
 import LogoButton from './logoButton';
 
@@ -76,7 +76,6 @@ export default function PersistentDrawerRight() {
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
     const xfansToken = urlParams.get('xfans_token');
-    console.log(xfansToken);
     if (xfansToken) {
       // 登录看是否有效，拿到 invite 状态
       useGlobalStore.setState({ token: xfansToken });
@@ -95,7 +94,7 @@ export default function PersistentDrawerRight() {
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
     setInterval(() => {
-      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO!) ?? '');
+      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO) || '""');
       if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
         // 读取所有的 cookie
         const cookies = document.cookie;

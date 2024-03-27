@@ -1,13 +1,21 @@
-import React, { DragEvent, SVGProps, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  DragEvent,
+  SVGProps,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Drawer } from '@mui/material';
-import { useRequest } from 'ahooks';
+import { useRequest, useThrottle, useThrottleFn } from 'ahooks';
 import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import useAccount from '../../../hooks/useAccount';
-import useWebSocket from '../../../hooks/useSocket';
+import useMessages from '../../../hooks/useMessages';
 import { getMyInfo, getUserCount } from '../../../service/community';
-import { NewMessage, SendMessage } from '../../../service/room';
+import { ReceiveMessage, SendMessage } from '../../../service/room';
 
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
@@ -22,7 +30,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
   const { wallet } = useAccount();
-  const { messages, sendMessage } = useWebSocket(wallet, community?.subject);
+  const { messages, sendMessage, loadMessages } = useMessages(wallet, community?.subject);
   const ref = useRef<HTMLDivElement>(null);
   const { data: userCount = 0, run: runGetUserCount } = useRequest(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -35,10 +43,25 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
     manual: true,
   });
 
-  useLayoutEffect(() => {
+  const isFirstLoadMsgsRef = useRef(false);
+  useEffect(() => {
     if (ref.current == null) return;
-    ref.current.scrollTop = 999999999;
-  });
+    if (messages.length > 0 && isFirstLoadMsgsRef.current === false) {
+      isFirstLoadMsgsRef.current = true;
+      if (open && isFirstLoadMsgsRef.current) {
+        ref.current.scrollTop = 999999999;
+      }
+    }
+  }, [messages.length, open]);
+
+  useEffect(
+    () => () => {
+      if (!open) {
+        isFirstLoadMsgsRef.current = false;
+      }
+    },
+    [open]
+  );
 
   useEffect(() => {
     if (open) {
@@ -46,6 +69,22 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       runGetMyInfo();
     }
   }, [open, runGetMyInfo, runGetUserCount]);
+
+  const { run: handleScroll } = useThrottleFn(
+    (env: React.UIEvent<HTMLDivElement, UIEvent>) => {
+      if (ref.current == null) return;
+      const modifier = 100;
+      if (ref.current.scrollTop < modifier) {
+        loadMessages('up', messages[0]?.id);
+        return;
+      }
+      if (ref.current.clientHeight + ref.current.scrollTop + modifier > ref.current.scrollHeight) {
+        loadMessages('down', messages[messages.length - 1]?.id);
+        return;
+      }
+    },
+    { wait: 500 }
+  );
 
   function renderMessages() {
     return messages.map((msg) => {
@@ -90,11 +129,14 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
             </div>
           </div>
         </header>
-        <div ref={ref} className="xfans-scrollbar relative flex-1 overflow-y-auto px-[16px]">
-          <UnreadBanner />
+        <div
+          ref={ref}
+          className="xfans-scrollbar relative flex-1 overflow-y-auto px-[16px]"
+          onScroll={handleScroll}
+        >
           {renderMessages()}
         </div>
-        <SendMessageBox sendMessage={sendMessage} />
+        <SendMessageBox disabled={myInfo?.isBlocked} sendMessage={sendMessage} />
         {isStackModalOpen && community && (
           <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
         )}
@@ -120,15 +162,7 @@ function FireIcon() {
   );
 }
 
-function UnreadBanner() {
-  return (
-    <div className="absolute top-0 left-0 w-full bg-[#D9D9D9]">
-      自从 Jan 05 2024,14：34以来，有30条未读新消息
-    </div>
-  );
-}
-
-function MessageFromMeItem({ msg }: { msg: NewMessage }) {
+function MessageFromMeItem({ msg }: { msg: ReceiveMessage }) {
   return (
     <div className="mt-[39px] flex items-start justify-end">
       <div className="flex flex-col items-end">
@@ -148,7 +182,7 @@ function MessageFromMeItem({ msg }: { msg: NewMessage }) {
     </div>
   );
 }
-function MessageFromOtherItem({ msg }: { msg: NewMessage }) {
+function MessageFromOtherItem({ msg }: { msg: ReceiveMessage }) {
   return (
     <div className="mt-[39px] flex items-start">
       <img
@@ -173,9 +207,10 @@ function MessageFromOtherItem({ msg }: { msg: NewMessage }) {
 }
 
 type SendMessageBoxProps = {
+  disabled?: boolean;
   sendMessage(message: SendMessage): void;
 };
-function SendMessageBox({ sendMessage }: SendMessageBoxProps) {
+function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) {
   const [img, setImg] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   async function handleDrop(event: DragEvent<HTMLDivElement>) {
@@ -198,20 +233,43 @@ function SendMessageBox({ sendMessage }: SendMessageBoxProps) {
       setImg(reader.result as string);
     };
   }
-  function handleSendMessage() {
+  const handleSendMessage = useCallback(() => {
     if (textareaRef.current == null) return;
     const message = textareaRef.current.value;
-    if (message == null) return;
-    sendMessage({ message, image: img ?? undefined, timestamp: Date.now() });
+    if (message == null || message === '') return;
+    sendMessage({
+      message,
+      image: img ?? undefined,
+      timestamp: Date.now(),
+    });
     textareaRef.current.value = '';
     setImg(null);
-  }
+  }, [img, sendMessage]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea == null) return;
+    function handle(env: KeyboardEvent) {
+      if (env.code.toLowerCase() === 'enter') {
+        handleSendMessage();
+      }
+    }
+    textarea.addEventListener('keydown', handle);
+    return () => {
+      textarea.removeEventListener('keydown', handle);
+    };
+  }, [handleSendMessage]);
   return (
     <div
-      className="w-[calc(100% - 32px)] mx-[16px] mt-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
+      className="w-[calc(100% - 32px)] relative mx-[16px] mt-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
       style={{ boxShadow: '5px 4px 20px 0px rgba(0, 0, 0, 0.13)' }}
       onDrop={handleDrop}
     >
+      {disabled && (
+        <div className="absolute flex h-full w-full select-none items-center bg-white/50 pl-[22px] text-[#F4245E]">
+          You have been banned from speaking.
+        </div>
+      )}
       <div className="flex flex-1 flex-col py-[16px] px-[22px]">
         {img && (
           <div className="relative flex self-start">
@@ -224,8 +282,9 @@ function SendMessageBox({ sendMessage }: SendMessageBoxProps) {
         )}
         <textarea
           ref={textareaRef}
-          placeholder="Write your message"
-          className="scrollbar-hide max-h-[180px] min-h-[56px] w-full resize-none bg-transparent p-0 outline-none"
+          placeholder={disabled ? '' : 'Write your message'}
+          rows={1}
+          className="scrollbar-hide max-h-[180px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>
       <div className="flex w-[80px] items-center pl-[16px]">
