@@ -64,6 +64,16 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   useEffect(() => {
+    if (ref.current == null) return;
+    const isNearBottom =
+      // 150给的近似值
+      ref.current.clientHeight + ref.current.scrollTop + 150 > ref.current.scrollHeight;
+    if (messages.length > 0 && isNearBottom) {
+      ref.current.scrollTop = 99999999999;
+    }
+  }, [messages.length]);
+
+  useEffect(() => {
     if (open) {
       runGetUserCount();
       runGetMyInfo();
@@ -250,7 +260,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     const textarea = textareaRef.current;
     if (textarea == null) return;
     function handle(env: KeyboardEvent) {
-      if (env.code.toLowerCase() === 'enter') {
+      // code 会在中文输入法按下 enter 的时候也触发，所以特地使用 keyCode，不要改动
+      if (env.keyCode === 13) {
         handleSendMessage();
       }
     }
