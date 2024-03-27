@@ -6,17 +6,18 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import { XFANS_USERINFO } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
 import useGlobalStore from '../../store/useGlobalStore';
+import useLocalStore from '../../store/useLocalStore';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
 import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-import { XFANS_USERINFO } from '../../constants';
 
 import LogoButton from './logoButton';
 
@@ -51,16 +52,20 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 export default function PersistentDrawerRight() {
-  const [open, setOpen] = React.useState(false);
+  const { isShowDrawer } = useLocalStore((state) => ({ ...state }));
 
   const [loginLoading, setLoginLoading] = React.useState(false);
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    useLocalStore.setState({
+      isShowDrawer: true,
+    });
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    useLocalStore.setState({
+      isShowDrawer: false,
+    });
   };
 
   const [pageState, setPageState] = React.useState('login');
@@ -69,14 +74,15 @@ export default function PersistentDrawerRight() {
     // 先检查是否需要展开
     const loginState = localStorage.getItem('xfans-login-state');
     const shouldOpenStateList: string[] = ['waitingRedirect', 'waitingInvite'];
-    if (shouldOpenStateList.includes(String(loginState))) {
-      setOpen(true);
-    }
+    // if (shouldOpenStateList.includes(String(loginState))) {
+    //   useLocalStore.setState({
+    //     isShowDrawer: true,
+    //   });
+    // }
 
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
     const xfansToken = urlParams.get('xfans_token');
-    console.log(xfansToken);
     if (xfansToken) {
       // 登录看是否有效，拿到 invite 状态
       useGlobalStore.setState({ token: xfansToken });
@@ -182,12 +188,12 @@ export default function PersistentDrawerRight() {
         edge="start"
         onClick={handleDrawerOpen}
         disableRipple
-        sx={{ ...(open && { display: 'none' }) }}
+        sx={{ ...(isShowDrawer && { display: 'none' }) }}
       >
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={open}></Main>
+      <Main open={isShowDrawer}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -198,7 +204,7 @@ export default function PersistentDrawerRight() {
         }}
         variant="persistent"
         anchor="right"
-        open={open}
+        open={isShowDrawer}
       >
         <div className="flex h-full">
           <div className="mx-[2px] mt-[37px] h-[24px] w-[24px]">
