@@ -17,7 +17,6 @@ import {
   getFloorPrice,
 } from '../../service/contract/shares';
 import { getBalance } from '../../service/contract/user';
-import useGlobalStore from '../../store/useGlobalStore';
 import useProfileModal from '../../store/useProfileModal';
 
 const Icon = () => (
@@ -172,11 +171,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     buyShares(currentInfo!.walletAddress!, amount).then(() => {
       setIsBuying(false);
       refresh();
-      useGlobalStore.setState({
-        message: 'Transaction completed',
-        messageType: 'succes',
-        messageOpen: true,
-      });
+      toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
     });
   }
 

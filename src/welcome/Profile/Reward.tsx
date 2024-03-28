@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { useAsyncEffect } from 'ahooks';
 import dayjs from 'dayjs';
-
+import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
@@ -46,7 +46,7 @@ const Reward = () => {
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.id === userInfo?.id)
     : -1;
-
+  console.log('tweetList', tweetList);
   const fetchMap: Record<any, any> = {
     1: getTweet,
     2: () => {
@@ -164,50 +164,59 @@ const Reward = () => {
               padding: 0,
             }}
           >
-            <ul className="border-t border-t-[#EBEEF0] py-[22px]">
-              {tweetList?.map((item, i) => (
-                <li key={i} className="mb-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-[6px]">
-                      <img
-                        onClick={() => {
-                          window.open(
-                            `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
-                            '_blank'
-                          );
-                        }}
-                        src={item.author?.avatar}
-                        alt=""
-                        className="w-[44px] cursor-pointer rounded-full"
-                      />
-                      <div className="flex flex-col space-y-[2px]">
-                        <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                          {item.author?.username}
-                        </span>
-                        <span
-                          className="text-xs text-[#919099]"
-                          style={{ fontVariant: 'small-caps' }}
-                        >
-                          {dayjs(item.createdAt).locale('en').format('MMM DD YYYY, HH:mm')}
-                        </span>
+            {tweetList == null || tweetList.length === 0 ? (
+              <div className="flex flex-col items-center">
+                <ListEmpty className="mt-[50px]" />
+                <p className="xfans-font-sf mt-[10px] text-[#00000080]">
+                  You haven&apos;t bought any shares yet.
+                </p>
+              </div>
+            ) : (
+              <ul className="border-t border-t-[#EBEEF0] py-[22px]">
+                {tweetList?.map((item, i) => (
+                  <li key={i} className="mb-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-[6px]">
+                        <img
+                          onClick={() => {
+                            window.open(
+                              `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
+                              '_blank'
+                            );
+                          }}
+                          src={item.author?.avatar}
+                          alt=""
+                          className="w-[44px] cursor-pointer rounded-full"
+                        />
+                        <div className="flex flex-col space-y-[2px]">
+                          <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
+                            {item.author?.username}
+                          </span>
+                          <span
+                            className="text-xs text-[#919099]"
+                            style={{ fontVariant: 'small-caps' }}
+                          >
+                            {dayjs(item.createdAt).locale('en').format('MMM DD YYYY, HH:mm')}
+                          </span>
+                        </div>
                       </div>
+
+                      <span className="text-sm font-medium">#{item.rank}</span>
                     </div>
 
-                    <span className="text-sm font-medium">#{item.rank}</span>
-                  </div>
+                    <p className="text-xs leading-[20px] text-black">{item.text}</p>
 
-                  <p className="text-xs leading-[20px] text-black">{item.text}</p>
-
-                  <Divider
-                    sx={{
-                      marginTop: 3,
-                      width: '100%',
-                      borderColor: '#EBEEF0',
-                    }}
-                  />
-                </li>
-              ))}
-            </ul>
+                    <Divider
+                      sx={{
+                        marginTop: 3,
+                        width: '100%',
+                        borderColor: '#EBEEF0',
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
           </TabPanel>
           <TabPanel
             value="2"
@@ -256,7 +265,14 @@ const Reward = () => {
                     }}
                   />
                 </li>
-              ) : null}
+              ) : (
+                <div className="flex flex-col items-center">
+                  <ListEmpty className="mt-[50px]" />
+                  <p className="xfans-font-sf mt-[10px] text-[#00000080]">
+                    You haven&apos;t bought any shares yet.
+                  </p>
+                </div>
+              )}
             </ul>
           </TabPanel>
         </TabContext>

@@ -67,3 +67,7 @@ body {
 .xfans-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #eaecf0;
 }
+
+.xfans-font-sf {
+  font-family: 'SF Pro Display', sans-serif;
+}

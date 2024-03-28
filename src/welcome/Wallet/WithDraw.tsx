@@ -92,9 +92,9 @@ const WithDraw = ({ onClose }: Props) => {
       }}
     >
       <div className="relative flex flex-col items-center">
-        <h2 className="text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
+        <h2 className="xfans-font-sf text-[24px] font-medium text-[#2E2E32]">Withdraw</h2>
         <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
-        <p className="my-6 text-sm text-black text-opacity-50">
+        <p className="xfans-font-sf my-6 text-sm text-black text-opacity-50">
           Send your ETH to another wallet address on the blast network
         </p>
 
@@ -116,7 +116,7 @@ const WithDraw = ({ onClose }: Props) => {
         </div>
 
         <div className="flex space-x-3 self-end">
-          <span className="text-sm text-[#0F1419]">Wallet Balance: </span>
+          <span className="xfans-font-sf text-sm text-[#0F1419]">Wallet Balance: </span>
           <div className="flex items-center space-x-1">
             <ETHIcon />
             <NumberDisplayer
@@ -136,7 +136,7 @@ const WithDraw = ({ onClose }: Props) => {
             startIcon={loading && <CircularProgress color="inherit" size={15} />}
             onClick={handleTransferClick}
           >
-            <span className="text-[15px] font-medium">Transfer</span>
+            <span className="xfans-font-sf text-[15px] font-medium">Transfer</span>
           </PrimaryButton>
         </div>
       </div>

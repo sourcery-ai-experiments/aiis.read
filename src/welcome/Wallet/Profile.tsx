@@ -148,9 +148,9 @@ const ProfileModal = () => {
                 src={currentInfo?.avatar}
                 alt="avatar"
                 onClick={() => openTwitterProfile(currentInfo?.twitterUsername)}
-                className="h-[75px] w-[75px] cursor-pointer rounded-full"
+                className="xfans-font-sf h-[75px] w-[75px] cursor-pointer rounded-full"
               />
-              <div className="flex flex-col space-y-[6px]">
+              <div className="xfans-font-sf flex flex-col space-y-[6px]">
                 <span
                   onClick={() => openTwitterProfile(currentInfo?.twitterUsername)}
                   className="cursor-pointer text-[20px] font-bold leading-[20px] text-[#0F1419]"
@@ -164,7 +164,9 @@ const ProfileModal = () => {
                   @{currentInfo?.twitterUsername}
                 </span>
                 <div className="flex items-center space-x-1">
-                  <span className="text-[14px] font-bold text-[#2E2E32]">Floor Price:</span>
+                  <span className="xfans-font-sf text-[14px] font-bold text-[#2E2E32]">
+                    Floor Price:
+                  </span>
                   <Icon />
                   <NumberDisplayer
                     className="text-[14px] text-[#0F1419]"
@@ -207,7 +209,7 @@ const ProfileModal = () => {
                   });
                 }}
                 key={item.text}
-                className={`rounded-full border border-[#0F1419] py-2 px-[18px] font-medium leading-[18px] ${
+                className={`xfans-font-sf rounded-full border border-[#0F1419] py-2 px-[18px] font-medium leading-[18px] ${
                   currentKey === i
                     ? 'bg-[#2C2A2A] text-white'
                     : 'cursor-pointer bg-white text-[#0F1419]'
@@ -227,7 +229,7 @@ const ProfileModal = () => {
               {rows == null || rows.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
-                  label="No one has purchased your shares yet."
+                  label="No holders yet."
                 />
               ) : (
                 <Table aria-label="simple table">

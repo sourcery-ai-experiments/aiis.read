@@ -28,7 +28,9 @@ const Community = () => {
     return (
       <div className="flex flex-col items-center">
         <ListEmpty className="mt-[50px]" />
-        <p className="mt-[10px] text-[#00000080]">You haven&apos;t bought any shares yet.</p>
+        <p className="xfans-font-sf mt-[10px] text-[#00000080]">
+          You haven&apos;t bought any shares yet.
+        </p>
       </div>
     );
   }
@@ -38,7 +40,9 @@ const Community = () => {
       return (
         <div className="flex flex-col items-center">
           <ListEmpty className="mt-[50px]" />
-          <p className="mt-[10px] text-[#00000080]">No unlocked communities available.</p>
+          <p className="xfans-font-sf mt-[10px] text-[#00000080]">
+            No unlocked communities available.
+          </p>
         </div>
       );
 
