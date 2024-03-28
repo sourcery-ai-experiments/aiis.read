@@ -8,6 +8,8 @@ const XFANS_TOASTER_SUCCESS = 'xfans_toaster_success';
 const XFANS_TOASTER_ERROR = 'xfans_toaster_error';
 
 export enum ToastMessage {
+  LOGIN_FAILURE_RETRY = 'Login expired! Please log in again.',
+  NO_PERMISSION = 'Permission Denied！',
   VOTE_SUCCESS = 'Vote successful.',
   ACTIVATE_FAILED = 'Registration failed!',
   ACTIVATE_SUCCESS = 'Registration successful.',
@@ -15,10 +17,8 @@ export enum ToastMessage {
   CONGRATULATION = 'congratulation!',
   INVITE_CODE_ERROR = 'invite code error',
   REQUEST_FAILURE_RETRY = 'Request failed!',
-  LOGIN_FAILURE_RETRY = '登录失效！请您重新登录',
-  NO_PERMISSION = 'Permission Denied！',
   NO_RESOURCE = 'No resource!',
-  REQUEST_METHOD_ERROR = '请求方式错误！请您稍后重试',
+  REQUEST_METHOD_ERROR = 'Request method error!',
   REQUEST_TIMEOUT_RETRY = ' Request timed out! ',
   NETWORK_ERROR_RETRY = 'Network error! ',
   SERVICE_ERROR = 'Service exception!',

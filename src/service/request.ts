@@ -83,7 +83,7 @@ class RequestHttp {
 
         // 登陆失效
         if (data.code == ResultEnum.OVERDUE) {
-          toaster.error(data.message ?? toaster.ToastMessage.LOGIN_FAILURE_RETRY);
+          toaster.error(data.message);
           useGlobalStore.setState({
             token: '',
           });
