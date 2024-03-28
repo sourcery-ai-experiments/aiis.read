@@ -437,7 +437,7 @@ const TableEmptyWidget = (props: TableEmptyWidgetProps) => {
       className={'jusitfy-center flex flex-col items-center space-x-2 ' + props.containerClassName}
     >
       <TableEmpty className="h-[184px] w-[200px]" />
-      <span className="mt-[10px] text-[14px] text-[#919099]">{props.label}</span>
+      <span className="xfans-font-sf mt-[10px] text-[14px] text-[#919099]">{props.label}</span>
     </div>
   );
 };

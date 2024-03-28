@@ -12,10 +12,10 @@ import { useToggle } from 'ahooks';
 import { BasicButton } from '../../components/Button';
 import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
+import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import { ROWS_PER_PAGE } from '../../constants';
 import { useUserInvite } from '../../service/user';
-import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
 
@@ -100,11 +100,7 @@ const InviteFriends = () => {
             <CopyToClipboard
               text={accounts[0] ?? ''}
               onCopy={() => {
-                useGlobalStore.setState({
-                  messageOpen: true,
-                  messageType: 'succes',
-                  message: 'copy successfully',
-                });
+                toaster.success(toaster.ToastMessage.COPY_SUCCESS);
               }}
             >
               <div className="flex w-[186px] cursor-pointer items-center justify-center bg-[#9A6CF9]">

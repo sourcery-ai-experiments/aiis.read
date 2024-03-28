@@ -57,7 +57,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
           className="flex items-center text-[15px] text-[#919099] hover:cursor-pointer"
           onClick={() => openProfile(userInfo, 1)}
         >
-          <span className="mr-1">Holding:</span>
+          <span className="xfans-font-sf mr-1">Holding:</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10"

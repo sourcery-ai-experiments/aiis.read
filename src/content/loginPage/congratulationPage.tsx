@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 
 import { NextButton, VerifyButton } from '../../components/buttons/loginButton';
+import * as toaster from '../../components/Toaster';
 import {
   LOCALSTORAGE_FALSE,
   LOCALSTORAGE_TRUE,
@@ -16,7 +17,6 @@ import {
   XFANS_VERIFY,
 } from '../../constants';
 import http, { ResultData } from '../../service/request';
-import useGlobalStore from '../../store/useGlobalStore';
 
 import '../../tailwind.css';
 interface CongratulationPageProps {
@@ -208,18 +208,10 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
             if (activateData.code === 0) {
               goProfile();
             } else {
-              useGlobalStore.setState({
-                message: activateData?.message,
-                messageType: 'error',
-                messageOpen: true,
-              });
+              toaster.error(activateData?.message ?? toaster.ToastMessage.ACTIVATE_FAILED);
             }
           } catch (error) {
-            useGlobalStore.setState({
-              message: '注册失败!',
-              messageType: 'error',
-              messageOpen: true,
-            });
+            toaster.error(toaster.ToastMessage.ACTIVATE_FAILED);
           }
         }}
         disabled={!startStatus}

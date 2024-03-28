@@ -6,6 +6,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
+import * as toaster from '../components/Toaster';
 import useGlobalStore from '../store/useGlobalStore';
 
 import { checkStatus } from './checkStatus';
@@ -91,21 +92,15 @@ class RequestHttp {
 
         // 登陆失效
         if (data.code == ResultEnum.OVERDUE) {
+          toaster.error(data.message);
           useGlobalStore.setState({
             token: '',
-            message: data.message,
-            messageType: 'error',
-            messageOpen: true,
           });
           return Promise.reject(data);
         }
         // 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）
         if (data.code && data.code !== ResultEnum.SUCCESS) {
-          useGlobalStore.setState({
-            message: data.message,
-            messageType: 'error',
-            messageOpen: true,
-          });
+          toaster.error(data.message);
           return Promise.reject(data);
         }
         // 成功请求（在页面上除非特殊情况，否则不用处理失败逻辑）
@@ -117,18 +112,10 @@ class RequestHttp {
         if (this.showMsg) {
           // 请求超时 && 网络错误单独判断，没有 response
           if (error.message.indexOf('timeout') !== -1) {
-            useGlobalStore.setState({
-              message: '请求超时！请您稍后重试',
-              messageType: 'error',
-              messageOpen: true,
-            });
+            toaster.error(toaster.ToastMessage.REQUEST_TIMEOUT_RETRY);
           }
           if (error.message.indexOf('Network Error') !== -1) {
-            useGlobalStore.setState({
-              message: '网络错误！请您稍后重试',
-              messageType: 'error',
-              messageOpen: true,
-            });
+            toaster.error(toaster.ToastMessage.NETWORK_ERROR_RETRY);
           }
           // 根据服务器响应的错误状态码，做不同的处理
           if (response) {

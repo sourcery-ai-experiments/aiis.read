@@ -2,7 +2,7 @@ import React, { FC, useRef, useState } from 'react';
 import { useHover } from 'ahooks';
 
 import { useTweetVote } from '../../../service/tweet';
-import useGlobalStore from '../../../store/useGlobalStore';
+import * as toaster from '../../Toaster';
 
 import '../../../tailwind.css';
 interface VoteTwitterProps {
@@ -18,14 +18,11 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
     userName,
     () => {
       setVoted(true);
-      useGlobalStore.setState({
-        message: '投票成功',
-        messageType: 'succes',
-        messageOpen: true,
-      });
+      toaster.success(toaster.ToastMessage.VOTE_SUCCESS);
     },
     () => {
       setVoted(false);
+      toaster.success(toaster.ToastMessage.VOTE_FAILED);
     }
   );
 
@@ -37,11 +34,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
       className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
       onClick={(e) => {
         requestVote();
-        useGlobalStore.setState({
-          message: '投票成功',
-          messageType: 'succes',
-          messageOpen: true,
-        });
+        toaster.success(toaster.ToastMessage.VOTE_SUCCESS);
         e.preventDefault();
         e.stopPropagation();
       }}

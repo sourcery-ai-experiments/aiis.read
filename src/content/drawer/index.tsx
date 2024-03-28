@@ -6,6 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import * as toaster from '../../components/Toaster';
 import { XFANS_USERINFO } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
@@ -156,18 +157,10 @@ export default function PersistentDrawerRight() {
       inviteCode: inviteCode,
     })) as ResultData;
     if (activateData.code === 0) {
-      useGlobalStore.setState({
-        message: 'congratulation!',
-        messageType: 'success',
-        messageOpen: true,
-      });
+      toaster.success(toaster.ToastMessage.CONGRATULATION);
       setPageState('congratulation');
     } else {
-      useGlobalStore.setState({
-        message: 'invite code error',
-        messageType: 'error',
-        messageOpen: true,
-      });
+      toaster.error(toaster.ToastMessage.INVITE_CODE_ERROR);
     }
   };
 

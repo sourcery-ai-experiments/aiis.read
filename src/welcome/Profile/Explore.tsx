@@ -149,8 +149,12 @@ const Explore = () => {
                           </div>
 
                           <div className="flex items-center space-x-[6px]">
-                            <span className="text-sm text-[#919099]">Tweet Avg Rank:</span>
-                            <span className="text-[15px] text-[#919099]">#{i + 1}</span>
+                            <span className="xfans-font-sf text-sm text-[#919099]">
+                              Tweet Avg Rank:
+                            </span>
+                            <span className="xfans-font-sf text-[15px] text-[#919099]">
+                              #{i + 1}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -191,7 +195,7 @@ const Explore = () => {
                             />
                           </div>
 
-                          <span className="text-sm text-[#919099]">
+                          <span className="xfans-font-sf text-sm text-[#919099]">
                             {getTimeDistanceFromDate(item.createdAt)} ago
                           </span>
                         </div>
@@ -277,7 +281,7 @@ const Explore = () => {
                             </span>
                           </div>
 
-                          <span className="h-[14px] w-12 text-center text-[14px] font-bold">
+                          <span className="xfans-font-sf h-[14px] w-12 text-center text-[14px] font-bold">
                             {item.isBuy ? 'Bought' : 'Sold'}
                           </span>
 

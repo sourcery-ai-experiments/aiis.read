@@ -5,11 +5,11 @@ import Switch from '@mui/material/Switch';
 
 import { BasicButton } from '../../components/Button';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import useAccount from '../../hooks/useAccount';
 import { useUserInfo } from '../../service/user';
 import { useWalletAccounts } from '../../service/wallet';
-import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useLocalStore from '../../store/useLocalStore';
 import useProfileModal from '../../store/useProfileModal';
@@ -62,11 +62,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
               <CopyToClipboard
                 text={accounts[0] ?? '0x0'}
                 onCopy={() => {
-                  useGlobalStore.setState({
-                    messageOpen: true,
-                    messageType: 'succes',
-                    message: 'copy successfully',
-                  });
+                  toaster.success(toaster.ToastMessage.COPY_SUCCESS);
                 }}
               >
                 <div className="flex cursor-pointer items-center space-x-2">
@@ -94,7 +90,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             >
               <div className="flex items-center space-x-3">
                 <UserIcon />
-                <span className="text-base font-medium">Portfolio Value</span>
+                <span className="xfans-font-sf text-base font-medium">Portfolio Value</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
@@ -108,7 +104,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <WalletIcon />
-                <span className="text-base font-medium">Wallet Balance</span>
+                <span className="xfans-font-sf text-base font-medium">Wallet Balance</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
@@ -124,7 +120,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Fire />
-                <span className="text-base font-medium">Transaction Fee Earned</span>
+                <span className="xfans-font-sf text-base font-medium">Transaction Fee Earned</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
@@ -138,7 +134,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Gift />
-                <span className="text-base font-medium">Reward Earned</span>
+                <span className="xfans-font-sf text-base font-medium">Reward Earned</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
@@ -152,7 +148,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Setting />
-                <span className="text-base font-medium">Hide Twitter Price Tags</span>
+                <span className="xfans-font-sf text-base font-medium">Hide Twitter Price Tags</span>
               </div>
               <div className="flex items-center space-x-1">
                 <PurpleSwitch
@@ -182,13 +178,13 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
               }}
               onClick={() => setIsWithDrawOpen(true)}
             >
-              <span className="text-base font-medium">Withdraw</span>
+              <span className="xfans-font-sf text-base font-medium">Withdraw</span>
             </BasicButton>
             {isWithDrawOpen && <WithDraw onClose={() => setIsWithDrawOpen(false)} />}
           </div>
 
           <div
-            className="mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-base font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
+            className="xfans-font-sf mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-base font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
             onClick={() => props.logout?.()}
           >
             Log Out

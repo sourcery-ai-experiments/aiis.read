@@ -43,7 +43,10 @@ const manifest: ManifestV3Export = {
     '48': 'images/extension_48.png',
     '128': 'images/extension_128.png',
   },
-  permissions: ['storage', 'tabs'],
+  // https://developer.chrome.com/docs/extensions/reference/api/cookies?hl=zh-cn
+  // 这里目前是从document里面读字体，并且没有添加cookies的permission，是生效的。
+  // 真实情况可能是chrome.cookies.getAll() 暂时先保留TODO
+  permissions: ['storage', 'tabs', 'cookies'],
 };
 
 export default manifest;
