@@ -1,18 +1,35 @@
 import React, { FC, useEffect, useState } from 'react';
-
+import useAccount from '../../../hooks/useAccount';
+import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useLocalStore from '../../../store/useLocalStore';
 import useProfileModal from '../../../store/useProfileModal';
+import { NumberDisplayer } from '../../NumberDisplayer';
 
 import '../../../tailwind.css';
 
 interface UserPagePriceProps {
-  price: string;
-  id: string;
+  twitterUsername: string;
 }
 
-export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
+export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
   const [elementWidth, setElementWidth] = useState<number | null>(null);
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const { userInfo: currentUserInfo } = useAccount();
+  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
+  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
+  const useWidth = elementWidth != null ? elementWidth : 0;
+
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [twitterUsername],
+    (result) => {
+      setUserInfo(result?.data?.items?.[0]);
+    },
+    () => undefined
+  );
 
   useEffect(() => {
+    batchUserInfo(userInfo);
+
     const getElementWidthByXPath = (xpath: string): number | null => {
       const element = document.evaluate(
         xpath,
@@ -37,15 +54,13 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
     setElementWidth(width);
   }, []); // This effect runs only once after the initial render
 
-  console.log(elementWidth);
-
-  const useWidth = elementWidth != null ? elementWidth : 0;
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
-
-  return (
+  return !isShowPrice && currentUserInfo?.isRegistered ? (
     <span
-      id={id}
-      onClick={openProfile}
+      onClick={(e) => {
+        openProfile(userInfo);
+        e.preventDefault();
+        e.stopPropagation();
+      }}
       style={{ left: `${useWidth + 12}px` }}
       className="absolute top-[-1px] flex h-[25px] w-[110px] grow-0 cursor-pointer items-center justify-center rounded-full bg-[#9A6CF9] !px-[17px] text-center"
     >
@@ -74,7 +89,9 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
         </defs>
       </svg>
 
-      <p className="ml-[4px] text-[12px] font-medium text-white">{price}</p>
+      <p className="ml-[4px] text-[12px] font-medium text-white">
+        <NumberDisplayer text={userInfo?.price} />
+      </p>
     </span>
-  );
+  ) : null;
 };

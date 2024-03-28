@@ -84,7 +84,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
         <div className="mt-10">
           <div className="space-y-[15px]">
             <div
-              className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]"
+              className="flex cursor-pointer items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]"
               onClick={() => openProfile(userInfo, 1)}
             >
               <div className="flex items-center space-x-3">

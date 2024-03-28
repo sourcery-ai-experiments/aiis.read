@@ -73,14 +73,14 @@ const useHolderList = () => {
     {
       manual: true,
       onSuccess(response, params) {
-        if (params[0].subject !== undefined || params[0].subject !== null) {
+        if (params[0].subject !== undefined && params[0].subject !== null) {
           useShareStore.setState({
             holderList: response.data.items,
             holderListTotal: response.data.total,
           });
         }
 
-        if (params[0].holder !== undefined || params[0].holder !== null) {
+        if (params[0].holder !== undefined && params[0].holder !== null) {
           useShareStore.setState({
             holderingList: response.data.items,
             holderingListTotal: response.data.total,
