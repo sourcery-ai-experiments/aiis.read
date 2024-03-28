@@ -22,7 +22,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
   const { wallet } = useAccount();
-  const { messages, sendMessage, loadMessages } = useRoom(wallet, community?.subject);
+  const { messages, members, sendMessage, loadMessages } = useRoom(wallet, community?.subject);
   const ref = useRef<HTMLDivElement>(null);
   const { data: userCount = 0, run: runGetUserCount } = useRequest(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -90,11 +90,28 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   function renderMessages() {
+    if (members.length === 0) return null;
     return messages.map((msg) => {
+      const senderUserInfo = members.find((member) => member.address === msg.sender);
+      if (senderUserInfo == null) return null;
       if (msg.sender === wallet) {
-        return <MessageFromMeItem key={msg.id} msg={msg} />;
+        return (
+          <MessageFromMeItem
+            key={msg.id}
+            msg={msg}
+            avatar={senderUserInfo.avatar}
+            username={senderUserInfo.username}
+          />
+        );
       }
-      return <MessageFromOtherItem key={msg.id} msg={msg} />;
+      return (
+        <MessageFromOtherItem
+          key={msg.id}
+          msg={msg}
+          avatar={senderUserInfo.avatar}
+          username={senderUserInfo.username}
+        />
+      );
     });
   }
   return (
@@ -165,7 +182,13 @@ function FireIcon() {
   );
 }
 
-function MessageFromMeItem({ msg }: { msg: ReceiveMessage }) {
+type MessageItemProps = {
+  msg: ReceiveMessage;
+  avatar: string;
+  username: string;
+};
+
+function MessageFromMeItem({ msg, avatar }: MessageItemProps) {
   return (
     <div className="mt-[39px] flex items-start justify-end">
       <div className="flex flex-col items-end">
@@ -177,25 +200,17 @@ function MessageFromMeItem({ msg }: { msg: ReceiveMessage }) {
           {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
         </span>
       </div>
-      <img
-        className="ml-[12px] w-[44px] rounded-full"
-        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-        alt="avatar"
-      />
+      <img className="ml-[12px] w-[44px] rounded-full" src={avatar} alt="avatar" />
     </div>
   );
 }
-function MessageFromOtherItem({ msg }: { msg: ReceiveMessage }) {
+function MessageFromOtherItem({ msg, avatar, username }: MessageItemProps) {
   return (
     <div className="mt-[39px] flex items-start">
-      <img
-        className="mr-[12px] w-[44px] rounded-full"
-        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-        alt="avatar"
-      />
+      <img className="mr-[12px] w-[44px] rounded-full" src={avatar} alt="avatar" />
       <div className="flex flex-col">
         <div className="flex max-w-[290px] flex-col rounded-[25px] rounded-tl-none bg-[#EEEEEE] p-[16px]">
-          <span className="text-xs text-[#B9B9BA]">Jan coo</span>
+          <span className="text-xs text-[#B9B9BA]">{username}</span>
           <div className="text-[#505050]">
             {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
             {msg.message}
