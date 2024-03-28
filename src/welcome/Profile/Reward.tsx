@@ -274,7 +274,15 @@ const Reward = () => {
                     <span className="text-sm font-medium">#{tweetList?.[currentIndex].rank}</span>
                   </div>
 
-                  <p className="text-xs leading-[20px] text-black">
+                  <p
+                    className="cursor-pointer text-xs leading-[20px] text-black"
+                    onClick={() => {
+                      window.open(
+                        `https://twitter.com/${tweetList?.[currentIndex]?.author?.twitterUsername}/status/${tweetList?.[currentIndex]?.id}`,
+                        '_blank'
+                      );
+                    }}
+                  >
                     {tweetList?.[currentIndex].text}
                   </p>
 
