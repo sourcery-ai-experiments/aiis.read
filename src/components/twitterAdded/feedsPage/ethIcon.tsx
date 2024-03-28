@@ -26,7 +26,8 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   useEffect(() => {
     batchUserInfo(userInfo);
   }, []);
-  return !isShowPrice && userInfo?.[0].isRegistered ? (
+
+  return !isShowPrice && userInfo?.isRegistered ? (
     <div
       className="w-auto items-center justify-center text-center"
       onClick={(e) => {
