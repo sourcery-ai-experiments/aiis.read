@@ -48,7 +48,8 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
           <img
             src="https://cdn-fe.s3.amazonaws.com/xfans/20240322-155619.png"
             alt="logo"
-            className="w-[32px] rounded-full"
+            className="w-[32px] cursor-pointer rounded-full"
+            onClick={() => window.open('https://xfans.tech', '_blank')}
           />
         </div>
 

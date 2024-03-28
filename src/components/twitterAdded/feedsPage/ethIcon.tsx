@@ -13,7 +13,6 @@ interface FriendPriceProps {
 
 export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const { userInfo: currentUserInfo } = useAccount();
   const [userInfo, setUserInfo] = useState<any>({ price: '0' });
   const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const { run: batchUserInfo } = useTweetBatchUserInfo(
@@ -27,7 +26,7 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   useEffect(() => {
     batchUserInfo(userInfo);
   }, []);
-  return !isShowPrice && currentUserInfo?.isRegistered ? (
+  return !isShowPrice && userInfo?.[0].isRegistered ? (
     <div
       className="w-auto items-center justify-center text-center"
       onClick={(e) => {
