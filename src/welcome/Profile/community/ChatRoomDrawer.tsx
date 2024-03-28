@@ -4,10 +4,13 @@ import { useRequest, useThrottleFn } from 'ahooks';
 import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
+import Loading from '../../../components/Loading';
 import useAccount from '../../../hooks/useAccount';
 import useRoom from '../../../hooks/useRoom';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
+import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useProfileModal from '../../../store/useProfileModal';
 
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
@@ -36,25 +39,26 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
     manual: true,
   });
 
-  const isFirstLoadMsgsRef = useRef(false);
+  const [messageRendered, setMessageRendered] = useState(false);
   useEffect(() => {
     if (ref.current == null) return;
-    if (messages.length > 0 && isFirstLoadMsgsRef.current === false) {
-      isFirstLoadMsgsRef.current = true;
-      if (open && isFirstLoadMsgsRef.current) {
-        ref.current.scrollTop = 999999999;
-      }
+    if (messageRendered) {
+      // 偷个懒，直接 timeout 等message render 完，后面换到子组件去做比较好
+      setTimeout(() => {
+        ref.current!.scrollTop = 999999999;
+      }, 500);
+      // }
     }
-  }, [messages.length, open]);
-
-  useEffect(
-    () => () => {
-      if (!open) {
-        isFirstLoadMsgsRef.current = false;
+  }, [messageRendered, open]);
+  useEffect(() => {
+    if (open) {
+      if (messages.length > 0 && messageRendered === false) {
+        setMessageRendered(true);
       }
-    },
-    [open]
-  );
+    } else {
+      setMessageRendered(false);
+    }
+  }, [messageRendered, messages.length, open]);
 
   useEffect(() => {
     if (ref.current == null) return;
@@ -90,28 +94,15 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   function renderMessages() {
-    if (members.length === 0) return null;
+    if (members.length === 0) return <Loading />;
+    if (members.length === 0) return <Loading />;
     return messages.map((msg) => {
       const senderUserInfo = members.find((member) => member.address === msg.sender);
       if (senderUserInfo == null) return null;
       if (msg.sender === wallet) {
-        return (
-          <MessageFromMeItem
-            key={msg.id}
-            msg={msg}
-            avatar={senderUserInfo.avatar}
-            username={senderUserInfo.username}
-          />
-        );
+        return <MessageFromMeItem key={msg.id} msg={msg} userInfo={senderUserInfo} />;
       }
-      return (
-        <MessageFromOtherItem
-          key={msg.id}
-          msg={msg}
-          avatar={senderUserInfo.avatar}
-          username={senderUserInfo.username}
-        />
-      );
+      return <MessageFromOtherItem key={msg.id} msg={msg} userInfo={senderUserInfo} />;
     });
   }
   return (
@@ -151,7 +142,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
         </header>
         <div
           ref={ref}
-          className="xfans-scrollbar relative flex-1 overflow-y-auto px-[16px]"
+          className="xfans-scrollbar relative flex flex-1 flex-col items-center justify-center overflow-y-auto px-[16px]"
           onScroll={handleScroll}
         >
           {renderMessages()}
@@ -184,15 +175,27 @@ function FireIcon() {
 
 type MessageItemProps = {
   msg: ReceiveMessage;
-  avatar: string;
-  username: string;
+  userInfo: CommunityUserInfo;
 };
 
-function MessageFromMeItem({ msg, avatar }: MessageItemProps) {
+function MessageFromMeItem({ msg, userInfo }: MessageItemProps) {
+  const { openProfile } = useProfileModal();
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [userInfo.username],
+    (result) => {
+      const twitterUserInfo = result?.data?.items?.[0];
+      if (twitterUserInfo == null) return;
+      openProfile(twitterUserInfo, 1);
+    },
+    () => undefined
+  );
+  function handleAvatarClick() {
+    batchUserInfo();
+  }
   return (
-    <div className="mt-[39px] flex items-start justify-end">
+    <div className="mt-[39px] flex w-full items-start justify-end">
       <div className="flex flex-col items-end">
-        <div className="max-w-[290px] rounded-[25px] rounded-tr-none bg-[#9A6CF9] p-[16px] text-white">
+        <div className="max-w-[290px] rounded-[25px] rounded-tr-none bg-[#9A6CF9] p-[16px] text-sm text-white">
           {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
           {msg.message}
         </div>
@@ -200,18 +203,41 @@ function MessageFromMeItem({ msg, avatar }: MessageItemProps) {
           {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
         </span>
       </div>
-      <img className="ml-[12px] w-[44px] rounded-full" src={avatar} alt="avatar" />
+      <img
+        onClick={handleAvatarClick}
+        className="ml-[12px] w-[44px] cursor-pointer rounded-full"
+        src={userInfo.avatar}
+        alt="avatar"
+      />
     </div>
   );
 }
-function MessageFromOtherItem({ msg, avatar, username }: MessageItemProps) {
+function MessageFromOtherItem({ msg, userInfo }: MessageItemProps) {
+  const { openProfile } = useProfileModal();
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [userInfo.username],
+    (result) => {
+      const twitterUserInfo = result?.data?.items?.[0];
+      if (twitterUserInfo == null) return;
+      openProfile(twitterUserInfo, 1);
+    },
+    () => undefined
+  );
+  function handleAvatarClick() {
+    batchUserInfo();
+  }
   return (
-    <div className="mt-[39px] flex items-start">
-      <img className="mr-[12px] w-[44px] rounded-full" src={avatar} alt="avatar" />
+    <div className="mt-[39px] flex w-full items-start">
+      <img
+        onClick={handleAvatarClick}
+        className="mr-[12px] w-[44px] cursor-pointer rounded-full"
+        src={userInfo.avatar}
+        alt="avatar"
+      />
       <div className="flex flex-col">
         <div className="flex max-w-[290px] flex-col rounded-[25px] rounded-tl-none bg-[#EEEEEE] p-[16px]">
-          <span className="text-xs text-[#B9B9BA]">{username}</span>
-          <div className="text-[#505050]">
+          <span className="text-xs text-[#B9B9BA]">{userInfo.username}</span>
+          <div className="text-sm text-[#505050]">
             {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
             {msg.message}
           </div>
@@ -264,6 +290,30 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     setImg(null);
   }, [img, sendMessage]);
 
+  function handlePast(event: React.ClipboardEvent<HTMLElement>) {
+    const data = event.clipboardData;
+    const items: DataTransferItem[] = [];
+    for (const item of data.items) {
+      if (['image/png', 'image/jpg', 'image/jpeg'].includes(item.type)) {
+        items.push(item);
+      }
+    }
+    if (items.length === 0) {
+      return;
+    }
+    // 暂只支持第一个
+    const item = items[0];
+    // 如果第一个不是图片不处理
+    if (item.type.indexOf('image') === -1) return;
+    const reader = new FileReader();
+    const file = item.getAsFile();
+    if (file == null) return;
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImg(reader.result as string);
+    };
+  }
+
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea == null) return;
@@ -303,6 +353,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
           ref={textareaRef}
           placeholder={disabled ? '' : 'Write your message'}
           rows={1}
+          onPaste={handlePast}
           className="scrollbar-hide max-h-[180px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>

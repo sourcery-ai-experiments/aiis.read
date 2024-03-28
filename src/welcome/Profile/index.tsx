@@ -31,11 +31,12 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
     },
   ];
 
-  const componentMap: Record<string, any> = {
-    explore: <Explore />,
-    community: <Community />,
-    reward: <Reward />,
-  };
+  function renderTabPane(key: string) {
+    if (key === 'explore') return <Explore />;
+    if (key === 'community') return <Community />;
+    if (key === 'reward') return <Reward />;
+    return null;
+  }
 
   useEffect(() => {
     getUserInfo();
@@ -112,7 +113,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
         ))}
       </div>
 
-      {componentMap[key]}
+      {renderTabPane(key)}
     </div>
   );
 };
