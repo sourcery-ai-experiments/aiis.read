@@ -39,4 +39,20 @@ const useWalletClaimReward = (
   return result;
 };
 
-export { useWalletAccounts, useWalletClaimReward };
+type PoolBalanceSuccessFunctionType = (x: any) => void;
+type PoolBalanceFailedFunctionType = () => void;
+
+const usePoolBalance = (
+  success: PoolBalanceSuccessFunctionType,
+  failed: PoolBalanceFailedFunctionType
+) => {
+  const result = useRequest(() => contractRequestHttp.post('/xfans/api/pool/getBalance'), {
+    manual: true,
+    onSuccess: success,
+    onError: failed,
+  });
+
+  return result;
+};
+
+export { useWalletAccounts, useWalletClaimReward, usePoolBalance };

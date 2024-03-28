@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
+import { usePoolBalance } from '../../service/wallet';
+
 import useProfileModal from '../../store/useProfileModal';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
@@ -40,6 +42,7 @@ const Reward = () => {
   const list = Array(7).fill('');
   const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
+  const [poolBalance, setPoolBalance] = React.useState('0');
   const { run: getTweet } = useTweetList();
   const { tweetList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
@@ -47,6 +50,18 @@ const Reward = () => {
     ? tweetList?.findIndex((item) => item.author?.id === userInfo?.id)
     : -1;
   console.log('tweetList', tweetList);
+
+  const { loading, run: fetchPool } = usePoolBalance(
+    (resp) => {
+      if (resp.code === 0) {
+        setPoolBalance(resp.balance);
+      }
+    },
+    () => {
+      setPoolBalance('0');
+    }
+  );
+
   const fetchMap: Record<any, any> = {
     1: getTweet,
     2: () => {
@@ -63,6 +78,7 @@ const Reward = () => {
     if (value === '1') {
       getTweet();
     }
+    fetchPool();
   }, []);
 
   const getPrice = async () => {
@@ -86,7 +102,7 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex items-center space-x-1">
               <Icon />
-              <span className="text-xs font-medium text-[#0F1419]">12.4</span>
+              <NumberDisplayer className="text-xs font-medium text-[#0F1419]" text={poolBalance} />
             </div>
             <span className="text-[15px] font-medium text-[#919099]">Pool</span>
           </div>
