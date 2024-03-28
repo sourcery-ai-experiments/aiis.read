@@ -14,7 +14,8 @@ import {
 } from '../../../service/contract/shares';
 
 type ModalProps = {
-  onClose(): void;
+  // false cancel true confirm
+  onClose(fromConfirm?: boolean): void;
   community: Community;
 };
 export default function StackModal({ onClose, community }: ModalProps) {
@@ -31,7 +32,7 @@ export default function StackModal({ onClose, community }: ModalProps) {
   return (
     <Modal
       open
-      onClose={onClose}
+      onClose={() => onClose()}
       closebuttonstyle={{
         marginTop: '5px',
       }}
@@ -92,7 +93,8 @@ export default function StackModal({ onClose, community }: ModalProps) {
 type StackPanelProps = {
   address: string;
   sharesBalance: string;
-  onClose(): void;
+  // false cancel true confirm
+  onClose(fromConfirm?: boolean): void;
 };
 
 function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
@@ -100,7 +102,7 @@ function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
   const { run: runStake, loading } = useRequest(() => stake(address, amount), {
     manual: true,
     onSuccess() {
-      onClose();
+      onClose(true);
       success('stake successful');
     },
   });
@@ -129,7 +131,7 @@ function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
           classes={{
             outlined: '!w-[184px] !h-[46px] !text-[#0F1419] !border-[#9A6CF9] !text-[#9A6CF9]',
           }}
-          onClick={onClose}
+          onClick={() => onClose()}
         >
           <div className="flex items-center justify-center space-x-2">
             <span className="text-[15px] font-medium">Cancel</span>
@@ -153,7 +155,8 @@ function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
 type UnstackPanelProps = {
   address: string;
   stakeBalance: string;
-  onClose(): void;
+  // false cancel true confirm
+  onClose(fromConfirm?: boolean): void;
 };
 
 function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
@@ -161,7 +164,7 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
   const { run: runUnstake, loading } = useRequest(() => unstake(address, amount), {
     manual: true,
     onSuccess() {
-      onClose();
+      onClose(true);
       success('unstake successful');
     },
   });
@@ -190,7 +193,7 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
           classes={{
             outlined: '!w-[184px] !h-[46px] !text-[#0F1419] !border-[#9A6CF9] !text-[#9A6CF9]',
           }}
-          onClick={onClose}
+          onClick={() => onClose()}
         >
           <div className="flex items-center justify-center space-x-2">
             <span className="text-[15px] font-medium">Cancel</span>

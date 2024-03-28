@@ -1,19 +1,11 @@
-import React, {
-  DragEvent,
-  SVGProps,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { DragEvent, SVGProps, useCallback, useEffect, useRef, useState } from 'react';
 import { Drawer } from '@mui/material';
-import { useRequest, useThrottle, useThrottleFn } from 'ahooks';
+import { useRequest, useThrottleFn } from 'ahooks';
 import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import useAccount from '../../../hooks/useAccount';
-import useMessages from '../../../hooks/useMessages';
+import useRoom from '../../../hooks/useRoom';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
 
@@ -30,7 +22,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
   const { wallet } = useAccount();
-  const { messages, sendMessage, loadMessages } = useMessages(wallet, community?.subject);
+  const { messages, sendMessage, loadMessages } = useRoom(wallet, community?.subject);
   const ref = useRef<HTMLDivElement>(null);
   const { data: userCount = 0, run: runGetUserCount } = useRequest(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -39,6 +31,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       manual: true,
     }
   );
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { data: myInfo, run: runGetMyInfo } = useRequest(() => getMyInfo(community!.subject), {
     manual: true,
   });
@@ -122,7 +115,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
         <header className="flex h-[64px] items-center justify-between  px-[16px] ">
           <div className="flex items-center font-bold text-[#0F1419]">
             <ArrowBackIcon className="cursor-pointer" onClick={onClose} />
-            <span className="ml-[8px]">{community?.ownerUser.username}‘ Community</span>
+            <span className="ml-[8px]">{community?.ownerUser.username}&apos;s Community</span>
           </div>
           <div className="flex leading-none">
             <div

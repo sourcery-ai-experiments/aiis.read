@@ -5,9 +5,10 @@ import { error } from '../components/Toaster';
 import { getMessagesByRoom, ReceiveMessage, SendMessage } from '../service/room';
 import useGlobalStore from '../store/useGlobalStore';
 
-export default function useMessages(user: string, room?: string) {
+export default function useRoom(user: string, room?: string) {
   const [messages, setMessages] = useState<ReceiveMessage[]>([]);
   const [socket, setSocket] = useState<Socket>();
+  const [members, setMembers] = useState<CommunityUserInfo[]>([]);
 
   // 建立 socket
   useEffect(() => {
@@ -28,21 +29,37 @@ export default function useMessages(user: string, room?: string) {
   }, [room, user]);
 
   useEffect(() => {
-    socket?.on('unauthorized', (data) => {
+    function handle() {
       error('You have been banned from speaking.');
-    });
+    }
+    socket?.on('unauthorized', handle);
+    return () => {
+      socket?.off('unauthorized', handle);
+    };
   }, [socket]);
 
   // 处理新消息
   useEffect(() => {
-    socket?.on('newMessage', (data: ReceiveMessage) => {
+    function handleMessage(data: ReceiveMessage) {
       // 标记已读
       socket?.emit('readMessage', { id: data.id });
-      const msgs = [...messages, data];
-      msgs.sort((a, b) => +a.id - +b.id);
-      setMessages(msgs);
-    });
-  }, [messages, socket]);
+      setMessages((msgs) => [...msgs, data].sort((a, b) => +a.id - +b.id));
+    }
+    socket?.on('newMessage', handleMessage);
+    return () => {
+      socket?.off('newMessage', handleMessage);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    function handle(data: CommunityUserInfo[]) {
+      setMembers(data);
+    }
+    socket?.on('members', handle);
+    return () => {
+      socket?.off('members', handle);
+    };
+  }, [socket]);
 
   const sendMessage = useCallback(
     (nextMessage: SendMessage) => {
@@ -80,6 +97,7 @@ export default function useMessages(user: string, room?: string) {
 
   return {
     messages,
+    members,
     sendMessage,
     loadMessages,
   };

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { ListEmpty } from '../../components/Empty';
+import Loading from '../../components/Loading';
 import useAccount from '../../hooks/useAccount';
 import { getList } from '../../service/community';
 import { getUnreadMessageCount, ReceiveMessage } from '../../service/room';
@@ -19,12 +20,21 @@ const Community = () => {
   const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
   const { wallet } = useAccount();
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    getList(0).then(setLockedCommunities);
+    setLoading(true);
+    let p = 0;
+    getList(0).then((data) => {
+      setLockedCommunities(data);
+      p++;
+      if (p === 2) {
+        setLoading(false);
+      }
+    });
     getList(1).then((items: CommunityWithMessage[]) => {
-      setUnlockedCommunities(items);
       let len = 0;
+      p++;
       items.forEach((item) => {
         getUnreadMessageCount(wallet, item.subject).then((res) => {
           item.lastMsg = res.latestMsg;
@@ -32,6 +42,9 @@ const Community = () => {
           len++;
           if (len === items.length) {
             setUnlockedCommunities(items);
+            if (p === 2) {
+              setLoading(false);
+            }
           }
         });
       });
@@ -42,18 +55,9 @@ const Community = () => {
     refresh();
   }, [refresh]);
 
-  function handleStakeModalClose() {
+  function handleStakeModalClose(fromConfirm: boolean) {
     setSelectedCommunity(null);
-    refresh();
-  }
-
-  if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
-    return (
-      <div className="flex flex-col items-center">
-        <ListEmpty className="mt-[50px]" />
-        <p className="mt-[10px] text-[#00000080]">You haven&apos;t bought any shares yet.</p>
-      </div>
-    );
+    if (fromConfirm) refresh();
   }
 
   function renderUnlocked() {
@@ -81,7 +85,7 @@ const Community = () => {
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center">
                     <span className="w-[210px] text-sm font-medium text-black">
-                      {item.ownerUser.username}‘s Community
+                      {item.ownerUser.username}&apos;s Community
                     </span>
                     <span className="ml-10 text-xs font-normal text-[#A1A1AA]">
                       {item.lastMsg?.createTime
@@ -122,7 +126,7 @@ const Community = () => {
                 <img src={item.ownerUser.avatar} alt="avatar" className="w-[44px] rounded-full" />
                 <div className="flex w-full flex-col">
                   <span className="text-sm font-medium text-black">
-                    {item.ownerUser.username}‘s Community
+                    {item.ownerUser.username}&apos;s Community
                   </span>
                   <div className="flex items-start justify-between">
                     <span className="text-xs text-[#5B7083]">
@@ -142,6 +146,21 @@ const Community = () => {
       </>
     );
   }
+  if (loading) {
+    return (
+      <div className=" flex flex-1 flex-col items-center justify-center overflow-x-hidden px-4">
+        <Loading />
+      </div>
+    );
+  }
+  if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
+    return (
+      <div className="flex flex-col items-center">
+        <ListEmpty className="mt-[50px]" />
+        <p className="mt-[10px] text-[#00000080]">You haven&apos;t bought any shares yet.</p>
+      </div>
+    );
+  }
   return (
     <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden px-4">
       {renderUnlocked()}
@@ -151,7 +170,7 @@ const Community = () => {
       )}
       {
         <ChatRoomDrawer
-          community={selectedCommunity}
+          community={selectedCommunity && selectedCommunity.status === 1 ? selectedCommunity : null}
           open={selectedCommunity != null && selectedCommunity.status === 1}
           onClose={() => setSelectedCommunity(null)}
         />
