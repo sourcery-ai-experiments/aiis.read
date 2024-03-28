@@ -207,10 +207,10 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
             if (activateData.code === 0) {
               goProfile();
             } else {
-              toaster.error(activateData?.message ?? toaster.ToastMessage.VOTE_FAILED);
+              toaster.error(activateData?.message ?? toaster.ToastMessage.ACTIVATE_FAILED);
             }
           } catch (error) {
-            toaster.error(toaster.ToastMessage.VOTE_FAILED);
+            toaster.error(toaster.ToastMessage.ACTIVATE_FAILED);
           }
         }}
         disabled={!startStatus}

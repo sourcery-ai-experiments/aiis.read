@@ -21,6 +21,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
     },
     () => {
       setVoted(false);
+      toaster.success(toaster.ToastMessage.VOTE_FAILED);
     }
   );
 
