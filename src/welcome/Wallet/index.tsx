@@ -5,6 +5,7 @@ import Switch from '@mui/material/Switch';
 
 import { BasicButton } from '../../components/Button';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import useAccount from '../../hooks/useAccount';
 import { useUserInfo } from '../../service/user';
@@ -12,7 +13,7 @@ import { useWalletAccounts } from '../../service/wallet';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useLocalStore from '../../store/useLocalStore';
 import useProfileModal from '../../store/useProfileModal';
-import * as toaster from '../../components/Toaster';
+
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
@@ -119,7 +120,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Fire />
-                <span className="xfans-font-sf text-base font-medium">Transaction Fee Earned</span>
+                <span className="xfans-font-sf text-base font-medium">Trading Fee Earned</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
