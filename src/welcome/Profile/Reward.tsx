@@ -45,7 +45,7 @@ const Reward = () => {
   const { tweetList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const currentIndex = tweetList
-    ? tweetList?.findIndex((item) => item.author?.id === userInfo?.id)
+    ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
   console.log('tweetList', tweetList);
   const fetchMap: Record<any, any> = {

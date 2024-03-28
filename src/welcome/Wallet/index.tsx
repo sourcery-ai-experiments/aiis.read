@@ -120,7 +120,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Fire />
-                <span className="xfans-font-sf text-base font-medium">Transaction Fee Earned</span>
+                <span className="xfans-font-sf text-base font-medium">Trading Fee Earned</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
