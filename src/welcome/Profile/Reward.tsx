@@ -178,12 +178,7 @@ const Reward = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-[6px]">
                         <img
-                          onClick={() => {
-                            window.open(
-                              `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
-                              '_blank'
-                            );
-                          }}
+                          onClick={() => openProfile(item?.author)}
                           src={item.author?.avatar}
                           alt=""
                           className="w-[44px] cursor-pointer rounded-full"
@@ -204,7 +199,17 @@ const Reward = () => {
                       <span className="text-sm font-medium">#{item.rank}</span>
                     </div>
 
-                    <p className="text-xs leading-[20px] text-black">{item.text}</p>
+                    <p
+                      className="cursor-pointer text-xs leading-[20px] text-black"
+                      onClick={() => {
+                        window.open(
+                          `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
+                          '_blank'
+                        );
+                      }}
+                    >
+                      {item.text}
+                    </p>
 
                     <Divider
                       sx={{
