@@ -8,6 +8,7 @@ import PersistentDrawerRight from './drawer';
 const Content = (): ReactElement => {
   return (
     <div
+      id="xfans-root"
       style={{
         position: 'fixed',
         zIndex: 999,

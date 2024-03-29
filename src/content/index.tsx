@@ -9,6 +9,8 @@ import useGlobalStore from '../store/useGlobalStore';
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
 
+import '../tailwind.css';
+
 withProxyStore(<Content />, store).then((component) => {
   const container = document.createElement('my-extension-root');
   document.body.append(container);
