@@ -55,11 +55,6 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
     if (ref.current == null) return;
     const observer = new ResizeObserver(() => {
       if (ref.current == null) return;
-      console.log(
-        isFirstRenderMessages.current,
-        ref.current.scrollHeight,
-        ref.current.clientHeight
-      );
       if (isFirstRenderMessages.current === false) return;
       if (ref.current.scrollHeight > ref.current.clientHeight) {
         ref.current.scrollTop = 999999999;
