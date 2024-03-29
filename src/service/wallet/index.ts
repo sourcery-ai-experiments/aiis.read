@@ -27,7 +27,7 @@ const useWalletClaimReward = (
   const result = useRequest(
     () =>
       contractRequestHttp.post('/xfans/api/pool/claim', {
-        list: list?.slice(0, 2),
+        list: list,
       }),
     {
       manual: true,
