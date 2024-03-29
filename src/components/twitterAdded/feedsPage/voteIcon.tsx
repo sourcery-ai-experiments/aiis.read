@@ -12,7 +12,7 @@ interface VoteTwitterProps {
 
 export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   const [voted, setVoted] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
+  const [userInfo, setUserInfo] = useState<any>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [userName],
@@ -42,7 +42,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
 
   return (
     <>
-      {userInfo.isActive ? (
+      {userInfo?.isActive ? (
         <div
           ref={ref}
           className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
