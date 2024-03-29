@@ -12,12 +12,12 @@ import { useToggle } from 'ahooks';
 import { BasicButton } from '../../components/Button';
 import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
+import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
 import { ROWS_PER_PAGE } from '../../constants';
 import { useUserInvite } from '../../service/user';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useUserStore from '../../store/useUserStore';
-import * as toaster from '../../components/Toaster';
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

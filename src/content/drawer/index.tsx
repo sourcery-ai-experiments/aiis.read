@@ -6,12 +6,12 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
+import * as toaster from '../../components/Toaster';
 import { XFANS_USERINFO } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
 import useGlobalStore from '../../store/useGlobalStore';
-import * as toaster from '../../components/Toaster';
 import useLocalStore from '../../store/useLocalStore';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
@@ -102,7 +102,7 @@ export default function PersistentDrawerRight() {
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
     setInterval(() => {
-      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO!) ?? '');
+      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO) || '""');
       if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
         // 读取所有的 cookie
         const cookies = document.cookie;

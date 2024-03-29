@@ -1,13 +1,33 @@
-import React, { DragEvent, SVGProps, useState } from 'react';
+/**
+ * @file 聊天室
+ */
+import React, {
+  DragEvent,
+  SVGProps,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Drawer } from '@mui/material';
+import { useRequest, useThrottleFn } from 'ahooks';
+import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
+import Loading from '../../../components/Loading';
+import useAccount from '../../../hooks/useAccount';
+import { getMyInfo, getUserCount } from '../../../service/community';
+import { ReceiveMessage, SendMessage } from '../../../service/room';
+import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useProfileModal from '../../../store/useProfileModal';
 
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
+import useRoom from './useRoom';
 
 type Props = {
-  community: Community;
+  community: Community | null;
   open?: boolean;
   onClose(): void;
 };
@@ -15,6 +35,93 @@ type Props = {
 export default function ChatRoomDrawer({ open = false, community, onClose }: Props) {
   const [isStackModalOpen, setIsStackModalOpen] = useState(false);
   const [isMembersDrawerOpen, setIsMembersDrawerOpen] = useState(false);
+  const { wallet } = useAccount();
+  const { messages, members, sendMessage, loadMessages } = useRoom(wallet, community?.subject);
+  const ref = useRef<HTMLDivElement>(null);
+  const { data: userCount = 0, run: runGetUserCount } = useRequest(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    () => getUserCount(community!.subject),
+    {
+      manual: true,
+    }
+  );
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { data: myInfo, run: runGetMyInfo } = useRequest(() => getMyInfo(community!.subject), {
+    manual: true,
+  });
+
+  const isFirstRenderMessages = useRef(false);
+  useEffect(() => {
+    if (ref.current == null) return;
+    const observer = new ResizeObserver(() => {
+      if (ref.current == null) return;
+      if (isFirstRenderMessages.current === false) return;
+      if (ref.current.scrollHeight > ref.current.clientHeight) {
+        ref.current.scrollTop = 999999999;
+      }
+    });
+    observer.observe(ref.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  // 需要提前更新 isFirstRenderMessages 让 ResizeObserver 触发后能及时拿到新状态
+  useLayoutEffect(() => {
+    if (open) {
+      if (messages.length > 0 && isFirstRenderMessages.current === false) {
+        isFirstRenderMessages.current = true;
+      }
+    } else {
+      isFirstRenderMessages.current = false;
+    }
+  }, [messages.length, open]);
+
+  useEffect(() => {
+    if (ref.current == null) return;
+    const isNearBottom =
+      // 150给的近似值
+      ref.current.clientHeight + ref.current.scrollTop + 150 > ref.current.scrollHeight;
+    if (messages.length > 0 && isNearBottom) {
+      ref.current.scrollTop = 99999999999;
+    }
+  }, [messages.length]);
+
+  useEffect(() => {
+    if (open) {
+      runGetUserCount();
+      runGetMyInfo();
+    }
+  }, [open, runGetMyInfo, runGetUserCount]);
+
+  const { run: handleScroll } = useThrottleFn(
+    (env: React.UIEvent<HTMLDivElement, UIEvent>) => {
+      if (ref.current == null) return;
+      const modifier = 100;
+      if (ref.current.scrollTop < modifier) {
+        // TODO 放上翻页需要定位到之前的滚动位置
+        loadMessages('up', messages[0]?.id);
+        return;
+      }
+      if (ref.current.clientHeight + ref.current.scrollTop + modifier > ref.current.scrollHeight) {
+        loadMessages('down', messages[messages.length - 1]?.id);
+        return;
+      }
+    },
+    { wait: 500 }
+  );
+
+  function renderMessages() {
+    if (messages.length === 0) return <Loading />;
+    if (members.length === 0) return <Loading />;
+    return messages.map((msg) => {
+      const senderUserInfo = members.find((member) => member.address === msg.sender);
+      if (senderUserInfo == null) return null;
+      if (msg.sender === wallet) {
+        return <MessageFromMeItem key={msg.id} msg={msg} userInfo={senderUserInfo} />;
+      }
+      return <MessageFromOtherItem key={msg.id} msg={msg} userInfo={senderUserInfo} />;
+    });
+  }
   return (
     <Drawer
       sx={{
@@ -29,36 +136,44 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       anchor="right"
       open={open}
     >
-      <div className="relative h-full w-full bg-[#FDFDFD] px-[16px] pr-[13px]">
-        <header className="flex h-[64px] items-center justify-between">
+      <div className="relative flex h-full w-full flex-col bg-[#FDFDFD]">
+        <header className="flex h-[64px] items-center justify-between  px-[16px] ">
           <div className="flex items-center font-bold text-[#0F1419]">
             <ArrowBackIcon className="cursor-pointer" onClick={onClose} />
-            <span className="ml-[8px]">Devon‘ Community</span>
+            <span className="ml-[8px]">{community?.ownerUser.username}&apos;s Community</span>
           </div>
           <div className="flex leading-none">
             <div
               className="flex cursor-pointer items-center rounded-full border border-[#9A6CF9] px-[8px] py-[4px] font-medium"
               onClick={() => setIsMembersDrawerOpen(true)}
             >
-              <MembersIcon /> <span className="ml-[2px] text-[#0F1419]">24</span>
+              <MembersIcon /> <span className="ml-[2px] text-[#0F1419]">{userCount}</span>
             </div>
             <div
               className="ml-[18px] flex cursor-pointer items-center rounded-full border border-[#9A6CF9] px-[8px] py-[4px] font-medium"
               onClick={() => setIsStackModalOpen(true)}
             >
-              <FireIcon /> <span className="ml-[2px] text-[#0F1419]">Stack</span>
+              <FireIcon /> <span className="ml-[2px] text-[#0F1419]">Stake</span>
             </div>
           </div>
         </header>
-        <div>
-          <MessageFromMeItem />
-          <MessageFromOtherItem />
+        <div
+          ref={ref}
+          className="xfans-scrollbar relative flex flex-1 flex-col items-center justify-center overflow-y-auto px-[16px]"
+          onScroll={handleScroll}
+        >
+          {renderMessages()}
         </div>
-        <SendMessageBox />
-        {isStackModalOpen && (
+        <SendMessageBox disabled={myInfo?.isBlocked} sendMessage={sendMessage} />
+        {isStackModalOpen && community && (
           <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
         )}
-        <MembersDrawer open={isMembersDrawerOpen} onClose={() => setIsMembersDrawerOpen(false)} />
+        <MembersDrawer
+          isOwner={myInfo?.address === community?.subject}
+          open={isMembersDrawerOpen}
+          subject={community?.subject}
+          onClose={() => setIsMembersDrawerOpen(false)}
+        />
       </div>
     </Drawer>
   );
@@ -75,48 +190,90 @@ function FireIcon() {
   );
 }
 
-function MessageFromMeItem() {
+type MessageItemProps = {
+  msg: ReceiveMessage;
+  userInfo: CommunityUserInfo;
+};
+
+function MessageFromMeItem({ msg, userInfo }: MessageItemProps) {
+  const { openProfile } = useProfileModal();
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [userInfo.username],
+    (result) => {
+      const twitterUserInfo = result?.data?.items?.[0];
+      if (twitterUserInfo == null) return;
+      openProfile(twitterUserInfo, 1);
+    },
+    () => undefined
+  );
+  function handleAvatarClick() {
+    batchUserInfo();
+  }
   return (
-    <div className="mt-[39px] flex items-start justify-end">
+    <div className="mt-[39px] flex w-full items-start justify-end">
       <div className="flex flex-col items-end">
-        <div className="max-w-[290px] rounded-[25px] rounded-tr-none bg-[#9A6CF9] p-[16px] text-white">
-          Hello chatGPT,how are you today?
+        <div className="max-w-[290px] rounded-[25px] rounded-tr-none bg-[#9A6CF9] p-[16px] text-sm text-white">
+          {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
+          {msg.message}
         </div>
-        <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
+        <span className="mt-[6px] text-xs text-[#A6A6A9]">
+          {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
+        </span>
       </div>
       <img
-        className="ml-[12px] w-[44px] rounded-full"
-        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+        onClick={handleAvatarClick}
+        className="ml-[12px] w-[44px] cursor-pointer rounded-full"
+        src={userInfo.avatar}
         alt="avatar"
       />
     </div>
   );
 }
-function MessageFromOtherItem() {
+function MessageFromOtherItem({ msg, userInfo }: MessageItemProps) {
+  const { openProfile } = useProfileModal();
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [userInfo.username],
+    (result) => {
+      const twitterUserInfo = result?.data?.items?.[0];
+      if (twitterUserInfo == null) return;
+      openProfile(twitterUserInfo, 1);
+    },
+    () => undefined
+  );
+  function handleAvatarClick() {
+    batchUserInfo();
+  }
   return (
-    <div className="mt-[39px] flex items-start">
+    <div className="mt-[39px] flex w-full items-start">
       <img
-        className="mr-[12px] w-[44px] rounded-full"
-        src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
+        onClick={handleAvatarClick}
+        className="mr-[12px] w-[44px] cursor-pointer rounded-full"
+        src={userInfo.avatar}
         alt="avatar"
       />
       <div className="flex flex-col">
         <div className="flex max-w-[290px] flex-col rounded-[25px] rounded-tl-none bg-[#EEEEEE] p-[16px]">
-          <span className="text-xs text-[#B9B9BA]">Jan coo</span>
-          <p className="text-[#505050]">
-            There are many programming languages in the market that are used in designing and
-            building websites, various applications and other tasks. All these languages are popular
-            in their place and in the way they are used, and many programmers learn and use them.
-          </p>
+          <span className="text-xs text-[#B9B9BA]">{userInfo.username}</span>
+          <div className="text-sm text-[#505050]">
+            {msg.image && <img src={msg.image} alt="pic" className="mb-[16px]" />}
+            {msg.message}
+          </div>
         </div>
-        <span className="mt-[6px] text-xs text-[#A6A6A9]">Jan 05 2024, 14:32</span>
+        <span className="mt-[6px] text-xs text-[#A6A6A9]">
+          {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
+        </span>
       </div>
     </div>
   );
 }
 
-function SendMessageBox() {
+type SendMessageBoxProps = {
+  disabled?: boolean;
+  sendMessage(message: Pick<SendMessage, 'message' | 'image'>): void;
+};
+function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) {
   const [img, setImg] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   async function handleDrop(event: DragEvent<HTMLDivElement>) {
     // 防止新窗口打开图片
     event.preventDefault();
@@ -137,12 +294,67 @@ function SendMessageBox() {
       setImg(reader.result as string);
     };
   }
+  const handleSendMessage = useCallback(() => {
+    if (textareaRef.current == null) return;
+    const message = textareaRef.current.value.trim();
+    if (message == null || message === '') return;
+    sendMessage({
+      message,
+      image: img ?? undefined,
+    });
+    textareaRef.current.value = '';
+    setImg(null);
+  }, [img, sendMessage]);
+
+  function handlePast(event: React.ClipboardEvent<HTMLElement>) {
+    const data = event.clipboardData;
+    const items: DataTransferItem[] = [];
+    for (const item of data.items) {
+      if (['image/png', 'image/jpg', 'image/jpeg'].includes(item.type)) {
+        items.push(item);
+      }
+    }
+    if (items.length === 0) {
+      return;
+    }
+    // 暂只支持第一个
+    const item = items[0];
+    // 如果第一个不是图片不处理
+    if (item.type.indexOf('image') === -1) return;
+    const reader = new FileReader();
+    const file = item.getAsFile();
+    if (file == null) return;
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImg(reader.result as string);
+    };
+  }
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea == null) return;
+    function handle(env: KeyboardEvent) {
+      // code 会在中文输入法按下 enter 的时候也触发，所以特地使用 keyCode，不要改动
+      if (env.keyCode === 13) {
+        handleSendMessage();
+      }
+    }
+    textarea.addEventListener('keydown', handle);
+    return () => {
+      textarea.removeEventListener('keydown', handle);
+    };
+  }, [handleSendMessage]);
   return (
     <div
-      className="w-[calc(100% - 32px)] absolute left-[16px] right-[16px] bottom-[24px] flex overflow-hidden rounded-[30px] bg-white"
+      className="w-[calc(100% - 32px)] relative mx-[16px] mt-[16px] mb-[24px] flex overflow-hidden rounded-[30px] bg-white"
       style={{ boxShadow: '5px 4px 20px 0px rgba(0, 0, 0, 0.13)' }}
       onDrop={handleDrop}
     >
+      {disabled && (
+        <div className="absolute flex h-full w-full select-none items-center bg-white/50 pl-[22px] text-[#F4245E]">
+          You have been banned from speaking.
+        </div>
+      )}
       <div className="flex flex-1 flex-col py-[16px] px-[22px]">
         {img && (
           <div className="relative flex self-start">
@@ -154,12 +366,15 @@ function SendMessageBox() {
           </div>
         )}
         <textarea
-          placeholder="Write your message"
-          className="scrollbar-hide max-h-[180px] min-h-[56px] w-full resize-none bg-transparent p-0 outline-none"
+          ref={textareaRef}
+          placeholder={disabled ? '' : 'Write your message'}
+          rows={1}
+          onPaste={handlePast}
+          className="scrollbar-hide max-h-[180px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>
       <div className="flex w-[80px] items-center pl-[16px]">
-        <SendIcon />
+        <SendIcon onClick={handleSendMessage} />
       </div>
     </div>
   );
@@ -194,9 +409,10 @@ function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function SendIcon() {
+function SendIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
+      {...props}
       className="cursor-pointer"
       width="24"
       height="24"

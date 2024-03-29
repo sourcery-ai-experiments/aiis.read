@@ -4,8 +4,8 @@ import { useToggle } from 'ahooks';
 
 import { BackButton, BasicButton, PrimaryButton } from '../../components/Button';
 import Modal from '../../components/Modal';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
 import * as toaster from '../../components/Toaster';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 
 const Deposit = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);

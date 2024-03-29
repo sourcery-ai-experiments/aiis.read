@@ -120,7 +120,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
-                className="flex-1 overflow-y-auto"
+                className="xfans-scrollbar flex-1 overflow-y-auto"
               >
                 <ul>
                   {topList?.map((item, i) => (
@@ -167,7 +167,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
-                className="flex-1 overflow-y-auto"
+                className="xfans-scrollbar flex-1 overflow-y-auto"
               >
                 <ul>
                   {newList?.map((item, i) => (
@@ -209,7 +209,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
-                className="flex-1 overflow-y-auto"
+                className="xfans-scrollbar flex-1 overflow-y-auto"
               >
                 <ul>
                   {recentList?.map((item, i) => (
@@ -259,7 +259,7 @@ const Explore = () => {
                 sx={{
                   padding: 0,
                 }}
-                className="flex-1 overflow-y-auto"
+                className="xfans-scrollbar flex-1 overflow-y-auto"
               >
                 <ul>
                   {shareList?.map((item, i: any) => (

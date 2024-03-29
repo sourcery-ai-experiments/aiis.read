@@ -6,8 +6,9 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
-import useGlobalStore from '../store/useGlobalStore';
 import * as toaster from '../components/Toaster';
+import useGlobalStore from '../store/useGlobalStore';
+
 import { checkStatus } from './checkStatus';
 
 // 请求响应参数（不包含data）
@@ -31,7 +32,7 @@ export enum ResultEnum {
 
 const config = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: 'https://test-xfans-api.d.buidlerdao.xyz',
+  baseURL: import.meta.env.VITE_BASE_URL,
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证
@@ -40,7 +41,16 @@ const config = {
 
 const contractConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: 'https://test-mpc-xfans-api.buidlerdao.xyz/',
+  baseURL: import.meta.env.VITE_CONTRACT_BASE_URL,
+  // 设置超时时间
+  timeout: ResultEnum.TIMEOUT as number,
+  // 跨域时候允许携带凭证
+  withCredentials: true,
+};
+
+const chatConfig = {
+  // 默认地址请求地址，可在 .env.** 文件中修改
+  baseURL: import.meta.env.VITE_ROOM_BASE_URL,
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证
@@ -61,8 +71,7 @@ class RequestHttp {
      */
     this.service.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token =
-          useGlobalStore.getState().token ?? JSON.parse(localStorage.getItem('token')!).state.token;
+        const token = useGlobalStore.getState().token;
         if (config.headers && typeof config.headers.set === 'function') {
           config.headers.set('Authorization', 'Bearer ' + token);
         }
@@ -150,3 +159,4 @@ class RequestHttp {
 
 export default new RequestHttp(config);
 export const contractRequestHttp = new RequestHttp(contractConfig);
+export const roomRequestHttp = new RequestHttp(chatConfig);

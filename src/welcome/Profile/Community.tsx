@@ -1,38 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ListEmpty } from '../../components/Empty';
+import Loading from '../../components/Loading';
+import useAccount from '../../hooks/useAccount';
 import { getList } from '../../service/community';
+import { getUnreadMessageCount, ReceiveMessage } from '../../service/room';
+import { getTimeDistanceFromDate } from '../../utils';
 
 import ChatRoomDrawer from './community/ChatRoomDrawer';
 import StackModal from './community/StackModal';
 
+type CommunityWithMessage = Community & {
+  lastMsg?: ReceiveMessage;
+  unreadCount?: number;
+};
+
 const Community = () => {
-  const [isChatRootOpen, setIsChatRootOpen] = useState(false);
   const [lockedCommunities, setLockedCommunities] = useState<Community[]>([]);
-  const [unlockedCommunities, setUnlockedCommunities] = useState<Community[]>([]);
+  const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
+  const { wallet } = useAccount();
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(() => {
+    setLoading(true);
+    let p = 0;
+    getList(0).then((data) => {
+      setLockedCommunities(data);
+      p++;
+      if (p === 2) {
+        setLoading(false);
+      }
+    });
+    getList(1).then((items: CommunityWithMessage[]) => {
+      let len = 0;
+      p++;
+      items.forEach((item) => {
+        getUnreadMessageCount(wallet, item.subject).then((res) => {
+          item.lastMsg = res.latestMsg;
+          item.unreadCount = res.count;
+          len++;
+          if (len === items.length) {
+            setUnlockedCommunities(items);
+            if (p === 2) {
+              setLoading(false);
+            }
+          }
+        });
+      });
+    });
+  }, [wallet]);
 
   useEffect(() => {
-    getList(0).then(setLockedCommunities);
-    getList(1).then(setUnlockedCommunities);
-  }, []);
+    refresh();
+  }, [refresh]);
 
-  function handleStakeModalClose() {
+  function handleStakeModalClose(fromConfirm: boolean) {
     setSelectedCommunity(null);
-    // 刷新列表获取最新状态
-    getList(0).then(setLockedCommunities);
-    getList(1).then(setUnlockedCommunities);
-  }
-
-  if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
-    return (
-      <div className="flex flex-col items-center">
-        <ListEmpty className="mt-[50px]" />
-        <p className="xfans-font-sf mt-[10px] text-[#00000080]">
-          You haven&apos;t bought any shares yet.
-        </p>
-      </div>
-    );
+    if (fromConfirm) refresh();
   }
 
   function renderUnlocked() {
@@ -54,7 +79,7 @@ const Community = () => {
             className={`px-1 py-[10px] ${
               i === unlockedCommunities.length - 1 ? '' : 'border-b border-b-[#EBEEF0]'
             }`}
-            onClick={() => setIsChatRootOpen(true)}
+            onClick={() => setSelectedCommunity(item)}
           >
             <div className="ml-3 flex cursor-pointer items-center">
               <img src={item.ownerUser.avatar} alt="" className="w-[44px] rounded-full" />
@@ -62,12 +87,18 @@ const Community = () => {
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center">
                     <span className="w-[210px] text-sm font-medium text-black">
-                      {item.ownerUser.username}‘s Community
+                      {item.ownerUser.username}&apos;s Community
                     </span>
-                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">21:22</span>
+                    <span className="ml-10 text-xs font-normal text-[#A1A1AA]">
+                      {item.lastMsg?.createTime
+                        ? getTimeDistanceFromDate(item.lastMsg?.createTime) + ' ago'
+                        : ''}
+                    </span>
                   </div>
-                  {/* TODO 用真实数据 */}
-                  <p className="truncate text-xs text-[#5B7083]">new message</p>
+                  <p className="h-[16px] truncate text-xs text-[#5B7083]">
+                    {(item.unreadCount ?? 0) > 0 ? `[${item.unreadCount}]` : ''}
+                    {item.lastMsg?.message ?? ''}
+                  </p>
                 </div>
               </div>
             </div>
@@ -97,7 +128,7 @@ const Community = () => {
                 <img src={item.ownerUser.avatar} alt="avatar" className="w-[44px] rounded-full" />
                 <div className="flex w-full flex-col">
                   <span className="text-sm font-medium text-black">
-                    {item.ownerUser.username}‘s Community
+                    {item.ownerUser.username}&apos;s Community
                   </span>
                   <div className="flex items-start justify-between">
                     <span className="text-xs text-[#5B7083]">
@@ -117,21 +148,37 @@ const Community = () => {
       </>
     );
   }
-
+  if (loading) {
+    return (
+      <div className=" flex flex-1 flex-col items-center justify-center overflow-x-hidden px-4">
+        <Loading />
+      </div>
+    );
+  }
+  if (lockedCommunities.length === 0 && unlockedCommunities.length === 0) {
+    return (
+      <div className="flex flex-col items-center">
+        <ListEmpty className="mt-[50px]" />
+        <p className="xfans-font-sf mt-[10px] text-[#00000080]">
+          You haven&apos;t bought any shares yet.
+        </p>
+      </div>
+    );
+  }
   return (
-    <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4">
+    <div className="xfans-scrollbar relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden px-4">
       {renderUnlocked()}
       {renderLocked()}
       {selectedCommunity && selectedCommunity.status === 0 && (
         <StackModal community={selectedCommunity} onClose={handleStakeModalClose} />
       )}
-      {selectedCommunity && selectedCommunity.status === 1 && (
+      {
         <ChatRoomDrawer
-          community={selectedCommunity}
-          open={isChatRootOpen}
-          onClose={() => setIsChatRootOpen(false)}
+          community={selectedCommunity && selectedCommunity.status === 1 ? selectedCommunity : null}
+          open={selectedCommunity?.status === 1}
+          onClose={() => setSelectedCommunity(null)}
         />
-      )}
+      }
     </div>
   );
 };

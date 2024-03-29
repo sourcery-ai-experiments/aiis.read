@@ -15,10 +15,8 @@
   /* src: url('./welcome/assets/SF-Pro-Display-Medium.otf'); */
 }
 
-html,
-body {
-  font-family: 'SF Pro Display', sans-serif;
-  font-size: 16px !important;
+#xfans-root * {
+  font-family: 'SF Pro Display', sans-serif !important;
 }
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */

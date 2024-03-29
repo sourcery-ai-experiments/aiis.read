@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 
 import { NextButton, VerifyButton } from '../../components/buttons/loginButton';
+import * as toaster from '../../components/Toaster';
 import {
   LOCALSTORAGE_FALSE,
   LOCALSTORAGE_TRUE,
@@ -16,7 +17,7 @@ import {
   XFANS_VERIFY,
 } from '../../constants';
 import http, { ResultData } from '../../service/request';
-import * as toaster from '../../components/Toaster';
+
 import '../../tailwind.css';
 interface CongratulationPageProps {
   goProfile: () => void; // 定义一个函数类型的属性
