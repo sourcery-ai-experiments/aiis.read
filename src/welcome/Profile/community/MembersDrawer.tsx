@@ -1,3 +1,6 @@
+/**
+ * @file 成员列表
+ */
 import React, { useEffect } from 'react';
 import { Drawer, Switch } from '@mui/material';
 import { useRequest } from 'ahooks';
@@ -5,6 +8,8 @@ import { useRequest } from 'ahooks';
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import { success } from '../../../components/Toaster';
 import { blockUser, getUserList } from '../../../service/community';
+
+import { ToasterMessageType } from './constants';
 
 type Props = {
   open?: boolean;
@@ -71,11 +76,11 @@ function MemberItem({
   function handleSwitchChange(checked: boolean) {
     if (checked) {
       blockUser(subject, user.address, true).then(() => {
-        success('block successful');
+        success(ToasterMessageType.BlockSuccess);
       });
     } else {
       blockUser(subject, user.address, false).then(() => {
-        success('unblock successful');
+        success(ToasterMessageType.UnblockSuccess);
       });
     }
   }

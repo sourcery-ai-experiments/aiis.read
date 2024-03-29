@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import { error } from '../components/Toaster';
-import { getMessagesByRoom, ReceiveMessage, SendMessage } from '../service/room';
-import useGlobalStore from '../store/useGlobalStore';
+import { error } from '../../../components/Toaster';
+import { getMessagesByRoom, ReceiveMessage, SendMessage } from '../../../service/room';
+import useGlobalStore from '../../../store/useGlobalStore';
+
+import { ToasterMessageType } from './constants';
 
 export default function useRoom(user: string, room?: string) {
   const [messages, setMessages] = useState<ReceiveMessage[]>([]);
@@ -30,7 +32,7 @@ export default function useRoom(user: string, room?: string) {
 
   useEffect(() => {
     function handle() {
-      error('You have been banned from speaking.');
+      error(ToasterMessageType.BannedFromSpeaking);
     }
     socket?.on('unauthorized', handle);
     return () => {

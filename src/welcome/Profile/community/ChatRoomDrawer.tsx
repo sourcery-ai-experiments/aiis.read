@@ -1,3 +1,6 @@
+/**
+ * @file 聊天室
+ */
 import React, { DragEvent, SVGProps, useCallback, useEffect, useRef, useState } from 'react';
 import { Drawer } from '@mui/material';
 import { useRequest, useThrottleFn } from 'ahooks';
@@ -6,7 +9,6 @@ import dayjs from 'dayjs';
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import Loading from '../../../components/Loading';
 import useAccount from '../../../hooks/useAccount';
-import useRoom from '../../../hooks/useRoom';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
@@ -14,6 +16,7 @@ import useProfileModal from '../../../store/useProfileModal';
 
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
+import useRoom from './useRoom';
 
 type Props = {
   community?: Community | null;
