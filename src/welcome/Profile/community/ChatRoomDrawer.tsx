@@ -1,7 +1,15 @@
 /**
  * @file 聊天室
  */
-import React, { DragEvent, SVGProps, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  DragEvent,
+  SVGProps,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Drawer } from '@mui/material';
 import { useRequest, useThrottleFn } from 'ahooks';
 import dayjs from 'dayjs';
@@ -42,26 +50,36 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
     manual: true,
   });
 
-  const [messageRendered, setMessageRendered] = useState(false);
+  const isFirstRenderMessages = useRef(false);
   useEffect(() => {
     if (ref.current == null) return;
-    if (messageRendered) {
-      // 偷个懒，直接 timeout 等message render 完，后面换到子组件去做比较好
-      setTimeout(() => {
-        ref.current!.scrollTop = 999999999;
-      }, 500);
-      // }
-    }
-  }, [messageRendered, open]);
-  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      if (ref.current == null) return;
+      console.log(
+        isFirstRenderMessages.current,
+        ref.current.scrollHeight,
+        ref.current.clientHeight
+      );
+      if (isFirstRenderMessages.current === false) return;
+      if (ref.current.scrollHeight > ref.current.clientHeight) {
+        ref.current.scrollTop = 999999999;
+      }
+    });
+    observer.observe(ref.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  // 需要提前更新 isFirstRenderMessages 让 ResizeObserver 触发后能及时拿到新状态
+  useLayoutEffect(() => {
     if (open) {
-      if (messages.length > 0 && messageRendered === false) {
-        setMessageRendered(true);
+      if (messages.length > 0 && isFirstRenderMessages.current === false) {
+        isFirstRenderMessages.current = true;
       }
     } else {
-      setMessageRendered(false);
+      isFirstRenderMessages.current = false;
     }
-  }, [messageRendered, messages.length, open]);
+  }, [messages.length, open]);
 
   useEffect(() => {
     if (ref.current == null) return;
@@ -85,6 +103,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       if (ref.current == null) return;
       const modifier = 100;
       if (ref.current.scrollTop < modifier) {
+        // TODO 放上翻页需要定位到之前的滚动位置
         loadMessages('up', messages[0]?.id);
         return;
       }
