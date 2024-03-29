@@ -47,6 +47,7 @@ declare global {
      * 用户钱包地址
      */
     walletAddress?: string;
+    inviteCode?: string;
   }
 
   /**
