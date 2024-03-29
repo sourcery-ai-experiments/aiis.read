@@ -15,7 +15,6 @@ interface UserPagePriceProps {
 export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
   const [elementWidth, setElementWidth] = useState<number | null>(null);
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const { userInfo: currentUserInfo } = useAccount();
   const [userInfo, setUserInfo] = useState<any>({ price: '0' });
   const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const useWidth = elementWidth != null ? elementWidth : 0;
@@ -55,7 +54,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
     setElementWidth(width);
   }, []); // This effect runs only once after the initial render
 
-  return !isShowPrice && currentUserInfo?.isActive ? (
+  return !isShowPrice && userInfo?.isActive ? (
     <span
       onClick={(e) => {
         openProfile(userInfo);
