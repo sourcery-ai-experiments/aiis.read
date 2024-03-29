@@ -1,7 +1,7 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHover } from 'ahooks';
 
-import { useTweetVote } from '../../../service/tweet';
+import { useTweetBatchUserInfo, useTweetVote } from '../../../service/tweet';
 import * as toaster from '../../Toaster';
 
 import '../../../tailwind.css';
@@ -12,7 +12,15 @@ interface VoteTwitterProps {
 
 export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   const [voted, setVoted] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
   const ref = useRef<HTMLDivElement | null>(null);
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [userName],
+    (result) => {
+      setUserInfo(result?.data?.items?.[0]);
+    },
+    () => undefined
+  );
   const { run: requestVote } = useTweetVote(
     twitterId,
     userName,
@@ -28,19 +36,27 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
 
   const isHover = useHover(ref);
 
+  useEffect(() => {
+    batchUserInfo(userInfo);
+  }, []);
+
   return (
-    <div
-      ref={ref}
-      className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
-      onClick={(e) => {
-        requestVote();
-        toaster.success(toaster.ToastMessage.VOTE_SUCCESS);
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      {voted || isHover ? <VoidedIcon /> : <VoidIcon />}
-    </div>
+    <>
+      {userInfo.isActive ? (
+        <div
+          ref={ref}
+          className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
+          onClick={(e) => {
+            requestVote();
+            toaster.success(toaster.ToastMessage.VOTE_SUCCESS);
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          {voted || isHover ? <VoidedIcon /> : <VoidIcon />}
+        </div>
+      ) : null}
+    </>
   );
 };
 
