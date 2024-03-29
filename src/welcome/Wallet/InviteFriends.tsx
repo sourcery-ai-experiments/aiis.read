@@ -39,7 +39,6 @@ const Copy = () => (
 
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  // const accounts = useGlobalUserStore((state) => state.accounts);
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const [page, setPage] = useState(0);
 
