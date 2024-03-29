@@ -8,6 +8,7 @@ type Response = {
 export type SendMessage = {
   message?: string;
   image?: string;
+  uuid: string;
   timestamp: number;
 };
 

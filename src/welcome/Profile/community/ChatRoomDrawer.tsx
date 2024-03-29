@@ -255,7 +255,7 @@ function MessageFromOtherItem({ msg, userInfo }: MessageItemProps) {
 
 type SendMessageBoxProps = {
   disabled?: boolean;
-  sendMessage(message: SendMessage): void;
+  sendMessage(message: Pick<SendMessage, 'message' | 'image'>): void;
 };
 function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) {
   const [img, setImg] = useState<string | null>(null);
@@ -287,7 +287,6 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     sendMessage({
       message,
       image: img ?? undefined,
-      timestamp: Date.now(),
     });
     textareaRef.current.value = '';
     setImg(null);

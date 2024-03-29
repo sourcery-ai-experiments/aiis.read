@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 import { io, Socket } from 'socket.io-client';
 
 import { error } from '../../../components/Toaster';
@@ -65,9 +66,13 @@ export default function useRoom(user: string, room?: string) {
 
   const sendMessage = useCallback(
     (nextMessage: SendMessage) => {
-      socket?.emit('sendMessage', nextMessage);
+      socket?.emit('sendMessage', {
+        ...nextMessage,
+        uuid: `${room}_${nanoid()}_${Date.now()}`,
+        timestamp: Date.now(),
+      });
     },
-    [socket]
+    [room, socket]
   );
 
   const loadMessages = useCallback(
