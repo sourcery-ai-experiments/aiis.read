@@ -39,7 +39,7 @@ const Copy = () => (
 
 const InviteFriends = () => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
-  const accounts = useGlobalUserStore((state) => state.accounts);
+  const { userInfo } = useUserStore((state) => ({ ...state }));
   const [page, setPage] = useState(0);
 
   const { run: getInvite, loading } = useUserInvite();
@@ -95,10 +95,11 @@ const InviteFriends = () => {
 
           <div className="mt-6 flex h-[56px] w-full overflow-hidden rounded-[8px] border border-[#EBECED] text-base">
             <div className="flex flex-1 items-center pl-[26px] font-medium text-[#1A1D1F]">
-              <TruncateText text={accounts[0] ?? ''} startLength={7} endLength={7} />
+              {/* <TruncateText text={userInfo?.inviteCode ?? ''} startLength={7} endLength={7} /> */}
+              <span>{userInfo?.inviteCode ?? ''}</span>
             </div>
             <CopyToClipboard
-              text={accounts[0] ?? ''}
+              text={userInfo?.inviteCode ?? ''}
               onCopy={() => {
                 toaster.success(toaster.ToastMessage.COPY_SUCCESS);
               }}
