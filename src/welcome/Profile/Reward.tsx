@@ -11,6 +11,8 @@ import dayjs from 'dayjs';
 import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
+import { usePoolBalance } from '../../service/wallet';
+
 import useProfileModal from '../../store/useProfileModal';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
@@ -41,6 +43,7 @@ const Reward = () => {
   const list = Array(7).fill('');
   const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
+  const [poolBalance, setPoolBalance] = React.useState('0');
   const { run: getTweet } = useTweetList();
   const { tweetList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({ ...state }));
   const { userInfo } = useUserStore((state) => ({ ...state }));
@@ -48,6 +51,16 @@ const Reward = () => {
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
   console.log('tweetList', tweetList);
+
+  const { loading, run: fetchPool } = usePoolBalance(
+    (balance) => {
+      setPoolBalance(balance);
+    },
+    () => {
+      setPoolBalance('0');
+    }
+  );
+
   const fetchMap: Record<any, any> = {
     1: getTweet,
     2: () => {
@@ -64,6 +77,7 @@ const Reward = () => {
     if (value === '1') {
       getTweet();
     }
+    fetchPool();
   }, []);
 
   const getPrice = async () => {
@@ -87,7 +101,7 @@ const Reward = () => {
           <div className="flex flex-col items-center space-y-1">
             <div className="flex items-center space-x-1">
               <Icon />
-              <span className="text-xs font-medium text-[#0F1419]">12.4</span>
+              <NumberDisplayer className="text-xs font-medium text-[#0F1419]" text={poolBalance} />
             </div>
             <span className="text-[15px] font-medium text-[#919099]">Pool</span>
           </div>
@@ -179,12 +193,7 @@ const Reward = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-[6px]">
                         <img
-                          onClick={() => {
-                            window.open(
-                              `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
-                              '_blank'
-                            );
-                          }}
+                          onClick={() => openProfile(item?.author)}
                           src={item.author?.avatar}
                           alt=""
                           className="w-[44px] cursor-pointer rounded-full"
@@ -205,7 +214,17 @@ const Reward = () => {
                       <span className="text-sm font-medium">#{item.rank}</span>
                     </div>
 
-                    <p className="text-xs leading-[20px] text-black">{item.text}</p>
+                    <p
+                      className="cursor-pointer text-xs leading-[20px] text-black"
+                      onClick={() => {
+                        window.open(
+                          `https://twitter.com/${item?.author?.twitterUsername}/status/${item?.id}`,
+                          '_blank'
+                        );
+                      }}
+                    >
+                      {item.text}
+                    </p>
 
                     <Divider
                       sx={{
@@ -254,7 +273,15 @@ const Reward = () => {
                     <span className="text-sm font-medium">#{tweetList?.[currentIndex].rank}</span>
                   </div>
 
-                  <p className="text-xs leading-[20px] text-black">
+                  <p
+                    className="cursor-pointer text-xs leading-[20px] text-black"
+                    onClick={() => {
+                      window.open(
+                        `https://twitter.com/${tweetList?.[currentIndex]?.author?.twitterUsername}/status/${tweetList?.[currentIndex]?.id}`,
+                        '_blank'
+                      );
+                    }}
+                  >
                     {tweetList?.[currentIndex].text}
                   </p>
 
@@ -270,7 +297,7 @@ const Reward = () => {
                 <div className="flex flex-col items-center">
                   <ListEmpty className="mt-[50px]" />
                   <p className="xfans-font-sf mt-[10px] text-[#00000080]">
-                    You haven&apos;t bought any shares yet.
+                    No records found. Vote to join weekly rankings.
                   </p>
                 </div>
               )}

@@ -30,8 +30,8 @@ const Explore = () => {
 
   const fetchMap: Record<any, any> = {
     1: getTopList,
-    2: getNewList,
-    3: getRecentList,
+    2: getRecentList,
+    3: getNewList,
     4: getShareList,
   };
 
@@ -74,8 +74,8 @@ const Explore = () => {
               }}
             />
             <Tab
-              label="New"
-              value="2"
+              label="24h %"
+              value="3"
               sx={{
                 width: '25%',
                 fontSize: 15,
@@ -85,8 +85,8 @@ const Explore = () => {
               }}
             />
             <Tab
-              label="24h %"
-              value="3"
+              label="New"
+              value="2"
               sx={{
                 width: '25%',
                 fontSize: 15,
