@@ -14,7 +14,7 @@ const SignInWithXPage: FC<SignInWithXPageProps> = ({ handleButtonClick, showLoad
     <div className="min-h-screen w-full items-center justify-center text-center">
       <img
         className="mx-auto mt-[81px] mb-[32px] h-[120px] w-[120px] cursor-pointer"
-        src="https://cdn-fe.s3.amazonaws.com/xfans/20240322-155619.png"
+        src="https://cdn-fe.s3.amazonaws.com/xfans/20240328-153101.png"
         alt="Logo"
         onClick={() => window.open('https://xfans.tech', '_blank')}
       />
