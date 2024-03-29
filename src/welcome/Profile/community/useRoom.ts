@@ -15,7 +15,7 @@ export default function useRoom(user: string, room?: string) {
   // 建立 socket
   useEffect(() => {
     if (room == null) return;
-    const socket = io(import.meta.env.VITE_SOCKET_bASE_URL, {
+    const socket = io(import.meta.env.VITE_SOCKET_BASE_URL, {
       autoConnect: false,
       extraHeaders: {
         Authorization: 'Bearer ' + useGlobalStore.getState().token,

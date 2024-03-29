@@ -19,7 +19,7 @@ import StackModal from './StackModal';
 import useRoom from './useRoom';
 
 type Props = {
-  community?: Community | null;
+  community: Community | null;
   open?: boolean;
   onClose(): void;
 };
@@ -97,7 +97,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   function renderMessages() {
-    if (members.length === 0) return <Loading />;
+    if (messages.length === 0) return <Loading />;
     if (members.length === 0) return <Loading />;
     return messages.map((msg) => {
       const senderUserInfo = members.find((member) => member.address === msg.sender);

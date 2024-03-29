@@ -50,7 +50,7 @@ const contractConfig = {
 
 const chatConfig = {
   // 默认地址请求地址，可在 .env.** 文件中修改
-  baseURL: import.meta.env.VITE_ROOM_bASE_URL,
+  baseURL: import.meta.env.VITE_ROOM_BASE_URL,
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证

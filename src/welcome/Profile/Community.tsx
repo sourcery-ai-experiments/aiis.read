@@ -175,7 +175,7 @@ const Community = () => {
       {
         <ChatRoomDrawer
           community={selectedCommunity && selectedCommunity.status === 1 ? selectedCommunity : null}
-          open={selectedCommunity != null && selectedCommunity.status === 1}
+          open={selectedCommunity?.status === 1}
           onClose={() => setSelectedCommunity(null)}
         />
       }
