@@ -50,7 +50,7 @@ const usePoolBalance = (
     manual: true,
     onSuccess: (resp: any) => {
       if (resp.code === 0) {
-        success(resp.balance);
+        success(resp.balance ?? '0');
       } else {
         failed();
       }
