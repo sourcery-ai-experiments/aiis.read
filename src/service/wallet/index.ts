@@ -31,7 +31,13 @@ const useWalletClaimReward = (
       }),
     {
       manual: true,
-      onSuccess: success,
+      onSuccess: (resp: any) => {
+        if (resp.code === 0) {
+          success(resp.balance);
+        } else {
+          failed();
+        }
+      },
       onError: failed,
     }
   );

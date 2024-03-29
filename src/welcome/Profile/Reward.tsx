@@ -52,10 +52,8 @@ const Reward = () => {
   console.log('tweetList', tweetList);
 
   const { loading, run: fetchPool } = usePoolBalance(
-    (resp) => {
-      if (resp.code === 0) {
-        setPoolBalance(resp.balance);
-      }
+    (balance) => {
+      setPoolBalance(balance);
     },
     () => {
       setPoolBalance('0');
