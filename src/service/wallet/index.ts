@@ -31,13 +31,7 @@ const useWalletClaimReward = (
       }),
     {
       manual: true,
-      onSuccess: (resp: any) => {
-        if (resp.code === 0) {
-          success(resp.balance);
-        } else {
-          failed();
-        }
-      },
+      onSuccess: success,
       onError: failed,
     }
   );
@@ -54,7 +48,13 @@ const usePoolBalance = (
 ) => {
   const result = useRequest(() => contractRequestHttp.post('/xfans/api/pool/getBalance'), {
     manual: true,
-    onSuccess: success,
+    onSuccess: (resp: any) => {
+      if (resp.code === 0) {
+        success(resp.balance);
+      } else {
+        failed();
+      }
+    },
     onError: failed,
   });
 
