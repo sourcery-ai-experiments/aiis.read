@@ -44,7 +44,7 @@ withProxyStore(<Content />, store).then((component) => {
       if (userIsOnProfilePage === 'home') {
         addTwitterComponent();
       } else if (userIsOnProfilePage === 'userPage') {
-        console.log('The user is not on a Twitter user profile page.');
+        addTwitterComponent();
         addUserPagePriceComponent();
       }
     }, 1000); // 每秒执行一次

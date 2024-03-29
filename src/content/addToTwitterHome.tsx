@@ -54,12 +54,10 @@ export const addVoteComponent = (element: Element, tweetId: string, userName: st
 };
 
 export const addTwitterComponent = () => {
-  const thirdElement = document.querySelectorAll(
-    '#react-root > div > div > div > main > div > div > div > div > div > div > div'
-  )[3];
+  const thirdElement = document.querySelectorAll('[aria-labelledby]')[0];
 
   // 现有元素的处理逻辑
-  const targetElements = thirdElement.querySelectorAll('section > div > div > div');
+  const targetElements = thirdElement.querySelectorAll('[data-testid="cellInnerDiv"]');
   targetElements.forEach(function (element, index) {
     const anchorElements = element.querySelectorAll('a');
     const hrefs = Array.from(anchorElements).map((anchor) => anchor.href);
@@ -120,10 +118,10 @@ export const addUserPagePriceComponent = () => {
   const existingElement = document.getElementById(elementId);
 
   // 由于个人中心页面有复用，因此在插入之前要删除掉其他price tag
-  var elements = document.querySelectorAll('[id^="xfans-userPagePrice-"]');
+  const elements = document.querySelectorAll('[id^="xfans-userPagePrice-"]');
   elements.forEach((x) => {
     if (x.id !== elementId) {
-      var parent = x.parentNode; // 获取父节点
+      const parent = x.parentNode; // 获取父节点
       parent?.removeChild(x);
     }
   });
