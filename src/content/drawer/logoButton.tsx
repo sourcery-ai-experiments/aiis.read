@@ -7,7 +7,6 @@ const LogoButton = () => {
         src="https://cdn-fe.s3.amazonaws.com/xfans/20240328-153101.png"
         className="mx-0 mt-[120px] h-[35px] w-[35px] cursor-pointer rounded-full p-0"
         alt="Logo"
-        onClick={() => window.open('https://xfans.tech', '_blank')}
       />
     </div>
   );
