@@ -279,7 +279,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
   }
   const handleSendMessage = useCallback(() => {
     if (textareaRef.current == null) return;
-    const message = textareaRef.current.value;
+    const message = textareaRef.current.value.trim();
     if (message == null || message === '') return;
     sendMessage({
       message,
