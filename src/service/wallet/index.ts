@@ -27,7 +27,7 @@ const useWalletClaimReward = (
   const result = useRequest(
     () =>
       contractRequestHttp.post('/xfans/api/pool/claim', {
-        list: list?.slice(0, 2),
+        list: list,
       }),
     {
       manual: true,
@@ -50,7 +50,7 @@ const usePoolBalance = (
     manual: true,
     onSuccess: (resp: any) => {
       if (resp.code === 0) {
-        success(resp.balance);
+        success(resp.balance ?? '0');
       } else {
         failed();
       }
