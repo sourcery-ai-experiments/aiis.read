@@ -117,8 +117,18 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   function renderMessages() {
-    if (messages.length === 0) return <Loading />;
-    if (members.length === 0) return <Loading />;
+    if (messages.length === 0)
+      return (
+        <div className="flex flex-1 items-center justify-center">
+          <Loading />
+        </div>
+      );
+    if (members.length === 0)
+      return (
+        <div className="flex flex-1 items-center justify-center">
+          <Loading />
+        </div>
+      );
     return messages.map((msg) => {
       const senderUserInfo = members.find((member) => member.address === msg.sender);
       if (senderUserInfo == null) return null;
@@ -169,7 +179,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
         </header>
         <div
           ref={ref}
-          className="xfans-scrollbar relative flex flex-1 flex-col items-center justify-center overflow-y-auto px-[16px]"
+          className="xfans-scrollbar relative flex flex-1 flex-col items-center overflow-y-auto px-[16px]"
           onScroll={handleScroll}
         >
           {renderMessages()}
