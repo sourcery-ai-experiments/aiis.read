@@ -38,12 +38,12 @@ export default function StackModal({ onClose, community }: ModalProps) {
       }}
     >
       <div className="relative flex flex-col items-center pb-[24px]">
-        <h2 className="text-[24px] font-medium text-[#2E2E32]">Unlock Vincent ’s Community</h2>
+        <h2 className="text-[24px] font-medium text-[#2E2E32]">Unlock Vincent&apos;s Community</h2>
         <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
 
         <p className="relative mt-[27px] pl-[25px] text-center text-sm text-[#919099]">
           <Icon /> Stake at least 5 shares to unlock the
-          <br /> creator’s community
+          <br /> creator&apos;s community
         </p>
 
         <ProgressBar
