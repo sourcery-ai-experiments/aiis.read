@@ -186,7 +186,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
         </div>
         <SendMessageBox disabled={myInfo?.isBlocked} sendMessage={sendMessage} />
         {isStackModalOpen && community && (
-          <StackModal community={community} onClose={() => setIsStackModalOpen(false)} />
+          <StackModal subject={community.subject} onClose={() => setIsStackModalOpen(false)} />
         )}
         <MembersDrawer
           isOwner={myInfo?.address === community?.subject}
