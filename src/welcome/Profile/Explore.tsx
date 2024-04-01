@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -20,25 +20,40 @@ import { getTimeDistanceFromDate } from '../../utils';
 const Explore = () => {
   const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const { run: getShareList, loading: loading1 } = useShareList();
-  const { run: getTopList, loading: loading2 } = useTopList();
-  const { run: getNewList, loading: loading3 } = useNewList();
-  const { run: getRecentList, loading: loading4 } = useRecentList();
+  const { run: getShareList, loading: loading4 } = useShareList();
+  const { run: getTopList, loading: loading1 } = useTopList();
+  const { run: getNewList, loading: loading2 } = useNewList();
+  const { run: getRecentList, loading: loading3 } = useRecentList();
   const { shareList, topList, newList, recentList } = useShareStore((state) => ({ ...state }));
 
   const [value, setValue] = React.useState('1');
+  const [loadingx, setLoadingx] = React.useState(true);
 
   const fetchMap: Record<any, any> = {
     1: getTopList,
-    2: getRecentList,
-    3: getNewList,
+    2: getNewList,
+    3: getRecentList,
     4: getShareList,
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setLoadingx(true);
     setValue(newValue);
     fetchMap[newValue]();
   };
+
+  const loadingRef = useRef(false);
+
+  useEffect(() => {
+    let timeout: any;
+
+    if (loading1 || loading2 || loading3 || loading4) {
+      setLoadingx(true);
+      timeout = setTimeout(() => {
+        setLoadingx(false);
+      }, 500);
+    }
+  }, [loading1, loading2, loading3, loading4]);
 
   useEffect(() => {
     fetchMap[value]();
@@ -109,7 +124,7 @@ const Explore = () => {
           </TabList>
         </Box>
         <>
-          {loading1 || loading2 || loading3 || loading4 ? (
+          {loading1 || loading2 || loading3 || loading4 || loadingx ? (
             <div className="flex flex-1 items-center justify-center">
               <Loading />
             </div>
