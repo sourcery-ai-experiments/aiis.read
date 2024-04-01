@@ -127,6 +127,18 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
   }, [wallet]);
 
+  const totalPriceUSD = useMemo(() => {
+    if (price !== '0' && priceAfterFee !== '0') {
+      const _totalPriceUSD = new BigNumber(price)
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
+      return _totalPriceUSD.toString();
+    } else {
+      return '0';
+    }
+  }, [price, priceAfterFee]);
+
   // Transaction fee
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
@@ -246,11 +258,14 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
         <div className="mt-5 w-full space-y-4 text-black">
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium">Total Price</span>
-            <div className="flex items-center space-x-1">
-              <Icon1 />
-              <span className="text-lg font-medium">
-                <NumberDisplayer text={total} loading={loadingPrice || loadingPirceAfterFee} />
-              </span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer text={price} loading={loadingPrice || loadingPirceAfterFee} />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${totalPriceUSD}</span>
             </div>
           </div>
         </div>

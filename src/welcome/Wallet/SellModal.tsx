@@ -110,6 +110,18 @@ const SellModal = ({ onClose }: SellModalProps) => {
     };
   }, [amount, currentInfo?.walletAddress]);
 
+  const totalPriceUSD = useMemo(() => {
+    if (price !== '0' && priceAfterFee !== '0') {
+      const _totalPriceUSD = new BigNumber(price)
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
+      return _totalPriceUSD.toString();
+    } else {
+      return '0';
+    }
+  }, [price, priceAfterFee]);
+
   // Transaction fee
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
@@ -132,6 +144,19 @@ const SellModal = ({ onClose }: SellModalProps) => {
       return '0';
     }
   }, [price, priceAfterFee]);
+
+  const gasFeeUSD = useMemo(() => {
+    if (priceAfterFee !== '0' && gasFee !== '0') {
+      const _total = new BigNumber(priceAfterFee)
+        .plus(new BigNumber(gasFee))
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
+      return _total.toString();
+    } else {
+      return '0';
+    }
+  }, [gasFee, priceAfterFee]);
 
   // shareBalance
   useEffect(() => {
@@ -202,6 +227,8 @@ const SellModal = ({ onClose }: SellModalProps) => {
     });
   }
 
+  console.log(+shareBalance / 100);
+
   return (
     <Modal onClose={onClose} open width={553} closebuttonstyle={{ marginTop: '5px' }}>
       <div className="relative flex flex-col items-center">
@@ -258,6 +285,30 @@ const SellModal = ({ onClose }: SellModalProps) => {
         />
 
         <div className="mt-5 w-full space-y-4 text-black">
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-medium">Total Price</span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer text={price} loading={loadingPrice || loadingPirceAfterFee} />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${totalPriceUSD}</span>
+            </div>
+          </div>
+        </div>
+
+        <Divider
+          sx={{
+            marginTop: 3,
+            width: '100%',
+            borderColor: '#EBEEF0',
+            borderStyle: 'dashed',
+          }}
+        />
+
+        <div className="mt-5 w-full space-y-4 text-black">
           {/* <div className="flex items-center justify-between">
             <span className="text-lg font-medium text-[#919099]">From</span>
             <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
@@ -270,23 +321,29 @@ const SellModal = ({ onClose }: SellModalProps) => {
           </div> */}
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium">Transaction Fee</span>
-            <div className="flex items-center space-x-1">
-              <Icon1 />
-              <span className="text-lg font-medium">
-                <NumberDisplayer
-                  text={transactionFee}
-                  loading={loadingPrice || loadingPirceAfterFee}
-                />
-              </span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer
+                    text={transactionFee}
+                    loading={loadingPrice || loadingPirceAfterFee}
+                  />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${transactionFeeUSD}</span>
             </div>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium">Est. Gas Fee</span>
-            <div className="flex items-center space-x-1">
-              <Icon1 />
-              <span className="text-lg font-medium">
-                <NumberDisplayer text={gasFee} loading={loadingPrice} />
-              </span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer text={gasFee} loading={loadingPrice} />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${gasFeeUSD}</span>
             </div>
           </div>
         </div>
