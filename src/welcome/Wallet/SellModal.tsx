@@ -19,6 +19,7 @@ import {
 } from '../../service/contract/shares';
 import { getBalance } from '../../service/contract/user';
 import useProfileModal from '../../store/useProfileModal';
+import useShareStore from '../../store/useShareStore';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -79,6 +80,8 @@ const SellModal = ({ onClose }: SellModalProps) => {
   const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
   const [loadingSharesBalance, setLoadingSharesBalance] = useState<boolean>(true);
 
+  const { ethPrice } = useShareStore((state) => ({ ...state }));
+
   useEffect(() => {
     if (amount === 0) {
       setGasFee('0');
@@ -111,6 +114,19 @@ const SellModal = ({ onClose }: SellModalProps) => {
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
       const _transactionFee = new BigNumber(price).minus(new BigNumber(priceAfterFee));
+      return _transactionFee.toString();
+    } else {
+      return '0';
+    }
+  }, [price, priceAfterFee]);
+
+  const transactionFeeUSD = useMemo(() => {
+    if (price !== '0' && priceAfterFee !== '0') {
+      const _transactionFee = new BigNumber(price)
+        .minus(new BigNumber(priceAfterFee))
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
       return _transactionFee.toString();
     } else {
       return '0';
@@ -242,7 +258,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
         />
 
         <div className="mt-5 w-full space-y-4 text-black">
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <span className="text-lg font-medium text-[#919099]">From</span>
             <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
           </div>
@@ -251,7 +267,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
             <span className="text-lg font-medium">
               {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
             </span>
-          </div>
+          </div> */}
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium">Transaction Fee</span>
             <div className="flex items-center space-x-1">

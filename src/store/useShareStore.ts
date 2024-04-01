@@ -9,6 +9,7 @@ interface ShareStoreProps {
   holderListTotal: number;
   holderingList: HolderProps[] | null;
   holderingListTotal: number;
+  ethPrice: { id: number; symbol: string; price: number } | null;
 }
 
 const useShareStore = create<ShareStoreProps>((set) => ({
@@ -20,6 +21,7 @@ const useShareStore = create<ShareStoreProps>((set) => ({
   holderListTotal: 0,
   holderingList: null,
   holderingListTotal: 0,
+  ethPrice: null,
 }));
 
 export default useShareStore;

@@ -267,7 +267,7 @@ const Explore = () => {
                       <span className="text-[14px] font-normal text-[#A1A1AA]">
                         {dayjs(item.createdAt).format('YYYY/MM/DD HH:mm')}
                       </span>
-                      <div className="flex items-center justify-between pl-4">
+                      <div className="flex items-center justify-between pl-6">
                         <div className="flex items-center space-x-9">
                           <div className="flex w-9 flex-col items-center">
                             <img

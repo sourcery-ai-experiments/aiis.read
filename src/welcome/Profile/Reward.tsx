@@ -12,7 +12,6 @@ import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
 import { usePoolBalance } from '../../service/wallet';
-
 import useProfileModal from '../../store/useProfileModal';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
@@ -50,7 +49,6 @@ const Reward = () => {
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
-  console.log('tweetList', tweetList);
 
   const { loading, run: fetchPool } = usePoolBalance(
     (balance) => {

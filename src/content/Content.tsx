@@ -1,11 +1,13 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 
 import Toaster from '../components/Toaster';
-import http from '../service/request';
+import { useEthPrice } from '../service/share';
 
 import PersistentDrawerRight from './drawer';
 
 const Content = (): ReactElement => {
+  useEthPrice();
+
   return (
     <div
       id="xfans-root"

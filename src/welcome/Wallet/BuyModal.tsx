@@ -18,6 +18,7 @@ import {
 } from '../../service/contract/shares';
 import { getBalance } from '../../service/contract/user';
 import useProfileModal from '../../store/useProfileModal';
+import useShareStore from '../../store/useShareStore';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -75,6 +76,8 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const [loadingPrice, setLoadingPrice] = useState<boolean>(false);
   const [loadingPirceAfterFee, setLoadingPirceAfterFee] = useState<boolean>(false);
   const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
+
+  const { ethPrice } = useShareStore((state) => ({ ...state }));
 
   useEffect(() => {
     if (amount === 0) {
@@ -134,10 +137,36 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
   }, [price, priceAfterFee]);
 
+  const transactionFeeUSD = useMemo(() => {
+    if (price !== '0' && priceAfterFee !== '0') {
+      const _transactionFee = new BigNumber(priceAfterFee)
+        .minus(new BigNumber(price))
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
+      return _transactionFee.toString();
+    } else {
+      return '0';
+    }
+  }, [price, priceAfterFee]);
+
   // total
   const total = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
       const _total = new BigNumber(priceAfterFee).plus(new BigNumber(gasFee));
+      return _total.toString();
+    } else {
+      return '0';
+    }
+  }, [gasFee, priceAfterFee]);
+
+  const totalUSD = useMemo(() => {
+    if (priceAfterFee !== '0' && gasFee !== '0') {
+      const _total = new BigNumber(priceAfterFee)
+        .plus(new BigNumber(gasFee))
+        .dividedBy(new BigNumber(Math.pow(10, 18)))
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+        .toFixed(5);
       return _total.toString();
     } else {
       return '0';
@@ -216,6 +245,27 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
 
         <div className="mt-5 w-full space-y-4 text-black">
           <div className="flex items-center justify-between">
+            <span className="text-lg font-medium">Total Price</span>
+            <div className="flex items-center space-x-1">
+              <Icon1 />
+              <span className="text-lg font-medium">
+                <NumberDisplayer text={total} loading={loadingPrice || loadingPirceAfterFee} />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <Divider
+          sx={{
+            marginTop: 3,
+            width: '100%',
+            borderColor: '#EBEEF0',
+            borderStyle: 'dashed',
+          }}
+        />
+
+        <div className="mt-5 w-full space-y-4 text-black">
+          {/* <div className="flex items-center justify-between">
             <span className="text-lg font-medium text-[#919099]">From</span>
             <span className="text-lg font-medium">
               {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
@@ -224,26 +274,32 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium text-[#919099]">To</span>
             <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
-          </div>
+          </div> */}
           <div className="flex items-center justify-between">
-            <span className="text-lg font-medium">Transaction Fee</span>
-            <div className="flex items-center space-x-1">
-              <Icon1 />
-              <span className="text-lg font-medium">
-                <NumberDisplayer
-                  text={transactionFee}
-                  loading={loadingPrice || loadingPirceAfterFee}
-                />
-              </span>
+            <span className="text-lg font-medium text-[#919099]">Transaction Fee</span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer
+                    text={transactionFee}
+                    loading={loadingPrice || loadingPirceAfterFee}
+                  />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${transactionFeeUSD}</span>
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-lg font-medium">Est. Gas Fee</span>
-            <div className="flex items-center space-x-1">
-              <Icon1 />
-              <span className="text-lg font-medium">
-                <NumberDisplayer text={gasFee} loading={loadingPrice} />
-              </span>
+            <span className="text-lg font-medium text-[#919099]">Est. Gas Fee</span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center space-x-1">
+                <Icon1 />
+                <span className="text-lg font-medium">
+                  <NumberDisplayer text={gasFee} loading={loadingPrice} />
+                </span>
+              </div>
+              <span className="text-[#919099]">≈${totalUSD}</span>
             </div>
           </div>
         </div>
