@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
 import dayjs from 'dayjs';
-
+import { CenterLoading } from '../../components/Loading';
 import { BasicButton, PrimaryButton } from '../../components/Button';
 import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
@@ -19,7 +19,6 @@ import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';
-
 import BuyModal from './BuyModal';
 import SellModal from './SellModal';
 
@@ -226,7 +225,9 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {rows == null || rows.length === 0 ? (
+              {isGetHolderListLoading ? (
+                <CenterLoading />
+              ) : rows == null || rows?.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
                   label="No holders yet."
@@ -241,7 +242,7 @@ const ProfileModal = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row, i) => (
+                    {rows?.map((row, i) => (
                       <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell component="th" scope="row">
                           {row.holder}
@@ -276,7 +277,9 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {holding == null || holding.length === 0 ? (
+              {isGetHolderListLoading ? (
+                <CenterLoading />
+              ) : holding == null || holding.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
                   label="No shares purchased yet."
@@ -326,7 +329,9 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {tweetList == null || tweetList.length === 0 ? (
+              {isGetTweetListLoading ? (
+                <CenterLoading />
+              ) : tweetList == null || tweetList.length === 0 ? (
                 <TableEmptyWidget
                   containerClassName="pt-[30px] pb-[30px]"
                   label="No records found. Vote to join weekly rankings."
