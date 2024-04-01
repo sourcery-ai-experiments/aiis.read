@@ -20,3 +20,8 @@ export enum ContractError {
   InvalidAddress = 'Invalid Address',
   InsufficientBalance = 'Insufficient Balance',
 }
+
+export const XFANS_CONTENT_WIDTH = 433;
+export const XFANS_MIN_WIDTH = 458;
+export const XFANS_TWITTER_OFFSET = 55;
+export const XFANS_TWITTER_CONTENT_WIDTH = 600;
