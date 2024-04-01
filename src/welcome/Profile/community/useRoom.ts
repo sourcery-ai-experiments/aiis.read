@@ -24,7 +24,9 @@ export default function useRoom(user: string, room?: string) {
       query: { user, room },
     });
     socket.connect();
-    setSocket(socket);
+    socket.on('connect', () => {
+      setSocket(socket);
+    });
     return () => {
       setMessages([]);
       setMembers([]);
@@ -79,15 +81,22 @@ export default function useRoom(user: string, room?: string) {
   const loadMessages = useCallback(
     (direction: 'up' | 'down' = 'up', messageId?: string) => {
       if (room == null) return;
+      if (socket == null) return;
+      // connected 是 false 说明不是当前 socket，等新 socket 连接上再发
+      if (socket.connected === false) return;
       const orderMap = {
         up: 'desc',
         down: 'asc',
       } as const;
       getMessagesByRoom(room, {
         messageId,
-        count: 100,
+        count: 50,
         order: orderMap[direction],
       }).then((newMsgs) => {
+        if (newMsgs.length === 0) return;
+        newMsgs.forEach((msg) => {
+          socket?.emit('readMessage', { id: msg.id });
+        });
         if (direction === 'up') {
           setMessages((msgs) => [...msgs, ...newMsgs].sort((a, b) => +a.id - +b.id));
         } else {
@@ -95,10 +104,10 @@ export default function useRoom(user: string, room?: string) {
         }
       });
     },
-    [room]
+    [room, socket]
   );
 
-  // 进入房间先加载最新100条
+  // 进入房间先加载历史消息
   useEffect(() => {
     loadMessages();
   }, [loadMessages]);

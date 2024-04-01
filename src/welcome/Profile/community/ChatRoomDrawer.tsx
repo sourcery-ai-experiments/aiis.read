@@ -62,7 +62,7 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
           ref.current.scrollTop = 999999999;
         }
       });
-      // 监听子组件，以后图片可能来自网络
+      // 监听子组件，以后图片可能来自网络,可能要考虑图片加载完成后导致的位置变更
       for (const child of ref.current.children) {
         observer.observe(child);
       }
@@ -71,8 +71,8 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
       };
     }
   }, [isFirstRenderCompleted, open]);
-  // 需要提前更新 isFirstRenderMessages 让 ResizeObserver 触发后能及时拿到新状态
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     if (open) {
       if (messages.length > 0 && members.length > 0 && isFirstRenderCompleted === false) {
         setIsFirstRenderCompleted(true);
