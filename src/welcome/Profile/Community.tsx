@@ -35,6 +35,11 @@ const Community = () => {
     getList(1).then((items: CommunityWithMessage[]) => {
       let len = 0;
       p++;
+      if (items.length === 0) {
+        setUnlockedCommunities(items);
+        setLoading(false);
+        return;
+      }
       items.forEach((item) => {
         getUnreadMessageCount(wallet, item.subject).then((res) => {
           item.lastMsg = res.latestMsg;
@@ -170,7 +175,7 @@ const Community = () => {
       {renderUnlocked()}
       {renderLocked()}
       {selectedCommunity && selectedCommunity.status === 0 && (
-        <StackModal community={selectedCommunity} onClose={handleStakeModalClose} />
+        <StackModal subject={selectedCommunity.subject} onClose={handleStakeModalClose} />
       )}
       {
         <ChatRoomDrawer
