@@ -147,12 +147,15 @@ const SellModal = ({ onClose }: SellModalProps) => {
 
   const gasFeeUSD = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
-      const _total = new BigNumber(priceAfterFee)
-        .plus(new BigNumber(gasFee))
+      const _gasFee = new BigNumber(gasFee)
         .dividedBy(new BigNumber(Math.pow(10, 18)))
-        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
-        .toFixed(5);
-      return _total.toString();
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0));
+
+      if (_gasFee.comparedTo(new BigNumber(0.00001)) >= 0) {
+        return _gasFee.toFixed(5).toString();
+      } else {
+        return 0.00001;
+      }
     } else {
       return '0';
     }
@@ -226,8 +229,6 @@ const SellModal = ({ onClose }: SellModalProps) => {
       toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
     });
   }
-
-  console.log(+shareBalance / 100);
 
   return (
     <Modal onClose={onClose} open width={553} closebuttonstyle={{ marginTop: '5px' }}>
@@ -309,18 +310,8 @@ const SellModal = ({ onClose }: SellModalProps) => {
         />
 
         <div className="mt-5 w-full space-y-4 text-black">
-          {/* <div className="flex items-center justify-between">
-            <span className="text-lg font-medium text-[#919099]">From</span>
-            <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
-          </div>
           <div className="flex items-center justify-between">
-            <span className="text-lg font-medium text-[#919099]">To</span>
-            <span className="text-lg font-medium">
-              {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
-            </span>
-          </div> */}
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-medium">Transaction Fee</span>
+            <span className="text-lg font-medium text-[#919099]">Transaction Fee</span>
             <div className="flex flex-col items-end">
               <div className="flex items-center space-x-1">
                 <Icon1 />
@@ -335,7 +326,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-lg font-medium">Est. Gas Fee</span>
+            <span className="text-lg font-medium text-[#919099]">Est. Gas Fee</span>
             <div className="flex flex-col items-end">
               <div className="flex items-center space-x-1">
                 <Icon1 />
@@ -343,7 +334,9 @@ const SellModal = ({ onClose }: SellModalProps) => {
                   <NumberDisplayer text={gasFee} loading={loadingPrice} />
                 </span>
               </div>
-              <span className="text-[#919099]">≈${gasFeeUSD}</span>
+              <span className="text-[#919099]">
+                {gasFeeUSD === '0' || gasFeeUSD !== 0.00001 ? `≈$${gasFeeUSD}` : '<$0.00001'}
+              </span>
             </div>
           </div>
         </div>

@@ -172,19 +172,17 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
   }, [gasFee, priceAfterFee]);
 
-  const totalUSD = useMemo(() => {
+  const gasFeeUSD = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
-      const _total = new BigNumber(gasFee)
+      const _gasFee = new BigNumber(gasFee)
         .dividedBy(new BigNumber(Math.pow(10, 18)))
-        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
-        .toFixed(5);
-      console.log(
-        new BigNumber(gasFee)
-          .dividedBy(new BigNumber(Math.pow(10, 18)))
-          .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
-          .toString()
-      );
-      return _total.toString();
+        .multipliedBy(new BigNumber(ethPrice?.price ?? 0));
+
+      if (_gasFee.comparedTo(new BigNumber(0.00001)) >= 0) {
+        return _gasFee.toFixed(5).toString();
+      } else {
+        return 0.00001;
+      }
     } else {
       return '0';
     }
@@ -285,16 +283,6 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
         />
 
         <div className="mt-5 w-full space-y-4 text-black">
-          {/* <div className="flex items-center justify-between">
-            <span className="text-lg font-medium text-[#919099]">From</span>
-            <span className="text-lg font-medium">
-              {currentInfo?.walletAddress && <TruncateText text={currentInfo?.walletAddress} />}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-medium text-[#919099]">To</span>
-            <span className="text-lg font-medium">{wallet && <TruncateText text={wallet} />}</span>
-          </div> */}
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium text-[#919099]">Transaction Fee</span>
             <div className="flex flex-col items-end">
@@ -319,7 +307,9 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
                   <NumberDisplayer text={gasFee} loading={loadingPrice} />
                 </span>
               </div>
-              <span className="text-[#919099]">≈${totalUSD}</span>
+              <span className="text-[#919099]">
+                {gasFeeUSD === '0' || gasFeeUSD !== 0.00001 ? `≈$${gasFeeUSD}` : '<$0.00001'}
+              </span>
             </div>
           </div>
         </div>
