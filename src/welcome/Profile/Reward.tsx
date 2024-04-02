@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import { useAsyncEffect } from 'ahooks';
 import dayjs from 'dayjs';
 
 import { ListEmpty } from '../../components/Empty';
@@ -13,6 +12,7 @@ import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList } from '../../service/tweet';
 import { usePoolBalance } from '../../service/wallet';
 import useProfileModal from '../../store/useProfileModal';
+import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
 
@@ -40,7 +40,6 @@ const Icon = () => (
 const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
-  const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
   const [poolBalance, setPoolBalance] = React.useState('0');
   const { run: getTweet } = useTweetList();
@@ -49,6 +48,7 @@ const Reward = () => {
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
+  const { ethPrice } = useShareStore((state) => ({ ...state }));
 
   const { loading, run: fetchPool } = usePoolBalance(
     (balance) => {
@@ -78,20 +78,6 @@ const Reward = () => {
     fetchPool();
   }, []);
 
-  const getPrice = async () => {
-    const res = await fetch('https://api.binance.com/api/v3/ticker/price');
-
-    if (res.ok) {
-      return res.json();
-    }
-  };
-
-  useAsyncEffect(async () => {
-    const list = await getPrice();
-
-    setPriceMap(list);
-  }, []);
-
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
@@ -117,8 +103,8 @@ const Reward = () => {
         </div>
 
         <div className="flex items-center space-x-[14px]">
-          <Claim price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
-          <History price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
+          <Claim price={ethPrice?.price} />
+          <History price={ethPrice?.price} />
         </div>
       </div>
 

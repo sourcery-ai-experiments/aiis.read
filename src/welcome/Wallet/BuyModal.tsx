@@ -174,11 +174,16 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
 
   const totalUSD = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
-      const _total = new BigNumber(priceAfterFee)
-        .plus(new BigNumber(gasFee))
+      const _total = new BigNumber(gasFee)
         .dividedBy(new BigNumber(Math.pow(10, 18)))
         .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
         .toFixed(5);
+      console.log(
+        new BigNumber(gasFee)
+          .dividedBy(new BigNumber(Math.pow(10, 18)))
+          .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
+          .toString()
+      );
       return _total.toString();
     } else {
       return '0';
