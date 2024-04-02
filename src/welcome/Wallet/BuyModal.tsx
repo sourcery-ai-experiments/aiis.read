@@ -272,7 +272,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
             <div className="flex items-center justify-center space-x-1 rounded-full bg-[#F5F5F5] px-5 py-1">
               <Icon1 />
               <span className="text-lg font-medium">
-                <NumberDisplayer text={balance} isBigNumber={false} loading={loadingBalance} />
+                <NumberDisplayer text={balance} loading={loadingBalance} />
               </span>
             </div>
           </div>

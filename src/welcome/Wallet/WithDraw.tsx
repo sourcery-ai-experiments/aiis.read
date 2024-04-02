@@ -122,7 +122,6 @@ const WithDraw = ({ onClose }: Props) => {
             <NumberDisplayer
               className="text-base font-bold text-[#9A6CF9]"
               text={balance.toString()}
-              isBigNumber={false}
             />
           </div>
         </div>
