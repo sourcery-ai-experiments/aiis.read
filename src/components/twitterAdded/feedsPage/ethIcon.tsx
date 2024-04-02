@@ -27,7 +27,7 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
     batchUserInfo(userInfo);
   }, []);
 
-  return !isShowPrice && userInfo?.isRegistered ? (
+  return !isShowPrice && userInfo?.isActive ? (
     <div
       className="w-auto items-center justify-center text-center"
       onClick={(e) => {
