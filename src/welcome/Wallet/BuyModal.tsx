@@ -137,7 +137,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     } else {
       return '0';
     }
-  }, [price, priceAfterFee]);
+  }, [price, priceAfterFee, ethPrice?.price]);
 
   // Transaction fee
   const transactionFee = useMemo(() => {
@@ -160,7 +160,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     } else {
       return '0';
     }
-  }, [price, priceAfterFee]);
+  }, [price, priceAfterFee, ethPrice?.price]);
 
   // total
   const total = useMemo(() => {
@@ -186,7 +186,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     } else {
       return '0';
     }
-  }, [gasFee, priceAfterFee]);
+  }, [gasFee, priceAfterFee, ethPrice?.price]);
 
   // 刷新数据, 可能有顺序问题
   function refresh() {

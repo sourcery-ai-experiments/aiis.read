@@ -97,7 +97,7 @@ const useEthPrice = () => {
   const result = useRequest<ResultData<{ id: number; symbol: string; price: number }>, unknown[]>(
     () => http.get('/api/share/eth-price'),
     {
-      manual: false,
+      manual: true,
       onSuccess(response) {
         useShareStore.setState({
           ethPrice: response.data,

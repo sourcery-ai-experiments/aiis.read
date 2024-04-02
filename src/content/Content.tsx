@@ -1,13 +1,10 @@
 import React, { ReactElement } from 'react';
 
 import Toaster from '../components/Toaster';
-import { useEthPrice } from '../service/share';
 
 import PersistentDrawerRight from './drawer';
 
 const Content = (): ReactElement => {
-  useEthPrice();
-
   return (
     <div
       id="xfans-root"

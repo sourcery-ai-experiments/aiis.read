@@ -14,7 +14,7 @@ import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { ROWS_PER_PAGE } from '../../constants';
-import { useHolderList } from '../../service/share';
+import { useEthPrice, useHolderList } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
@@ -33,6 +33,8 @@ const ProfileModal = () => {
   const { tweetList, tweetListTotal } = useTweetStore((state) => ({ ...state }));
   const [isBuyModalOpen, { setLeft: closeBuyModal, setRight: openBuyModal }] = useToggle(false);
   const [isSellModalOpen, { setLeft: closeSellModal, setRight: openSellModal }] = useToggle(false);
+
+  const { run: getPrice } = useEthPrice();
 
   const openTwitterProfile = (username: string | undefined) =>
     username && window.open(`https://twitter.com/${username}`, '_blank');
@@ -134,6 +136,12 @@ const ProfileModal = () => {
       fetchMap[currentKey]({ offset: curPages[currentKey] * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
     }
   }, [curPages, fetchMap, currentKey, open]);
+
+  useEffect(() => {
+    if (isBuyModalOpen || isSellModalOpen) {
+      getPrice();
+    }
+  }, [isBuyModalOpen, isSellModalOpen]);
 
   return (
     <>

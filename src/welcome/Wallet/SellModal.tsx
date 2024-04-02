@@ -120,7 +120,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
     } else {
       return '0';
     }
-  }, [price, priceAfterFee]);
+  }, [price, priceAfterFee, ethPrice?.price]);
 
   // Transaction fee
   const transactionFee = useMemo(() => {
@@ -143,7 +143,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
     } else {
       return '0';
     }
-  }, [price, priceAfterFee]);
+  }, [price, priceAfterFee, ethPrice?.price]);
 
   const gasFeeUSD = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
@@ -159,7 +159,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
     } else {
       return '0';
     }
-  }, [gasFee, priceAfterFee]);
+  }, [gasFee, priceAfterFee, ethPrice?.price]);
 
   // shareBalance
   useEffect(() => {
