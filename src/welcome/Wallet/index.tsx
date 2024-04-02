@@ -109,11 +109,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
               <div className="flex items-center space-x-1">
                 <Icon />
 
-                <NumberDisplayer
-                  className="text-base font-bold text-[#9A6CF9]"
-                  text={balance}
-                  isBigNumber={false}
-                />
+                <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} />
               </div>
             </div>
 
