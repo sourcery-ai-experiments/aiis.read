@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { useAsyncEffect } from 'ahooks';
 import dayjs from 'dayjs';
-
+import { CenterLoading } from '../../components/Loading';
 import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList, useTweetYourRank } from '../../service/tweet';
@@ -44,11 +44,12 @@ const Reward = () => {
   const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
   const [poolBalance, setPoolBalance] = React.useState('0');
-  const { run: getTweet } = useTweetList();
-  const { run: getYourRank } = useTweetYourRank();
+  const { run: getTweet, loading: loadingTweetList } = useTweetList();
+  const { run: getYourRank, loading: loadingTweetYourRank } = useTweetYourRank();
   const { tweetList, tweetRewardTotalRewardAmount, tweetYourRank } = useTweetStore((state) => ({
     ...state,
   }));
+  const [loadingx, setLoadingx] = useState(true);
   const { userInfo } = useUserStore((state) => ({ ...state }));
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
@@ -82,6 +83,17 @@ const Reward = () => {
     }
     fetchPool();
   }, []);
+
+  useEffect(() => {
+    let timeout: any;
+
+    if (loadingTweetList || loadingTweetYourRank) {
+      setLoadingx(true);
+      timeout = setTimeout(() => {
+        setLoadingx(false);
+      }, 500);
+    }
+  }, [loadingTweetList, loadingTweetYourRank]);
 
   const getPrice = async () => {
     const res = await fetch('https://api.binance.com/api/v3/ticker/price');
@@ -182,7 +194,9 @@ const Reward = () => {
               padding: 0,
             }}
           >
-            {tweetList == null || tweetList.length === 0 ? (
+            {loadingTweetList || loadingx ? (
+              <CenterLoading />
+            ) : tweetList == null || tweetList.length === 0 ? (
               <div className="flex flex-col items-center">
                 <ListEmpty className="mt-[50px]" />
                 <p className="xfans-font-sf mt-[10px] text-[#00000080]">
@@ -247,7 +261,9 @@ const Reward = () => {
               padding: 0,
             }}
           >
-            {tweetYourRank == null || tweetYourRank.length === 0 ? (
+            {loadingTweetYourRank || loadingx ? (
+              <CenterLoading />
+            ) : tweetYourRank == null || tweetYourRank.length === 0 ? (
               <div className="flex flex-col items-center">
                 <ListEmpty className="mt-[50px]" />
                 <p className="xfans-font-sf mt-[10px] text-[#00000080]">
