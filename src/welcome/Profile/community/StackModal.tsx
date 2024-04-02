@@ -6,6 +6,7 @@ import { BasicButton, PrimaryButton } from '../../../components/Button';
 import Modal from '../../../components/Modal';
 import NumberInput from '../../../components/NumberInput';
 import { success } from '../../../components/Toaster';
+import { getBySubject } from '../../../service/community';
 import {
   getSharesBalance,
   getStakeBalance,
@@ -16,18 +17,20 @@ import {
 type ModalProps = {
   // false cancel true confirm
   onClose(fromConfirm?: boolean): void;
-  community: Community;
+  subject: string;
 };
-export default function StackModal({ onClose, community }: ModalProps) {
+export default function StackModal({ onClose, subject }: ModalProps) {
   const [currentTab, setCurrentTab] = useState<'stack' | 'unstack'>('stack');
   const activedTabNavClassName = 'bg-[#9A6CF9] text-white';
   const [sharesBalance, setSharesBalance] = useState('0');
   const [stakeBalance, setStakeBalance] = useState('0');
+  const { data: community } = useRequest(() => getBySubject(subject));
 
   useEffect(() => {
+    if (community == null) return;
     getSharesBalance(community.subject).then(setSharesBalance);
     getStakeBalance(community.subject).then(setStakeBalance);
-  }, [community.subject]);
+  }, [community]);
 
   return (
     <Modal
@@ -38,20 +41,20 @@ export default function StackModal({ onClose, community }: ModalProps) {
       }}
     >
       <div className="relative flex flex-col items-center pb-[24px]">
-        <h2 className="text-[24px] font-medium text-[#2E2E32]">Unlock Vincent ’s Community</h2>
+        <h2 className="text-[24px] font-medium text-[#2E2E32]">Unlock Vincent&apos;s Community</h2>
         <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
 
         <p className="relative mt-[27px] pl-[25px] text-center text-sm text-[#919099]">
           <Icon /> Stake at least 5 shares to unlock the
-          <br /> creator’s community
+          <br /> creator&apos;s community
         </p>
 
         <ProgressBar
-          staked={+community.stakedShares}
-          stakeRequired={+community.requiredStakedShares}
+          staked={+(community?.stakedShares ?? 0)}
+          stakeRequired={+(community?.requiredStakedShares ?? 0)}
         />
         <p className="mt-[14px] w-full text-right text-sm text-[#919099]">
-          Community total staked: {+community.stakedShares / 100}
+          Community total staked: {+(community?.stakedShares ?? 0) / 100}
         </p>
         <p className="w-full text-right text-sm text-[#919099]">
           you staked: {+stakeBalance / 100}
@@ -81,9 +84,9 @@ export default function StackModal({ onClose, community }: ModalProps) {
         </div>
 
         {currentTab === 'stack' ? (
-          <StackPanel onClose={onClose} address={community.subject} sharesBalance={sharesBalance} />
+          <StackPanel onClose={onClose} address={subject} sharesBalance={sharesBalance} />
         ) : (
-          <UnstackPanel onClose={onClose} address={community.subject} stakeBalance={stakeBalance} />
+          <UnstackPanel onClose={onClose} address={subject} stakeBalance={stakeBalance} />
         )}
       </div>
     </Modal>
@@ -215,14 +218,15 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
 }
 
 function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired: number }) {
+  const percentage = Number.isNaN(staked / stakeRequired) ? 0 : (staked / stakeRequired) * 100;
   return (
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
       <div
         className={`item-center absolute left-0 top-0 flex h-[20px] rounded-full bg-[#9A6CF969] pl-[10px] pr-[10px]`}
-        style={{ width: `calc(${Math.min((staked / stakeRequired) * 100, 100)}%)` }}
+        style={{ width: `calc(${Math.min(percentage, 100)}%)` }}
       />
-      <div className="item-center absolute right-0 top-[1px] flex h-[18px] w-[18px] justify-center rounded-full border border-[#9A6CF9] bg-white text-xs text-[#2E2E32]">
+      <div className="absolute right-0 top-[1px] flex h-[18px] items-center justify-center rounded-full border border-[#9A6CF9] bg-white px-[5px] text-xs text-[#2E2E32]">
         {stakeRequired / 100}
       </div>
     </div>

@@ -8,6 +8,13 @@ export async function getList(status: 0 | 1) {
   return response.data.items;
 }
 
+export async function getBySubject(subject: string) {
+  const response = await http.get<ResultData<Community>>('/api/community', {
+    subject,
+  });
+  return response.data;
+}
+
 // 获取我在这个 subject 社区里的用户信息
 export async function getMyInfo(subject: string) {
   const response = await http.get<ResultData<CommunityUserInfo>>('/api/community/user/me', {
