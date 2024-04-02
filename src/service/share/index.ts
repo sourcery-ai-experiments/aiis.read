@@ -93,4 +93,20 @@ const useHolderList = () => {
   return result;
 };
 
-export { useHolderList, useNewList, useRecentList, useShareList, useTopList };
+const useEthPrice = () => {
+  const result = useRequest<ResultData<{ id: number; symbol: string; price: number }>, unknown[]>(
+    () => http.get('/api/share/eth-price'),
+    {
+      manual: true,
+      onSuccess(response) {
+        useShareStore.setState({
+          ethPrice: response.data,
+        });
+      },
+    }
+  );
+
+  return result;
+};
+
+export { useEthPrice, useHolderList, useNewList, useRecentList, useShareList, useTopList };

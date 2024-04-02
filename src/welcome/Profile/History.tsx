@@ -36,7 +36,7 @@ const Icon = () => (
   </svg>
 );
 
-const History = (props: { price?: string }) => {
+const History = (props: { price?: number }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { rewardHistoryList, rewardHistoryListTotal, rewardHistoryTotalRewardAmount } =
     useTweetStore((state) => ({ ...state }));
