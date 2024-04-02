@@ -44,6 +44,7 @@
     "ahooks": "3.7.9",
     "axios": "1.6.7",
     "bignumber.js": "9.1.2",
+    "browser-image-compression": "2.0.2",
     "clsx": "2.1.0",
     "dayjs": "1.11.10",
     "install": "0.13.0",
