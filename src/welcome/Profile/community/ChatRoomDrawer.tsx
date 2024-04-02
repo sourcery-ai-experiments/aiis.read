@@ -319,7 +319,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     const reader = new FileReader();
     const compressedFile = await imageCompression(file, {
       maxSizeMB: 1,
-      useWebWorker: true,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
     });
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
@@ -362,7 +363,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     if (file == null) return;
     const compressedFile = await imageCompression(file, {
       maxSizeMB: 1,
-      useWebWorker: true,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
     });
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
