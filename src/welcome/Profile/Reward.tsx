@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 
 import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
+import { useEthPrice } from '../../service/share';
 import { useTweetList } from '../../service/tweet';
 import { usePoolBalance } from '../../service/wallet';
 import useProfileModal from '../../store/useProfileModal';
@@ -49,6 +50,7 @@ const Reward = () => {
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
   const { ethPrice } = useShareStore((state) => ({ ...state }));
+  const { run: getPrice } = useEthPrice();
 
   const { loading, run: fetchPool } = usePoolBalance(
     (balance) => {
@@ -76,6 +78,10 @@ const Reward = () => {
       getTweet();
     }
     fetchPool();
+  }, []);
+
+  useEffect(() => {
+    getPrice();
   }, []);
 
   return (
