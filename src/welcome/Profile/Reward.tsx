@@ -5,15 +5,14 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import { useAsyncEffect } from 'ahooks';
 import dayjs from 'dayjs';
 import { CenterLoading } from '../../components/Loading';
 import { ListEmpty } from '../../components/Empty';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList, useTweetYourRank } from '../../service/tweet';
 import { usePoolBalance } from '../../service/wallet';
-
 import useProfileModal from '../../store/useProfileModal';
+import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';
 import useUserStore from '../../store/useUserStore';
 
@@ -41,7 +40,6 @@ const Icon = () => (
 const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const list = Array(7).fill('');
-  const [priceMap, setPriceMap] = useState<Record<string, any>>([]);
   const [value, setValue] = React.useState('1');
   const [poolBalance, setPoolBalance] = React.useState('0');
   const { run: getTweet, loading: loadingTweetList } = useTweetList();
@@ -54,7 +52,7 @@ const Reward = () => {
   const currentIndex = tweetList
     ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
     : -1;
-  console.log('tweetList', tweetList);
+  const { ethPrice } = useShareStore((state) => ({ ...state }));
 
   const { loading, run: fetchPool } = usePoolBalance(
     (balance) => {
@@ -134,8 +132,8 @@ const Reward = () => {
         </div>
 
         <div className="flex items-center space-x-[14px]">
-          <Claim price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
-          <History price={priceMap.find((item: any) => item.symbol === 'ETHUSDT')?.price} />
+          <Claim price={ethPrice?.price} />
+          <History price={ethPrice?.price} />
         </div>
       </div>
 

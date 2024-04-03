@@ -54,7 +54,7 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
     setElementWidth(width);
   }, []); // This effect runs only once after the initial render
 
-  return !isShowPrice && userInfo?.isActive ? (
+  return userInfo?.isActive ? (
     <span
       onClick={(e) => {
         openProfile(userInfo);

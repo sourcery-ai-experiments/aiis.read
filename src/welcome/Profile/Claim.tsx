@@ -37,7 +37,7 @@ const Icon = () => (
   </svg>
 );
 
-const Claim = (props: { price?: string }) => {
+const Claim = (props: { price?: number }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
   const { tweetRewardList, tweetRewardTotalRewardAmount } = useTweetStore((state) => ({
     ...state,

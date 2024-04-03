@@ -1,15 +1,10 @@
 import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import BigNumber from 'bignumber.js';
-import Loading from './Loading';
-import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 
 type NumberDisplayerProps = {
   text?: string;
   className?: string;
-  /**
-   * @default true
-   */
-  isBigNumber?: boolean;
   /**
    * @default false
    */
@@ -21,16 +16,11 @@ type NumberDisplayerProps = {
  *
  * eg. 0.0{4}5252
  */
-export function NumberDisplayer({
-  text = '0',
-  className,
-  isBigNumber = true,
-  loading = false,
-}: NumberDisplayerProps) {
+export function NumberDisplayer({ text = '0', className, loading = false }: NumberDisplayerProps) {
+  // 防止不会使用，或者错误传错类型，有助于开发阶段尽早发现问题
+  if (typeof text !== 'string') throw new Error('text should be string');
   // 转成处理过后的字符串形式
-  const number = isBigNumber
-    ? new BigNumber(text).dividedBy(new BigNumber(Math.pow(10, 18))).toFixed()
-    : text;
+  const number = new BigNumber(text).dividedBy(new BigNumber(Math.pow(10, 18))).toFixed();
   // 拆分成2部分
   const [valueBeforeDot, valueAfterDot] = number.split('.');
   let value;
