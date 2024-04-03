@@ -327,7 +327,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
       const base64str = reader.result as string;
-      if (base64str.length > 1024 * 1024) {
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
         error(ToasterMessageType.SizeExceed);
         return;
       }
@@ -372,7 +373,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
       const base64str = reader.result as string;
-      if (base64str.length > 1024 * 1024) {
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
         error(ToasterMessageType.SizeExceed);
         return;
       }
