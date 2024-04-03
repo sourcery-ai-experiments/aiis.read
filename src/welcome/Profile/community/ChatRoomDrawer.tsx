@@ -10,12 +10,14 @@ import dayjs from 'dayjs';
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import Loading from '../../../components/Loading';
 import Modal from '../../../components/Modal';
+import { error } from '../../../components/Toaster';
 import useAccount from '../../../hooks/useAccount';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useProfileModal from '../../../store/useProfileModal';
 
+import { ToasterMessageType } from './constants';
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
 import useRoom from './useRoom';
@@ -325,7 +327,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
       const base64str = reader.result as string;
-      if (base64str.length > 1000 * 1024) {
+      if (base64str.length > 1024 * 1024) {
+        error(ToasterMessageType.SizeExceed);
         return;
       }
       setImg(base64str);
@@ -369,7 +372,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
       const base64str = reader.result as string;
-      if (base64str.length > 1000 * 1024) {
+      if (base64str.length > 1024 * 1024) {
+        error(ToasterMessageType.SizeExceed);
         return;
       }
       setImg(base64str);
