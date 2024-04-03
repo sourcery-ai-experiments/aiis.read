@@ -93,20 +93,6 @@ const Reward = () => {
     }
   }, [loadingTweetList, loadingTweetYourRank]);
 
-  const getPrice = async () => {
-    const res = await fetch('https://api.binance.com/api/v3/ticker/price');
-
-    if (res.ok) {
-      return res.json();
-    }
-  };
-
-  useAsyncEffect(async () => {
-    const list = await getPrice();
-
-    setPriceMap(list);
-  }, []);
-
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
