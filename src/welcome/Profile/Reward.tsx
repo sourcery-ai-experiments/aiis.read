@@ -96,7 +96,7 @@ const Reward = () => {
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
-        <div className="flex space-x-[34px]">
+        <div className="flex space-x-[10px]">
           <div className="flex flex-col items-center space-y-1">
             <div className="flex items-center space-x-1">
               <Icon />
