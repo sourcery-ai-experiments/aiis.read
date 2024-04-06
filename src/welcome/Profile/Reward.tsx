@@ -83,11 +83,9 @@ const Reward = () => {
   }, []);
 
   useEffect(() => {
-    let timeout: any;
-
     if (loadingTweetList || loadingTweetYourRank) {
       setLoadingx(true);
-      timeout = setTimeout(() => {
+      setTimeout(() => {
         setLoadingx(false);
       }, 500);
     }

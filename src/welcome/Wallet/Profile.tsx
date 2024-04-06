@@ -125,11 +125,9 @@ const ProfileModal = () => {
   }, [open]);
 
   useEffect(() => {
-    let timeout: any;
-
     if (isGetHolderListLoading || isGetTweetListLoading) {
       setLoadingx(true);
-      timeout = setTimeout(() => {
+      setTimeout(() => {
         setLoadingx(false);
       }, 500);
     }
