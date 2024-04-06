@@ -2,6 +2,7 @@ import { useRequest } from 'ahooks';
 
 import useTweetStore from '../../store/useTweetStore';
 import http, { ResultData } from '../request';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 
 const useTweetList = () => {
   const result = useRequest<ResultData<ItemsResponse<TweetProps>>, TweetRequest[]>(
@@ -101,4 +102,33 @@ const useTweetBatchUserInfo = (
   return result;
 };
 
-export { useTweetBatchUserInfo, useTweetList, useTweetReward, useTweetRewardHistory, useTweetVote };
+const useTweetYourRank = () => {
+  const { accounts } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
+  const result = useRequest<ResultData<ItemsResponse<TweetProps>>, TweetRequest[]>(
+    () =>
+      http.get('/api/twitter/tweets', {
+        holder: accounts?.[0] ?? '',
+      }),
+    {
+      manual: true,
+      onSuccess(response) {
+        useTweetStore.setState({
+          tweetYourRank: response.data.items,
+        });
+      },
+    }
+  );
+
+  return result;
+};
+
+export {
+  useTweetBatchUserInfo,
+  useTweetList,
+  useTweetReward,
+  useTweetRewardHistory,
+  useTweetVote,
+  useTweetYourRank,
+};

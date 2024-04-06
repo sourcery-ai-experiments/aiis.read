@@ -32,6 +32,7 @@ const ProfileModal = () => {
   const { tweetList, tweetListTotal } = useTweetStore((state) => ({ ...state }));
   const [isBuyModalOpen, { setLeft: closeBuyModal, setRight: openBuyModal }] = useToggle(false);
   const [isSellModalOpen, { setLeft: closeSellModal, setRight: openSellModal }] = useToggle(false);
+  const [loadingx, setLoadingx] = useState(true);
 
   const { run: getPrice } = useEthPrice();
 
@@ -123,8 +124,18 @@ const ProfileModal = () => {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (isGetHolderListLoading || isGetTweetListLoading) {
+      setLoadingx(true);
+      setTimeout(() => {
+        setLoadingx(false);
+      }, 500);
+    }
+  }, [isGetHolderListLoading, isGetTweetListLoading]);
+
   const [curPages, setCurPages] = useState([0, 0, 0]);
   function handlePageChange(nextPage: number) {
+    if (open) setLoadingx(true);
     const nextPages = [...curPages];
     nextPages[currentKey] = nextPage;
     setCurPages(nextPages);
@@ -233,7 +244,7 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {isGetHolderListLoading ? (
+              {isGetHolderListLoading || loadingx ? (
                 <CenterLoading />
               ) : rows == null || rows?.length === 0 ? (
                 <TableEmptyWidget
@@ -285,7 +296,7 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {isGetHolderListLoading ? (
+              {isGetHolderListLoading || loadingx ? (
                 <CenterLoading />
               ) : holding == null || holding.length === 0 ? (
                 <TableEmptyWidget
@@ -337,7 +348,7 @@ const ProfileModal = () => {
                 marginTop: 2,
               }}
             >
-              {isGetTweetListLoading ? (
+              {isGetTweetListLoading || loadingx ? (
                 <CenterLoading />
               ) : tweetList == null || tweetList.length === 0 ? (
                 <TableEmptyWidget
