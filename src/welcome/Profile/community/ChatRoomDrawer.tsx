@@ -377,7 +377,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
   function handleChange(env: ChangeEvent<HTMLTextAreaElement>) {
     if (textareaRef.current == null) return;
     // 其他地方把 value 设置为 '' 后，这里某些 case 会收到换行符号，这里做个处理
-    if (textareaRef.current.value.trim() === '') {
+    if (textareaRef.current.value.slice().trim() === '') {
       textareaRef.current.value = '';
     }
     textareaRef.current.style.height = 'auto';
