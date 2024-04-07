@@ -6,8 +6,9 @@ import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import dayjs from 'dayjs';
-import { CenterLoading } from '../../components/Loading';
+
 import { ListEmpty } from '../../components/Empty';
+import { CenterLoading } from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useTweetList, useTweetYourRank } from '../../service/tweet';
 import { usePoolBalance } from '../../service/wallet';

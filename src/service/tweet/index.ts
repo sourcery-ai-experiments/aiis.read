@@ -1,8 +1,8 @@
 import { useRequest } from 'ahooks';
 
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useTweetStore from '../../store/useTweetStore';
 import http, { ResultData } from '../request';
-import useGlobalUserStore from '../../store/useGlobalUserStore';
 
 const useTweetList = () => {
   const result = useRequest<ResultData<ItemsResponse<TweetProps>>, TweetRequest[]>(

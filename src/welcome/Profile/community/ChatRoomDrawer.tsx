@@ -1,7 +1,15 @@
 /**
  * @file 聊天室
  */
-import React, { DragEvent, SVGProps, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  DragEvent,
+  SVGProps,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Drawer } from '@mui/material';
 import { useRequest, useThrottleFn } from 'ahooks';
 import imageCompression from 'browser-image-compression';
@@ -248,7 +256,10 @@ function MessageItem({ msg, userInfo, from }: MessageItemProps) {
                   className="mb-[16px]"
                 />
               )}
-              {msg.message}
+              <div
+                className="whitespace-pre-wrap break-words"
+                dangerouslySetInnerHTML={{ __html: msg.message }}
+              />
             </div>
           </div>
           <span className="mt-[6px] text-xs text-[#A6A6A9]">
@@ -276,7 +287,10 @@ function MessageItem({ msg, userInfo, from }: MessageItemProps) {
               className="mb-[16px]"
             />
           )}
-          {msg.message}
+          <div
+            className="whitespace-pre-wrap break-words"
+            dangerouslySetInnerHTML={{ __html: msg.message }}
+          />
         </div>
         <span className="mt-[6px] text-xs text-[#A6A6A9]">
           {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
@@ -344,6 +358,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       image: img ?? undefined,
     });
     textareaRef.current.value = '';
+    // 清理完内容，重置下高度，有可能是点击发送按钮触发这里，所以无法触发 onChange
+    textareaRef.current.style.height = 'auto';
     setImg(null);
   }, [img, sendMessage]);
 
@@ -382,12 +398,24 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     };
   }
 
+  // 处理高度问题，不做内容处理
+  function handleChange(env: ChangeEvent<HTMLTextAreaElement>) {
+    if (textareaRef.current == null) return;
+    // 其他地方把 value 设置为 '' 后，这里某些 case 会收到换行符号，这里做个处理
+    if (textareaRef.current.value.slice().trim() === '') {
+      textareaRef.current.value = '';
+    }
+    textareaRef.current.style.height = 'auto';
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    return;
+  }
+
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea == null) return;
     function handle(env: KeyboardEvent) {
       // code 会在中文输入法按下 enter 的时候也触发，所以特地使用 keyCode，不要改动
-      if (env.keyCode === 13) {
+      if (env.keyCode === 13 && !env.shiftKey) {
         handleSendMessage();
       }
     }
@@ -422,7 +450,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
           placeholder={disabled ? '' : 'Write your message'}
           rows={1}
           onPaste={handlePast}
-          className="scrollbar-hide max-h-[180px] w-full resize-none bg-transparent p-0 outline-none"
+          onChange={handleChange}
+          className="scrollbar-hide max-h-[100px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>
       <div className="flex w-[80px] items-center pl-[16px]">

@@ -8,11 +8,11 @@ import { styled } from '@mui/material/styles';
 
 import * as toaster from '../../components/Toaster';
 import {
-  XFANS_USERINFO,
   XFANS_CONTENT_WIDTH,
+  XFANS_MIN_WIDTH,
   XFANS_TWITTER_CONTENT_WIDTH,
   XFANS_TWITTER_OFFSET,
-  XFANS_MIN_WIDTH,
+  XFANS_USERINFO,
 } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
