@@ -12,17 +12,20 @@ import React, {
 } from 'react';
 import { Drawer } from '@mui/material';
 import { useRequest, useThrottleFn } from 'ahooks';
+import imageCompression from 'browser-image-compression';
 import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import Loading from '../../../components/Loading';
 import Modal from '../../../components/Modal';
+import { error } from '../../../components/Toaster';
 import useAccount from '../../../hooks/useAccount';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useProfileModal from '../../../store/useProfileModal';
 
+import { ToasterMessageType } from './constants';
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
 import useRoom from './useRoom';
@@ -85,8 +88,8 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   useEffect(() => {
     if (ref.current == null) return;
     const isNearBottom =
-      // 150给的近似值
-      ref.current.clientHeight + ref.current.scrollTop + 150 > ref.current.scrollHeight;
+      // 450给的近似值
+      ref.current.clientHeight + ref.current.scrollTop + 450 > ref.current.scrollHeight;
     if (messages.length > 0 && isNearBottom) {
       ref.current.scrollTop = 99999999999;
     }
@@ -330,9 +333,20 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       return;
     }
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    const compressedFile = await imageCompression(file, {
+      maxSizeMB: 1,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
+    });
+    reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
-      setImg(reader.result as string);
+      const base64str = reader.result as string;
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
+        error(ToasterMessageType.SizeExceed);
+        return;
+      }
+      setImg(base64str);
     };
   }
   const handleSendMessage = useCallback(() => {
@@ -349,7 +363,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     setImg(null);
   }, [img, sendMessage]);
 
-  function handlePast(event: React.ClipboardEvent<HTMLElement>) {
+  async function handlePast(event: React.ClipboardEvent<HTMLElement>) {
     const data = event.clipboardData;
     const items: DataTransferItem[] = [];
     for (const item of data.items) {
@@ -367,9 +381,20 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     const reader = new FileReader();
     const file = item.getAsFile();
     if (file == null) return;
-    reader.readAsDataURL(file);
+    const compressedFile = await imageCompression(file, {
+      maxSizeMB: 1,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
+    });
+    reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
-      setImg(reader.result as string);
+      const base64str = reader.result as string;
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
+        error(ToasterMessageType.SizeExceed);
+        return;
+      }
+      setImg(base64str);
     };
   }
 
@@ -413,7 +438,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       <div className="flex flex-1 flex-col py-[16px] px-[22px]">
         {img && (
           <div className="relative flex self-start">
-            <img className="h-[90px] w-[90px]" src={img} alt="img" />
+            <img className="w-[90px]" src={img} alt="img" />
             <CloseIcon
               className="absolute top-0 right-0 cursor-pointer"
               onClick={() => setImg(null)}
