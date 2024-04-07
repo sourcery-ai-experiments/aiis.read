@@ -209,7 +209,7 @@ export default function PersistentDrawerRight() {
         anchor="right"
         open={isShowDrawer}
       >
-        <div className="flex h-full">
+        <div className="flex h-full overflow-hidden">
           <div
             className={`mx-[2px] mt-[37px] flex h-[24px] flex-shrink-0 justify-end`}
             style={{
