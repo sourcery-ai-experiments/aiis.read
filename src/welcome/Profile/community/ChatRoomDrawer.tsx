@@ -2,27 +2,30 @@
  * @file 聊天室
  */
 import React, {
+  ChangeEvent,
   DragEvent,
   SVGProps,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 import { Drawer } from '@mui/material';
 import { useRequest, useThrottleFn } from 'ahooks';
+import imageCompression from 'browser-image-compression';
 import dayjs from 'dayjs';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import Loading from '../../../components/Loading';
 import Modal from '../../../components/Modal';
+import { error } from '../../../components/Toaster';
 import useAccount from '../../../hooks/useAccount';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useProfileModal from '../../../store/useProfileModal';
 
+import { ToasterMessageType } from './constants';
 import MembersDrawer from './MembersDrawer';
 import StackModal from './StackModal';
 import useRoom from './useRoom';
@@ -85,8 +88,8 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   useEffect(() => {
     if (ref.current == null) return;
     const isNearBottom =
-      // 150给的近似值
-      ref.current.clientHeight + ref.current.scrollTop + 150 > ref.current.scrollHeight;
+      // 450给的近似值
+      ref.current.clientHeight + ref.current.scrollTop + 450 > ref.current.scrollHeight;
     if (messages.length > 0 && isNearBottom) {
       ref.current.scrollTop = 99999999999;
     }
@@ -145,11 +148,16 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   return (
     <Drawer
       sx={{
-        width: '433px',
+        width: 'auto',
+        // 和 XFANS_CONTENT_WIDTH 不符合，TODO 用常量
+        maxWidth: '427px',
         '& .MuiDrawer-paper': {
-          width: '433px',
+          width: 'auto',
+          maxWidth: '427px',
           overflow: 'hidden',
           border: 'none',
+          // 防止有宽度一瞬间撑开了内容出现了一闪而过的滚动条
+          display: open ? 'block' : 'none',
         },
       }}
       variant="persistent"
@@ -253,7 +261,10 @@ function MessageItem({ msg, userInfo, from }: MessageItemProps) {
                   className="mb-[16px]"
                 />
               )}
-              {msg.message}
+              <div
+                className="whitespace-pre-wrap break-words"
+                dangerouslySetInnerHTML={{ __html: msg.message }}
+              />
             </div>
           </div>
           <span className="mt-[6px] text-xs text-[#A6A6A9]">
@@ -281,7 +292,10 @@ function MessageItem({ msg, userInfo, from }: MessageItemProps) {
               className="mb-[16px]"
             />
           )}
-          {msg.message}
+          <div
+            className="whitespace-pre-wrap break-words"
+            dangerouslySetInnerHTML={{ __html: msg.message }}
+          />
         </div>
         <span className="mt-[6px] text-xs text-[#A6A6A9]">
           {dayjs(msg.createTime).format('YYYY/MM/DD HH:mm')}
@@ -324,9 +338,20 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       return;
     }
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    const compressedFile = await imageCompression(file, {
+      maxSizeMB: 1,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
+    });
+    reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
-      setImg(reader.result as string);
+      const base64str = reader.result as string;
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
+        error(ToasterMessageType.SizeExceed);
+        return;
+      }
+      setImg(base64str);
     };
   }
   const handleSendMessage = useCallback(() => {
@@ -338,10 +363,12 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       image: img ?? undefined,
     });
     textareaRef.current.value = '';
+    // 清理完内容，重置下高度，有可能是点击发送按钮触发这里，所以无法触发 onChange
+    textareaRef.current.style.height = 'auto';
     setImg(null);
   }, [img, sendMessage]);
 
-  function handlePast(event: React.ClipboardEvent<HTMLElement>) {
+  async function handlePast(event: React.ClipboardEvent<HTMLElement>) {
     const data = event.clipboardData;
     const items: DataTransferItem[] = [];
     for (const item of data.items) {
@@ -359,10 +386,33 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     const reader = new FileReader();
     const file = item.getAsFile();
     if (file == null) return;
-    reader.readAsDataURL(file);
+    const compressedFile = await imageCompression(file, {
+      maxSizeMB: 1,
+      // 插件里可能有权限问题，关了先
+      useWebWorker: false,
+    });
+    reader.readAsDataURL(compressedFile);
     reader.onloadend = () => {
-      setImg(reader.result as string);
+      const base64str = reader.result as string;
+      const modifier = 1.5;
+      if (base64str.length > 1024 * 1024 * modifier) {
+        error(ToasterMessageType.SizeExceed);
+        return;
+      }
+      setImg(base64str);
     };
+  }
+
+  // 处理高度问题，不做内容处理
+  function handleChange(env: ChangeEvent<HTMLTextAreaElement>) {
+    if (textareaRef.current == null) return;
+    // 其他地方把 value 设置为 '' 后，这里某些 case 会收到换行符号，这里做个处理
+    if (textareaRef.current.value.slice().trim() === '') {
+      textareaRef.current.value = '';
+    }
+    textareaRef.current.style.height = 'auto';
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    return;
   }
 
   useEffect(() => {
@@ -370,7 +420,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
     if (textarea == null) return;
     function handle(env: KeyboardEvent) {
       // code 会在中文输入法按下 enter 的时候也触发，所以特地使用 keyCode，不要改动
-      if (env.keyCode === 13) {
+      if (env.keyCode === 13 && !env.shiftKey) {
         handleSendMessage();
       }
     }
@@ -393,7 +443,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
       <div className="flex flex-1 flex-col py-[16px] px-[22px]">
         {img && (
           <div className="relative flex self-start">
-            <img className="h-[90px] w-[90px]" src={img} alt="img" />
+            <img className="w-[90px]" src={img} alt="img" />
             <CloseIcon
               className="absolute top-0 right-0 cursor-pointer"
               onClick={() => setImg(null)}
@@ -405,7 +455,8 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
           placeholder={disabled ? '' : 'Write your message'}
           rows={1}
           onPaste={handlePast}
-          className="scrollbar-hide max-h-[180px] w-full resize-none bg-transparent p-0 outline-none"
+          onChange={handleChange}
+          className="scrollbar-hide max-h-[100px] w-full resize-none bg-transparent p-0 outline-none"
         />
       </div>
       <div className="flex w-[80px] items-center pl-[16px]">

@@ -7,7 +7,13 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
 import * as toaster from '../../components/Toaster';
-import { XFANS_USERINFO } from '../../constants';
+import {
+  XFANS_CONTENT_WIDTH,
+  XFANS_MIN_WIDTH,
+  XFANS_TWITTER_CONTENT_WIDTH,
+  XFANS_TWITTER_OFFSET,
+  XFANS_USERINFO,
+} from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -24,7 +30,11 @@ import LogoButton from './logoButton';
 
 import '../../tailwind.css';
 
-const drawerWidth = 463;
+const drawerWidth = Math.max(
+  (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
+  XFANS_MIN_WIDTH
+);
+const backWidth = drawerWidth - XFANS_CONTENT_WIDTH;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -200,8 +210,16 @@ export default function PersistentDrawerRight() {
         open={isShowDrawer}
       >
         <div className="flex h-full">
-          <div className="mx-[2px] mt-[37px] h-[24px] w-[24px]">
-            <ChevronRightIcon onClick={handleDrawerClose} className="m-0 w-[24px] cursor-pointer" />
+          <div
+            className={`mx-[2px] mt-[37px] flex h-[24px] flex-shrink-0 justify-end`}
+            style={{
+              width: backWidth,
+            }}
+          >
+            <ChevronRightIcon
+              onClick={handleDrawerClose}
+              className="m-0 mr-0 w-[24px] cursor-pointer"
+            />
           </div>
           <Divider orientation="vertical" flexItem />
           {pageState === 'login' && (
