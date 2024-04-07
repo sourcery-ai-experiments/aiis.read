@@ -148,11 +148,16 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   return (
     <Drawer
       sx={{
-        width: '433px',
+        width: 'auto',
+        // 和 XFANS_CONTENT_WIDTH 不符合，TODO 用常量
+        maxWidth: '427px',
         '& .MuiDrawer-paper': {
-          width: '433px',
+          width: 'auto',
+          maxWidth: '427px',
           overflow: 'hidden',
           border: 'none',
+          // 防止有宽度一瞬间撑开了内容出现了一闪而过的滚动条
+          display: open ? 'block' : 'none',
         },
       }}
       variant="persistent"
@@ -402,7 +407,7 @@ function SendMessageBox({ sendMessage, disabled = false }: SendMessageBoxProps) 
   function handleChange(env: ChangeEvent<HTMLTextAreaElement>) {
     if (textareaRef.current == null) return;
     // 其他地方把 value 设置为 '' 后，这里某些 case 会收到换行符号，这里做个处理
-    if (textareaRef.current.value.slice().trim() === '') {
+    if (textareaRef.current.value.slice().trimEnd() === '') {
       textareaRef.current.value = '';
     }
     textareaRef.current.style.height = 'auto';

@@ -100,7 +100,7 @@ const Community = () => {
                         : ''}
                     </span>
                   </div>
-                  <p className="h-[16px] truncate text-xs text-[#5B7083]">
+                  <p className="h-[16px] max-w-[300px] truncate text-xs text-[#5B7083]">
                     {(item.unreadCount ?? 0) > 0 ? `[${item.unreadCount}]` : ''}
                     {item.lastMsg?.message ?? ''}
                   </p>
