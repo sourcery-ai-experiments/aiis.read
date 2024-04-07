@@ -148,11 +148,16 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   return (
     <Drawer
       sx={{
-        width: '433px',
+        width: 'auto',
+        // 和 XFANS_CONTENT_WIDTH 不符合，TODO 用常量
+        maxWidth: '427px',
         '& .MuiDrawer-paper': {
-          width: '433px',
+          width: 'auto',
+          maxWidth: '427px',
           overflow: 'hidden',
           border: 'none',
+          // 防止有宽度一瞬间撑开了内容出现了一闪而过的滚动条
+          display: open ? 'block' : 'none',
         },
       }}
       variant="persistent"
