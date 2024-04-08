@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
+import dayjs from 'dayjs';
 
 import { BasicButton } from '../../components/Button';
 import TableEmptyWidget from '../../components/Empty';
@@ -136,7 +137,7 @@ const InviteFriends = () => {
                   {inviteInfo.items.map((row, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
-                        {row.invitedAt}
+                        {dayjs(row.invitedAt).format('YYYY/MM/DD HH:mm')}
                       </TableCell>
                       <TableCell>{row.invitedUsername}</TableCell>
                       <TableCell>{row.points}</TableCell>
