@@ -5,7 +5,11 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-
+import {
+  XFANS_TWITTER_GO_FOLLOW,
+  XFANS_TWITTER_GO_FOLLOW_VERIFY,
+  LOCALSTORAGE_FALSE,
+} from '../../constants';
 import * as toaster from '../../components/Toaster';
 import {
   XFANS_CONTENT_WIDTH,
@@ -223,7 +227,15 @@ export default function PersistentDrawerRight() {
           </div>
           <Divider orientation="vertical" flexItem />
           {pageState === 'login' && (
-            <SignInWithXPage showLoading={loginLoading} handleButtonClick={() => clickLogin()} />
+            <SignInWithXPage
+              showLoading={loginLoading}
+              handleButtonClick={() => {
+                // reset follow status
+                localStorage.setItem(XFANS_TWITTER_GO_FOLLOW, LOCALSTORAGE_FALSE);
+                localStorage.setItem(XFANS_TWITTER_GO_FOLLOW_VERIFY, LOCALSTORAGE_FALSE);
+                clickLogin();
+              }}
+            />
           )}
           {pageState === 'invite' && (
             <InvitePage handleButtonClick={(inviteCode) => clickRegisterInviteCode(inviteCode)} />
