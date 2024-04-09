@@ -140,7 +140,7 @@ const Explore = () => {
                 <ul>
                   {topList?.map((item, i) => (
                     <li
-                      key={item.id}
+                      key={i}
                       className="flex cursor-pointer items-center border-t border-t-[#EBEEF0] pt-[18px] pb-2"
                       onClick={() => openProfile(item)}
                     >

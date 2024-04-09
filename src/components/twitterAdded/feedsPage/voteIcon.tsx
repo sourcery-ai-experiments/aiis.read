@@ -1,10 +1,15 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHover } from 'ahooks';
+import dayjs from 'dayjs';
+import * as isBetween from 'dayjs/plugin/isBetween';
 
 import { useTweetBatchUserInfo, useTweetVote } from '../../../service/tweet';
+import useTweetStore from '../../../store/useTweetStore';
 import * as toaster from '../../Toaster';
 
 import '../../../tailwind.css';
+
+dayjs.extend(isBetween);
 interface VoteTwitterProps {
   twitterId: string;
   userName: string;
@@ -35,6 +40,8 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
   );
 
   const isHover = useHover(ref);
+  const { rewardStage } = useTweetStore((state) => ({ ...state }));
+  const isPast = dayjs().isBetween(rewardStage?.startedAt, rewardStage?.endedAt);
 
   useEffect(() => {
     batchUserInfo(userInfo);
@@ -42,7 +49,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
 
   return (
     <>
-      {userInfo?.isActive ? (
+      {userInfo?.isActive && Number(userInfo?.sharesHeldByCurrentUser) > 0 && isPast ? (
         <div
           ref={ref}
           className="!z-[999] ml-[55px] w-auto !cursor-pointer items-center justify-center text-center"
