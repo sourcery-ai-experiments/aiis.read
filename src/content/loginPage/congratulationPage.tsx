@@ -19,39 +19,22 @@ interface CongratulationPageProps {
 }
 
 const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
-  const [goFollow, setGoFollow] = React.useState(useGlobalStore.getState().isGoFollow);
-  const [goFollowVerify, setGoFollowVerify] = React.useState(
-    useGlobalStore.getState().isGoFollowVerify
-  );
-  const [goRetwittes, setGoRetwittes] = React.useState(useGlobalStore.getState().isGoRetwittes);
-  const [goRetwittesVerify, setGoRetwittesVerify] = React.useState(
-    useGlobalStore.getState().isGoRetwittesVerify
+  const { isGoFollow, isGoFollowVerify, isGoRetwittes, isGoRetwittesVerify } = useGlobalStore(
+    (state) => ({
+      ...state,
+    })
   );
 
   const followStatus =
-    goFollow === true ? (goFollowVerify === true ? XFANS_DONE : XFANS_VERIFY) : XFANS_GO;
+    isGoFollow === true ? (isGoFollowVerify === true ? XFANS_DONE : XFANS_VERIFY) : XFANS_GO;
   const retweetStatus =
-    goRetwittes === true ? (goRetwittesVerify === true ? XFANS_DONE : XFANS_VERIFY) : XFANS_GO;
+    isGoRetwittes === true ? (isGoRetwittesVerify === true ? XFANS_DONE : XFANS_VERIFY) : XFANS_GO;
   const startStatus = followStatus === XFANS_DONE && retweetStatus === XFANS_DONE;
 
   // 打开一个新的标签页并访问指定网页
   const openNewTab = (url: string) => {
     const newTab = window.open(url, '_blank');
     newTab?.focus();
-  };
-
-  const _setGoRetwittesVerify = (r: boolean) => {
-    setGoRetwittesVerify(r);
-    useGlobalStore.setState({
-      isGoRetwittesVerify: r,
-    });
-  };
-
-  const _setGoRetwittes = (r: boolean) => {
-    setGoRetwittes(r);
-    useGlobalStore.setState({
-      isGoRetwittes: r,
-    });
   };
 
   // 再获取url中的token 作为第一优先级
@@ -62,22 +45,36 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
     try {
       const activateData = (await http.post2(`api/user/activate/check-task`, false)) as ResultData;
       if (activateData.code === 0 && activateData.data.finished === true) {
-        _setGoRetwittesVerify(true);
+        useGlobalStore.setState({
+          isGoRetwittesVerify: true,
+        });
       } else {
         if (!xfansCheckRetweet) {
-          _setGoRetwittes(false);
+          useGlobalStore.setState({
+            isGoRetwittes: false,
+          });
         } else {
-          _setGoRetwittes(true);
+          useGlobalStore.setState({
+            isGoRetwittes: true,
+          });
         }
-        _setGoRetwittesVerify(false);
+        useGlobalStore.setState({
+          isGoRetwittesVerify: false,
+        });
       }
     } catch (error) {
       if (!xfansCheckRetweet) {
-        _setGoRetwittes(false);
+        useGlobalStore.setState({
+          isGoRetwittes: false,
+        });
       } else {
-        _setGoRetwittes(true);
+        useGlobalStore.setState({
+          isGoRetwittes: true,
+        });
       }
-      _setGoRetwittesVerify(false);
+      useGlobalStore.setState({
+        isGoRetwittesVerify: false,
+      });
     }
   };
 
@@ -121,7 +118,6 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
             switch (followStatus) {
               case XFANS_GO:
                 openNewTab(XFANS_TWITTER_HOMEPAGE);
-                setGoFollow(true);
                 useGlobalStore.setState({
                   isGoFollow: true,
                 });
@@ -129,7 +125,6 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
 
               case XFANS_VERIFY:
                 setTimeout(() => {
-                  setGoFollowVerify(true);
                   useGlobalStore.setState({
                     isGoFollowVerify: true,
                   });
@@ -168,7 +163,9 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
           onClick={() => {
             switch (retweetStatus) {
               case XFANS_GO:
-                _setGoRetwittes(true);
+                useGlobalStore.setState({
+                  isGoRetwittes: true,
+                });
                 openNewTab(XFANS_TWITTES);
                 break;
 
