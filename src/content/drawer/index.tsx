@@ -12,13 +12,11 @@ import {
   XFANS_MIN_WIDTH,
   XFANS_TWITTER_CONTENT_WIDTH,
   XFANS_TWITTER_OFFSET,
-  XFANS_USERINFO,
 } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
-import useGlobalStore from '../../store/useGlobalStore';
-import useLocalStore from '../../store/useLocalStore';
+import useGlobalStore, { PageType } from '../../store/useGlobalStore';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
 import ProfileModal from '../../welcome/Wallet/Profile';
@@ -63,45 +61,33 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 export default function PersistentDrawerRight() {
-  const { isShowDrawer } = useLocalStore((state) => ({ ...state }));
+  const { isShowDrawer, goPage, page, logout } = useGlobalStore((state) => ({ ...state }));
 
   const [loginLoading, setLoginLoading] = React.useState(false);
 
   const handleDrawerOpen = () => {
-    useLocalStore.setState({
+    useGlobalStore.setState({
       isShowDrawer: true,
     });
   };
 
   const handleDrawerClose = () => {
-    useLocalStore.setState({
+    useGlobalStore.setState({
       isShowDrawer: false,
     });
   };
 
-  const [pageState, setPageState] = React.useState('login');
-
   React.useEffect(() => {
-    // 先检查是否需要展开
-    const loginState = localStorage.getItem('xfans-login-state');
-    const shouldOpenStateList: string[] = ['waitingRedirect', 'waitingInvite'];
-    // if (shouldOpenStateList.includes(String(loginState))) {
-    //   useLocalStore.setState({
-    //     isShowDrawer: true,
-    //   });
-    // }
-
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
     const xfansToken = urlParams.get('xfans_token');
     if (xfansToken) {
       // 登录看是否有效，拿到 invite 状态
       useGlobalStore.setState({ token: xfansToken });
-      localStorage.setItem('xfans-token', xfansToken);
       checkProfileData();
     } else {
       // 获取 xfans_token 参数的值
-      const localStorageToken = localStorage.getItem('xfans-token');
+      const localStorageToken = useGlobalStore.getState().token;
       if (localStorageToken && localStorageToken.length > 0) {
         // 已经有 token 的情况，登录判断 invite 状态
         useGlobalStore.setState({ token: localStorageToken });
@@ -112,7 +98,7 @@ export default function PersistentDrawerRight() {
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
     setInterval(() => {
-      const userInfo = JSON.parse(localStorage.getItem(XFANS_USERINFO) || '""');
+      const userInfo = useGlobalStore.getState().userInfo;
       if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
         // 读取所有的 cookie
         const cookies = document.cookie;
@@ -133,16 +119,16 @@ export default function PersistentDrawerRight() {
     const profileData = (await http.get(`/api/user/me`)) as ResultData<ProfileData>;
     if (profileData.code === 0) {
       if (profileData.data.isActive) {
-        setPageState('profile');
+        goPage(PageType.Profile);
         return 'active';
       } else if (!profileData.data.isRegistered) {
-        setPageState('invite');
+        goPage(PageType.Invite);
         return 'waiting invite code';
       } else if (!profileData.data.isTaskFinished) {
-        setPageState('congratulation');
+        goPage(PageType.Congratulation);
         return 'waiting task';
       } else {
-        setPageState('congratulation');
+        goPage(PageType.Congratulation);
         return 'waiting task';
       }
     }
@@ -151,8 +137,6 @@ export default function PersistentDrawerRight() {
 
   const clickLogin = async () => {
     setLoginLoading(true);
-    // 设置 waiting redirect 缓存
-    localStorage.setItem('xfans-login-state', 'waitingRedirect');
 
     // 跳转 login link https://test-xfans-api.d.buidlerdao.xyz/api/user/twitter-oauth2
     const link = (await http.get(`/api/user/twitter-oauth2`)) as ResultData<TwitterOauth2Data>;
@@ -168,18 +152,10 @@ export default function PersistentDrawerRight() {
     })) as ResultData;
     if (activateData.code === 0) {
       toaster.success(toaster.ToastMessage.CONGRATULATION);
-      setPageState('congratulation');
+      goPage(PageType.Congratulation);
     } else {
       toaster.error(toaster.ToastMessage.INVITE_CODE_ERROR);
     }
-  };
-
-  const logout = () => {
-    setPageState('login');
-    useGlobalStore.setState({ token: '' });
-    localStorage.setItem('xfans-token', '');
-    localStorage.setItem('xfans-login-state', '');
-    localStorage.setItem(XFANS_USERINFO, '');
   };
 
   return (
@@ -222,18 +198,20 @@ export default function PersistentDrawerRight() {
             />
           </div>
           <Divider orientation="vertical" flexItem />
-          {pageState === 'login' && (
+          {page === PageType.Login && (
             <SignInWithXPage showLoading={loginLoading} handleButtonClick={() => clickLogin()} />
           )}
-          {pageState === 'invite' && (
+          {page === PageType.Invite && (
             <InvitePage handleButtonClick={(inviteCode) => clickRegisterInviteCode(inviteCode)} />
           )}
-          {pageState === 'congratulation' && (
-            <CongratulationPage goProfile={() => setPageState('profile')} />
+          {page === PageType.Congratulation && (
+            <CongratulationPage goProfile={() => goPage(PageType.Profile)} />
           )}
-          {pageState === 'profile' && <Profile handleButtonClick={() => setPageState('wallet')} />}
-          {pageState === 'wallet' && (
-            <Wallet back={() => setPageState('profile')} logout={logout} />
+          {page === PageType.Profile && (
+            <Profile handleButtonClick={() => goPage(PageType.Wallet)} />
+          )}
+          {page === PageType.Wallet && (
+            <Wallet back={() => goPage(PageType.Profile)} logout={logout} />
           )}
         </div>
       </Drawer>

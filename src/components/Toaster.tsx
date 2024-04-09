@@ -2,7 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Snackbar } from '@mui/material';
 
-import useGlobalStore from '../store/useGlobalStore';
+import useToasterStore from '../store/useToasterStore';
 
 // toaster
 const XFANS_TOASTER_SUCCESS = 'xfans_toaster_success';
@@ -34,7 +34,7 @@ export enum ToastMessage {
 }
 
 export function success(message: string) {
-  useGlobalStore.setState({
+  useToasterStore.setState({
     message,
     messageType: XFANS_TOASTER_SUCCESS,
     messageOpen: true,
@@ -42,7 +42,7 @@ export function success(message: string) {
 }
 
 export function error(message: string) {
-  useGlobalStore.setState({
+  useToasterStore.setState({
     message,
     messageType: XFANS_TOASTER_ERROR,
     messageOpen: true,
@@ -50,7 +50,7 @@ export function error(message: string) {
 }
 
 export default function Toaster() {
-  const { message, messageType, messageOpen, closeMessage } = useGlobalStore();
+  const { message, messageType, messageOpen, closeMessage } = useToasterStore();
 
   return createPortal(
     <Snackbar

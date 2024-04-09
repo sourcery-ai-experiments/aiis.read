@@ -11,7 +11,6 @@ export const XFANS_CHECK_RETWEET = 'xfans_check_retweet';
 export const XFANS_DONE = 'Done';
 export const XFANS_VERIFY = 'Verify';
 export const XFANS_GO = 'GO';
-export const XFANS_USERINFO = 'xfans-userinfo';
 
 // table
 export const ROWS_PER_PAGE = 5;

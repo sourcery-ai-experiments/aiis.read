@@ -144,7 +144,9 @@ const Explore = () => {
                       className="flex cursor-pointer items-center border-t border-t-[#EBEEF0] pt-[18px] pb-2"
                       onClick={() => openProfile(item)}
                     >
-                      <span className="text-[14px] font-medium text-[#0F1419]">{i + 1}</span>
+                      <span className="w-[16px] text-[14px] font-medium text-[#0F1419]">
+                        {i + 1}
+                      </span>
                       <img
                         src={item.avatar}
                         alt="avatar"
@@ -191,7 +193,7 @@ const Explore = () => {
                       className="flex cursor-pointer items-center border-t border-t-[#EBEEF0] pt-[18px] pb-2"
                       onClick={() => openProfile(item)}
                     >
-                      <span className="text-[#0F1419]">{i + 1}</span>
+                      <span className="w-[16px] text-[#0F1419]">{i + 1}</span>
                       <img
                         src={item.avatar}
                         alt="avatar"
@@ -233,7 +235,7 @@ const Explore = () => {
                       className="flex cursor-pointer items-center border-t border-t-[#EBEEF0] pt-[18px] pb-2"
                       onClick={() => openProfile(item)}
                     >
-                      <span className="text-[#0F1419]">{i + 1}</span>
+                      <span className="w-[16px] text-[#0F1419]">{i + 1}</span>
                       <img
                         src={item.avatar}
                         alt="avatar"
