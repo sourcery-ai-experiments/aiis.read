@@ -34,22 +34,17 @@ import LogoButton from './logoButton';
 
 import '../../tailwind.css';
 
-const drawerWidth = Math.max(
-  (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
-  XFANS_MIN_WIDTH
-);
-const backWidth = drawerWidth - XFANS_CONTENT_WIDTH;
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-}>(({ theme, open }) => ({
+  drawerWidth?: number; // 添加 width 参数
+}>(({ theme, open, drawerWidth }) => ({
   // flexGrow: 1,
   // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -drawerWidth,
+  marginRight: -(drawerWidth || 0),
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -83,7 +78,38 @@ export default function PersistentDrawerRight() {
     });
   };
 
+  const caculateDrawerWidth = () => {
+    return Math.max(
+      (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
+      XFANS_MIN_WIDTH
+    );
+  };
+
+  const caculateBackWidth = () => {
+    return caculateDrawerWidth() - XFANS_CONTENT_WIDTH;
+  };
+
   const [pageState, setPageState] = React.useState('login');
+
+  const [drawerWidth, setDrawerWidth] = React.useState(caculateDrawerWidth());
+
+  const [backWidth, setBackWidth] = React.useState(caculateBackWidth());
+
+  React.useEffect(() => {
+    function handleResize() {
+      // 当窗口大小变化时，更新 width 的值
+      setBackWidth(caculateBackWidth());
+      setDrawerWidth(caculateDrawerWidth());
+    }
+
+    // 添加窗口大小变化时的事件监听器
+    window.addEventListener('resize', handleResize);
+
+    // 在组件卸载时移除事件监听器
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   React.useEffect(() => {
     // 先检查是否需要展开
@@ -200,7 +226,7 @@ export default function PersistentDrawerRight() {
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={isShowDrawer}></Main>
+      <Main open={isShowDrawer} drawerWidth={drawerWidth}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
