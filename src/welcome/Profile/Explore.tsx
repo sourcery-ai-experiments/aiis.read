@@ -165,12 +165,12 @@ const Explore = () => {
                             />
                           </div>
 
-                          <div className="flex items-center space-x-[6px]">
+                          <div className="mr-2 flex items-center space-x-[6px]">
                             <span className="xfans-font-sf text-sm text-[#919099]">
                               Tweet Avg Rank:
                             </span>
                             <span className="xfans-font-sf text-[15px] text-[#919099]">
-                              #{i + 1}
+                              {item.tweetAvgRank ? `${item.tweetAvgRank}` : '-'}
                             </span>
                           </div>
                         </div>

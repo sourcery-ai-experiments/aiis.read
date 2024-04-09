@@ -135,6 +135,7 @@ declare global {
      * 用户钱包地址
      */
     walletAddress?: string;
+    tweetAvgRank?: number;
   }
 
   export interface HolderRequest extends PageProps {
