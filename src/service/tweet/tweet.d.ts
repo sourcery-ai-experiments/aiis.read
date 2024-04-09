@@ -44,6 +44,7 @@ declare global {
     totalRewardAmount?: string;
     tweetId?: string;
     rank?: string;
+    sharesHeldByCurrentUser?: string;
   }
 
   /**

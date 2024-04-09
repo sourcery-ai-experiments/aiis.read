@@ -10,6 +10,7 @@ interface ShareStoreProps {
   rewardHistoryListTotal: number;
   rewardHistoryTotalRewardAmount: string;
   tweetYourRank: any[] | null;
+  rewardStage: { startedAt: string; endedAt: string } | null;
 }
 
 const useTweetStore = create<ShareStoreProps>((set) => ({
@@ -22,6 +23,7 @@ const useTweetStore = create<ShareStoreProps>((set) => ({
   rewardHistoryListTotal: 0,
   rewardHistoryTotalRewardAmount: '0',
   tweetYourRank: null,
+  rewardStage: null,
 }));
 
 export default useTweetStore;

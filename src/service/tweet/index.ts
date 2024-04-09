@@ -124,11 +124,28 @@ const useTweetYourRank = () => {
   return result;
 };
 
+const useTweetRewardStage = () => {
+  const result = useRequest<ResultData<{ startedAt: string; endedAt: string }>, unknown[]>(
+    () => http.get('/api/twitter/reward/current-stage'),
+    {
+      manual: false,
+      onSuccess(response) {
+        useTweetStore.setState({
+          rewardStage: response.data,
+        });
+      },
+    }
+  );
+
+  return result;
+};
+
 export {
   useTweetBatchUserInfo,
   useTweetList,
   useTweetReward,
   useTweetRewardHistory,
+  useTweetRewardStage,
   useTweetVote,
   useTweetYourRank,
 };
