@@ -32,9 +32,11 @@ export default function MembersDrawer({ isOwner = false, subject, open = false, 
   return (
     <Drawer
       sx={{
-        width: '433px',
+        width: '427px',
+        display: open ? 'block' : 'none',
         '& .MuiDrawer-paper': {
-          width: '433px',
+          width: '427px',
+          overflow: 'hidden',
           border: 'none',
         },
       }}

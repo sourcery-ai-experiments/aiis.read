@@ -1,8 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import useAccount from '../../../hooks/useAccount';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
-import useLocalStore from '../../../store/useLocalStore';
 import useProfileModal from '../../../store/useProfileModal';
 import { NumberDisplayer } from '../../NumberDisplayer';
 
@@ -16,7 +14,6 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
   const [elementWidth, setElementWidth] = useState<number | null>(null);
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const [userInfo, setUserInfo] = useState<any>({ price: '0' });
-  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
   const useWidth = elementWidth != null ? elementWidth : 0;
 
   const { run: batchUserInfo } = useTweetBatchUserInfo(
