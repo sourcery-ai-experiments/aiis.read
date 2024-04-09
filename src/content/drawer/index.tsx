@@ -78,15 +78,6 @@ export default function PersistentDrawerRight() {
   };
 
   React.useEffect(() => {
-    // 先检查是否需要展开
-    // const loginState = localStorage.getItem('xfans-login-state');
-    // const shouldOpenStateList: string[] = ['waitingRedirect', 'waitingInvite'];
-    // if (shouldOpenStateList.includes(String(loginState))) {
-    //   useLocalStore.setState({
-    //     isShowDrawer: true,
-    //   });
-    // }
-
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
     const xfansToken = urlParams.get('xfans_token');
