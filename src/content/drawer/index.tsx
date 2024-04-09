@@ -5,7 +5,6 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-
 import * as toaster from '../../components/Toaster';
 import {
   XFANS_CONTENT_WIDTH,
@@ -28,22 +27,17 @@ import LogoButton from './logoButton';
 
 import '../../tailwind.css';
 
-const drawerWidth = Math.max(
-  (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
-  XFANS_MIN_WIDTH
-);
-const backWidth = drawerWidth - XFANS_CONTENT_WIDTH;
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-}>(({ theme, open }) => ({
+  drawerWidth?: number; // 添加 width 参数
+}>(({ theme, open, drawerWidth }) => ({
   // flexGrow: 1,
   // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -drawerWidth,
+  marginRight: -(drawerWidth || 0),
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -76,6 +70,37 @@ export default function PersistentDrawerRight() {
       isShowDrawer: false,
     });
   };
+
+  const caculateDrawerWidth = () => {
+    return Math.max(
+      (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
+      XFANS_MIN_WIDTH
+    );
+  };
+
+  const caculateBackWidth = () => {
+    return caculateDrawerWidth() - XFANS_CONTENT_WIDTH;
+  };
+
+  const [drawerWidth, setDrawerWidth] = React.useState(caculateDrawerWidth());
+
+  const [backWidth, setBackWidth] = React.useState(caculateBackWidth());
+
+  React.useEffect(() => {
+    function handleResize() {
+      // 当窗口大小变化时，更新 width 的值
+      setBackWidth(caculateBackWidth());
+      setDrawerWidth(caculateDrawerWidth());
+    }
+
+    // 添加窗口大小变化时的事件监听器
+    window.addEventListener('resize', handleResize);
+
+    // 在组件卸载时移除事件监听器
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   React.useEffect(() => {
     // 再获取url中的token 作为第一优先级
@@ -172,7 +197,7 @@ export default function PersistentDrawerRight() {
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={isShowDrawer}></Main>
+      <Main open={isShowDrawer} drawerWidth={drawerWidth}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -199,7 +224,17 @@ export default function PersistentDrawerRight() {
           </div>
           <Divider orientation="vertical" flexItem />
           {page === PageType.Login && (
-            <SignInWithXPage showLoading={loginLoading} handleButtonClick={() => clickLogin()} />
+            <SignInWithXPage
+              showLoading={loginLoading}
+              handleButtonClick={() => {
+                // reset follow status
+                useGlobalStore.setState({
+                  isGoFollow: false,
+                  isGoFollowVerify: false,
+                });
+                clickLogin();
+              }}
+            />
           )}
           {page === PageType.Invite && (
             <InvitePage handleButtonClick={(inviteCode) => clickRegisterInviteCode(inviteCode)} />

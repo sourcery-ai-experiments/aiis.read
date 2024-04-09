@@ -17,6 +17,10 @@ export interface GlobalStoreProps {
   token: string;
   isShowPrice: boolean;
   isShowDrawer: boolean;
+  isGoFollow: boolean;
+  isGoFollowVerify: boolean;
+  isGoRetwittes: boolean;
+  isGoRetwittesVerify: boolean;
   userInfo: UserInfo | null;
   goPage(page: PageType): void;
   logout(): void;
@@ -30,6 +34,10 @@ const useGlobalStore = create<GlobalStoreProps>()(
       isShowPrice: false,
       isShowDrawer: false,
       userInfo: null,
+      isGoFollow: false,
+      isGoFollowVerify: false,
+      isGoRetwittes: false,
+      isGoRetwittesVerify: false,
       goPage(page: PageType) {
         set({ page });
       },

@@ -188,9 +188,7 @@ const Reward = () => {
             ) : tweetList == null || tweetList.length === 0 ? (
               <div className="flex flex-col items-center">
                 <ListEmpty className="mt-[50px]" />
-                <p className="xfans-font-sf mt-[10px] text-[#00000080]">
-                  You haven&apos;t bought any shares yet.
-                </p>
+                <p className="xfans-font-sf mt-[10px] text-[#00000080]">No records found.</p>
               </div>
             ) : (
               <ul className="border-t border-t-[#EBEEF0] py-[22px]">
@@ -255,9 +253,7 @@ const Reward = () => {
             ) : tweetYourRank == null || tweetYourRank.length === 0 ? (
               <div className="flex flex-col items-center">
                 <ListEmpty className="mt-[50px]" />
-                <p className="xfans-font-sf mt-[10px] text-[#00000080]">
-                  No records found. Vote to join weekly rankings.
-                </p>
+                <p className="xfans-font-sf mt-[10px] text-[#00000080]">No records found.</p>
               </div>
             ) : (
               <ul className="border-t border-t-[#EBEEF0] py-[22px]">
