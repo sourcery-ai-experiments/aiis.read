@@ -10,8 +10,8 @@ import TruncateText from '../../components/TruncateText';
 import useAccount from '../../hooks/useAccount';
 import { useUserInfo } from '../../service/user';
 import { useWalletAccounts } from '../../service/wallet';
+import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
-import useLocalStore from '../../store/useLocalStore';
 import useProfileModal from '../../store/useProfileModal';
 
 import Deposit from './Deposit';
@@ -21,7 +21,7 @@ import WithDraw from './WithDraw';
 const Wallet = (props: { back?: () => void; logout?: () => void }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
 
-  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
+  const { isShowPrice } = useGlobalStore((state) => ({ ...state }));
   const { userInfo } = useAccount();
   const { run: getUserInfo } = useUserInfo();
   const [isWithDrawOpen, setIsWithDrawOpen] = useState(false);
@@ -150,7 +150,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
                 <PurpleSwitch
                   checked={isShowPrice}
                   onChange={(_e, checked) => {
-                    useLocalStore.setState({
+                    useGlobalStore.setState({
                       isShowPrice: checked,
                     });
                   }}

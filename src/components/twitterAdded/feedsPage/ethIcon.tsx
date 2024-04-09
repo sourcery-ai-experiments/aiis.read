@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import useAccount from '../../../hooks/useAccount';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
-import useLocalStore from '../../../store/useLocalStore';
+import useGlobalStore from '../../../store/useGlobalStore';
 import useProfileModal from '../../../store/useProfileModal';
 import { NumberDisplayer } from '../../NumberDisplayer';
 
@@ -14,7 +13,7 @@ interface FriendPriceProps {
 export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const [userInfo, setUserInfo] = useState<any>({ price: '0' });
-  const { isShowPrice } = useLocalStore((state) => ({ ...state }));
+  const { isShowPrice } = useGlobalStore((state) => ({ ...state }));
   const { run: batchUserInfo } = useTweetBatchUserInfo(
     [twitterUsername],
     (result) => {
