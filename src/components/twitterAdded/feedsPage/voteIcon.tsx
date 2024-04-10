@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHover } from 'ahooks';
 import dayjs from 'dayjs';
-import * as isBetween from 'dayjs/plugin/isBetween';
+import isBetween from 'dayjs/plugin/isBetween';
 
 import { useTweetBatchUserInfo, useTweetVote } from '../../../service/tweet';
 import useTweetStore from '../../../store/useTweetStore';
