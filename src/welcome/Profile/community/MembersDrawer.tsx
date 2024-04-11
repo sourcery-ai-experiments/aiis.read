@@ -44,23 +44,25 @@ export default function MembersDrawer({ isOwner = false, subject, open = false, 
       anchor="right"
       open={open}
     >
-      <div className="relative h-full bg-[#FDFDFD] px-[16px] pr-[13px]">
-        <header className="flex h-[64px] items-center justify-between">
+      <div className="relative flex h-full flex-col bg-[#FDFDFD]">
+        <header className="flex h-[64px] items-center justify-between px-[16px]">
           <div className="flex items-center font-bold text-[#0F1419]">
             <ArrowBackIcon className="cursor-pointer" onClick={onClose} />
             <span className="ml-[8px]">Members</span>
           </div>
         </header>
-        {userList.map((item) => (
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          <MemberItem
-            key={item.address}
-            disabled={!isOwner || item.address === subject}
+        <div className="xfans-scrollbar flex-1 overflow-y-auto px-[16px]">
+          {userList.map((item) => (
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            subject={subject!}
-            user={item}
-          />
-        ))}
+            <MemberItem
+              key={item.address}
+              disabled={!isOwner || item.address === subject}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              subject={subject!}
+              user={item}
+            />
+          ))}
+        </div>
       </div>
     </Drawer>
   );
