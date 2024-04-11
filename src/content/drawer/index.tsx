@@ -24,15 +24,15 @@ import '../../tailwind.css';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-  drawerWidth?: number; // 添加 width 参数
-}>(({ theme, open, drawerWidth }) => ({
+  drawerwidth?: number; // 添加 width 参数
+}>(({ theme, open, drawerwidth }) => ({
   // flexGrow: 1,
   // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -(drawerWidth || 0),
+  marginRight: -(drawerwidth || 0),
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -195,7 +195,7 @@ export default function PersistentDrawerRight() {
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={isShowDrawer} drawerWidth={drawerWidth}></Main>
+      <Main open={isShowDrawer} drawerwidth={drawerWidth}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
