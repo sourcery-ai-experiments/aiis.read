@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useProfileModal from '../../../store/useProfileModal';
 import { NumberDisplayer } from '../../NumberDisplayer';
-
+import { getElementWidthByXPath } from '../../../utils';
 import '../../../tailwind.css';
 
 interface UserPagePriceProps {
@@ -26,23 +26,6 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
 
   useEffect(() => {
     batchUserInfo(userInfo);
-
-    const getElementWidthByXPath = (xpath: string): number | null => {
-      const element = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue as HTMLElement;
-
-      if (element) {
-        return element.offsetWidth;
-      } else {
-        console.error('Element not found with the given XPath');
-        return null;
-      }
-    };
 
     const xpath =
       '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div';

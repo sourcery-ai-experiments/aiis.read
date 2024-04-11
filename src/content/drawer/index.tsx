@@ -6,12 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import * as toaster from '../../components/Toaster';
-import {
-  XFANS_CONTENT_WIDTH,
-  XFANS_MIN_WIDTH,
-  XFANS_TWITTER_CONTENT_WIDTH,
-  XFANS_TWITTER_OFFSET,
-} from '../../constants';
+import { XFANS_CONTENT_WIDTH, XFANS_MIN_WIDTH } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -22,7 +17,7 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-
+import { getElementRightByXPath } from '../../utils';
 import LogoButton from './logoButton';
 
 import '../../tailwind.css';
@@ -72,10 +67,13 @@ export default function PersistentDrawerRight() {
   };
 
   const caculateDrawerWidth = () => {
-    return Math.max(
-      (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
-      XFANS_MIN_WIDTH
-    );
+    const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
+    const right = getElementRightByXPath(xPath);
+
+    if (right === null) {
+      return XFANS_MIN_WIDTH;
+    }
+    return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
   };
 
   const caculateBackWidth = () => {
