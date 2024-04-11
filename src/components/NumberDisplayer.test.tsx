@@ -15,7 +15,7 @@ it('if integer part less than 1, decimal part should have 4 decimals', () => {
   expect(render(<NumberDisplayer text="145000000000000000" />).container).toMatchSnapshot();
 });
 it('if decimal part less than 0.0001, decimal part should round into 4 decimals', () => {
-  expect(render(<NumberDisplayer text="000000000012457" />).container).toMatchSnapshot();
+  expect(render(<NumberDisplayer text="000000000012455" />).container).toMatchSnapshot();
 });
 
 it('should throw error if text is not string', () => {
