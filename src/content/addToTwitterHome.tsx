@@ -11,7 +11,9 @@ export const addPriceComponent = (element: Element, tweetId: string, twitterUser
     'article > div > div > div:nth-child(2) > div:nth-child(1)'
   );
 
-  if (specificElement) {
+  const pathname = window.location.pathname;
+
+  if (specificElement && pathname === '/home') {
     const root = createRoot(priceContainer);
     root.render(
       <div id={`xfans-price-${tweetId}`}>
