@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { Divider } from '@mui/material';
+import { Divider, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import dayjs from 'dayjs';
 
 import { ListEmpty } from '../../components/Empty';
+import { InfoCircle } from '../../components/icons/InfoCircle';
 import { CenterLoading } from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { useEthPrice } from '../../service/share';
@@ -16,7 +17,6 @@ import { usePoolBalance } from '../../service/wallet';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
 import useTweetStore from '../../store/useTweetStore';
-import useUserStore from '../../store/useUserStore';
 
 import Claim from './Claim';
 import History from './History';
@@ -41,7 +41,6 @@ const Icon = () => (
 
 const Reward = () => {
   const { openProfile } = useProfileModal((state) => ({ ...state }));
-  const list = Array(7).fill('');
   const [value, setValue] = React.useState('1');
   const [poolBalance, setPoolBalance] = React.useState('0');
   const { run: getTweet, loading: loadingTweetList } = useTweetList();
@@ -50,14 +49,10 @@ const Reward = () => {
     ...state,
   }));
   const [loadingx, setLoadingx] = useState(true);
-  const { userInfo } = useUserStore((state) => ({ ...state }));
-  const currentIndex = tweetList
-    ? tweetList?.findIndex((item) => item.author?.twitterId === userInfo?.twitterId)
-    : -1;
   const { ethPrice } = useShareStore((state) => ({ ...state }));
   const { run: getPrice } = useEthPrice();
 
-  const { loading, run: fetchPool } = usePoolBalance(
+  const { run: fetchPool } = usePoolBalance(
     (balance) => {
       setPoolBalance(balance);
     },
@@ -101,13 +96,20 @@ const Reward = () => {
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
-        <div className="flex space-x-[10px]">
+        <div className="flex space-x-[20px]">
           <div className="flex flex-col items-center space-y-1">
             <div className="flex items-center space-x-1">
               <Icon />
               <NumberDisplayer className="text-xs font-medium text-[#0F1419]" text={poolBalance} />
             </div>
-            <span className="text-[15px] font-medium text-[#919099]">Pool</span>
+            <span className="relative text-[15px] font-medium text-[#919099]">
+              Pool
+              <Tooltip title="The pool refers to a reward pool formed by transaction fees, which will be distributed to the creators' shareholders based on the ranking of the creators' tweets.">
+                <span className="absolute top-[3px] right-[-18px] h-[14px] w-[14px]">
+                  <InfoCircle />
+                </span>
+              </Tooltip>
+            </span>
           </div>
 
           <div className="flex flex-col items-center space-y-1">
@@ -118,7 +120,14 @@ const Reward = () => {
                 text={tweetRewardTotalRewardAmount}
               />
             </div>
-            <span className="text-[15px] font-medium text-[#919099]">Your Reward</span>
+            <span className="relative text-[15px] font-medium text-[#919099]">
+              Your Reward
+              <Tooltip title="If the creator you've invested in produces tweets that rank among the top 100, you can earn bonuses based on the number of shares you hold.">
+                <span className="absolute top-[3px] right-[-18px] h-[14px] w-[14px]">
+                  <InfoCircle />
+                </span>
+              </Tooltip>
+            </span>
           </div>
         </div>
 
@@ -154,6 +163,14 @@ const Reward = () => {
               aria-label="lab API tabs example"
             >
               <Tab
+                icon={
+                  <Tooltip title="Weekly refers to the list of tweet rankings each week, and the ranking algorithm can be found in the official documentation on our website.">
+                    <span>
+                      <InfoCircle />
+                    </span>
+                  </Tooltip>
+                }
+                iconPosition="end"
                 label="Weekly rank"
                 value="1"
                 sx={{
