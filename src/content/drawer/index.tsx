@@ -67,6 +67,9 @@ export default function PersistentDrawerRight() {
   };
 
   const caculateDrawerWidth = () => {
+    if (window.location.href.includes('oauth2')) {
+      return XFANS_MIN_WIDTH;
+    }
     const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
     const right = getElementRightByXPath(xPath);
 
