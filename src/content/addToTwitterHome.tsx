@@ -28,11 +28,13 @@ export const addVoteComponent = (element: Element, tweetId: string, userName: st
     'article > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div > div'
   );
 
+  const time = element.querySelector('time')?.getAttribute('datetime') as string;
+
   if (specificElement) {
     const root = createRoot(voteContainer);
     root.render(
       <div id={`xfans-vote-${tweetId}`}>
-        <VoteTwitter twitterId={tweetId} userName={userName} />
+        <VoteTwitter twitterId={tweetId} userName={userName} time={time} />
       </div>
     );
     specificElement.appendChild(voteContainer);
@@ -45,7 +47,7 @@ export const addVoteComponent = (element: Element, tweetId: string, userName: st
       const root = createRoot(voteContainer);
       root.render(
         <div id={`xfans-vote-${tweetId}`} style={{ zIndex: 99 }}>
-          <VoteTwitter twitterId={tweetId} userName={userName} />
+          <VoteTwitter twitterId={tweetId} userName={userName} time={time} />
         </div>
       );
       specificElement2.appendChild(voteContainer);
