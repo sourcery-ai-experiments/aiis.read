@@ -13,7 +13,7 @@ export const checkStatus = (status: number) => {
       toaster.error(toaster.ToastMessage.REQUEST_FAILURE_RETRY);
       break;
     case 401:
-      toaster.error(toaster.ToastMessage.LOGIN_FAILURE_RETRY);
+      // toaster.error(toaster.ToastMessage.LOGIN_FAILURE_RETRY);
       useGlobalStore.getState().logout();
       break;
     case 403:
