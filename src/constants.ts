@@ -17,4 +17,4 @@ export enum ContractError {
 export const XFANS_CONTENT_WIDTH = 433;
 export const XFANS_MIN_WIDTH = 458;
 
-export const XFANS_NETWORK = "Blast Testnet"
+export const XFANS_NETWORK = 'Arbitrum Sepolia';

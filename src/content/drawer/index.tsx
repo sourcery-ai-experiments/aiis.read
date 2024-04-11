@@ -70,6 +70,7 @@ export default function PersistentDrawerRight() {
     if (window.location.href.includes('oauth2')) {
       return XFANS_MIN_WIDTH;
     }
+    // 首页信息流dom
     const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
     const right = getElementRightByXPath(xPath);
 
