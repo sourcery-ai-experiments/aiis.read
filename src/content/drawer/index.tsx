@@ -19,7 +19,7 @@ import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
 import { getElementRightByXPath } from '../../utils';
 import LogoButton from './logoButton';
-
+import { XFANS_CHECK_RETWEET, XFANS_TOKEN, OAUTH2, XFANS_TWITTER_HOMEPAGE } from '../../constants';
 import '../../tailwind.css';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -67,7 +67,7 @@ export default function PersistentDrawerRight() {
   };
 
   const caculateDrawerWidth = () => {
-    if (window.location.href.includes('oauth2')) {
+    if (window.location.href.includes(OAUTH2)) {
       return XFANS_MIN_WIDTH;
     }
     // 首页信息流dom
@@ -107,7 +107,7 @@ export default function PersistentDrawerRight() {
   React.useEffect(() => {
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
-    const xfansToken = urlParams.get('xfans_token');
+    const xfansToken = urlParams.get(XFANS_TOKEN);
     if (xfansToken) {
       // 登录看是否有效，拿到 invite 状态
       useGlobalStore.setState({ token: xfansToken });
@@ -125,6 +125,14 @@ export default function PersistentDrawerRight() {
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
     setInterval(() => {
+      // 当处于登陆状态中的时候，自动logout不触发。
+      if (
+        window.location.href.includes(XFANS_TOKEN) ||
+        window.location.href.includes(XFANS_CHECK_RETWEET) ||
+        window.location.href.includes(XFANS_TWITTER_HOMEPAGE)
+      ) {
+        return;
+      }
       const userInfo = useGlobalStore.getState().userInfo;
       if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
         // 读取所有的 cookie
