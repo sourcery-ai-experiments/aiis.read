@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Tooltip } from '@mui/material';
 
 import { ListEmpty } from '../../components/Empty';
+import { InfoCircle } from '../../components/icons/InfoCircle';
 import Loading from '../../components/Loading';
 import useAccount from '../../hooks/useAccount';
 import { getList } from '../../service/community';
@@ -118,9 +120,14 @@ const Community = () => {
 
     return (
       <>
-        <p className="mt-[100px] text-center text-[15px] font-medium text-[#9A6CF9]">
+        <div className="mt-[100px] flex items-center justify-center text-center text-[15px] font-medium text-[#9A6CF9]">
           The Following Are Locked Communities
-        </p>
+          <Tooltip title="To unlock the community features, fans need to collectively pledge more than 3 shares. Pledges can be revoked at any time, but if the total falls below 3 shares, the community will lock again while keeping chat data.">
+            <span className="ml-[6px]">
+              <InfoCircle />
+            </span>
+          </Tooltip>
+        </div>
 
         <div>
           <ul className="mt-4 space-y-[10px]">

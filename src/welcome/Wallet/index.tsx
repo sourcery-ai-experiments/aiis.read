@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 
 import { BasicButton } from '../../components/Button';
+import { InfoCircle } from '../../components/icons/InfoCircle';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import * as toaster from '../../components/Toaster';
 import TruncateText from '../../components/TruncateText';
@@ -39,7 +41,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
     getWalletAccounts();
   }, []);
   return (
-    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
+    <div className="flex h-full w-full flex-col">
       <div className="flex items-center space-x-[10px] py-3 pl-4">
         <div className="cursor-pointer" onClick={() => props.back?.()}>
           <GoBack />
@@ -116,7 +118,14 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Fire />
-                <span className="xfans-font-sf text-base font-medium">Trading Fee Earned</span>
+                <span className="flex items-center text-base font-medium">
+                  Trading Fee Earned
+                  <Tooltip title="If fans trade your shares, you can earn a 2.5% transaction fee from each transaction.">
+                    <span className="ml-[6px]">
+                      <InfoCircle />
+                    </span>
+                  </Tooltip>
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />
@@ -130,7 +139,14 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
             <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
               <div className="flex items-center space-x-3">
                 <Gift />
-                <span className="xfans-font-sf text-base font-medium">Reward Earned</span>
+                <span className="flex items-center text-base font-medium">
+                  Reward Earned
+                  <Tooltip title="If the creator you've invested in produces tweets that rank among the top 100, you can earn bonuses based on the number of shares you hold.">
+                    <span className="ml-[6px]">
+                      <InfoCircle />
+                    </span>
+                  </Tooltip>
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <Icon />

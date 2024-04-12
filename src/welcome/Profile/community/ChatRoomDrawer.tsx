@@ -19,6 +19,7 @@ import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import Loading from '../../../components/Loading';
 import Modal from '../../../components/Modal';
 import { error } from '../../../components/Toaster';
+import { XFANS_CONTENT_WIDTH } from '../../../constants';
 import useAccount from '../../../hooks/useAccount';
 import { getMyInfo, getUserCount } from '../../../service/community';
 import { ReceiveMessage, SendMessage } from '../../../service/room';
@@ -149,11 +150,11 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
     <Drawer
       sx={{
         // 和 XFANS_CONTENT_WIDTH 不符合，TODO 用常量
-        width: '427px',
+        width: XFANS_CONTENT_WIDTH,
         // 防止有宽度一瞬间撑开了内容出现了一闪而过的滚动条
         display: open ? 'block' : 'none',
         '& .MuiDrawer-paper': {
-          width: '427px',
+          width: XFANS_CONTENT_WIDTH,
           overflow: 'hidden',
           border: 'none',
         },

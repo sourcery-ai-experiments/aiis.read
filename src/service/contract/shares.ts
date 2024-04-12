@@ -4,9 +4,8 @@ import { contractRequestHttp as http } from '../request';
 
 export async function getFloorPrice(address: string) {
   const data = await http.get<{ gasFee: string; price: string }>('/xfans/api/shares/getBuyPrice', {
-    // 地板价指买 100 个最小单位 0.01 的 amount
-    amount: '100',
     address,
+    amount: '1',
   });
   return data.price;
 }

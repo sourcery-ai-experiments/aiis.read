@@ -90,11 +90,8 @@ class RequestHttp {
       (response: AxiosResponse) => {
         const { data } = response;
         // 登陆失效
-        if (data.code == ResultEnum.OVERDUE) {
-          toaster.error(data.message);
-          useGlobalStore.setState({
-            token: '',
-          });
+        if (data.code === ResultEnum.OVERDUE) {
+          useGlobalStore.getState().logout();
           return Promise.reject(data);
         }
         // 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）

@@ -1,13 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import dayjs from 'dayjs';
 
+import ArrowRight from '../../components/icons/ArrowRight';
 import DownIcon from '../../components/icons/DownIcon';
 import ETHIcon from '../../components/icons/ETHIcon';
+import { InfoCircle } from '../../components/icons/InfoCircle';
 import UpIcon from '../../components/icons/UpIcon';
 import Loading from '../../components/Loading';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
@@ -18,7 +21,6 @@ import useShareStore from '../../store/useShareStore';
 import { getTimeDistanceFromDate } from '../../utils';
 
 const Explore = () => {
-  const list = Array(7).fill('');
   const { openProfile } = useProfileModal((state) => ({ ...state }));
   const { run: getShareList, loading: loading4 } = useShareList();
   const { run: getTopList, loading: loading1 } = useTopList();
@@ -41,8 +43,6 @@ const Explore = () => {
     setValue(newValue);
     fetchMap[newValue]();
   };
-
-  const loadingRef = useRef(false);
 
   useEffect(() => {
     let timeout: any;
@@ -89,9 +89,19 @@ const Explore = () => {
               }}
             />
             <Tab
+              icon={
+                <Tooltip placement="top" title="24-hour floor price increase leaderboard.">
+                  <span>
+                    <InfoCircle />
+                  </span>
+                </Tooltip>
+              }
+              iconPosition="end"
               label="24h %"
               value="3"
               sx={{
+                padding: 0,
+                whiteSpace: 'nowrap',
                 width: '25%',
                 fontSize: 15,
                 color: '#919099',
@@ -100,6 +110,17 @@ const Explore = () => {
               }}
             />
             <Tab
+              icon={
+                <Tooltip
+                  placement="top"
+                  title="The list of creators for the latest registered xFans."
+                >
+                  <span>
+                    <InfoCircle />
+                  </span>
+                </Tooltip>
+              }
+              iconPosition="end"
               label="New"
               value="2"
               sx={{
@@ -253,15 +274,23 @@ const Explore = () => {
                             />
                           </div>
 
-                          <div className="flex items-center space-x-1">
-                            {Number(item.increaseRate24h) >= 0 ? <UpIcon /> : <DownIcon />}
-                            <span
-                              className={`text-[15px] ${
-                                Number(item.increaseRate24h) >= 0
-                                  ? 'text-[#16B364]'
-                                  : 'text-[#D85550]'
-                              }`}
-                            >
+                          <div
+                            className={`flex items-center space-x-1 ${
+                              Number(item.increaseRate24h) > 0
+                                ? 'text-[#16B364]'
+                                : Number(item.increaseRate24h) < 0
+                                ? 'text-[#D85550]'
+                                : 'text-[#A9B9B1]'
+                            }`}
+                          >
+                            {Number(item.increaseRate24h) > 0 ? (
+                              <UpIcon />
+                            ) : Number(item.increaseRate24h) < 0 ? (
+                              <DownIcon />
+                            ) : (
+                              <ArrowRight />
+                            )}
+                            <span className="text-[15px]">
                               {Math.abs(Number(item.increaseRate24h))}%
                             </span>
                           </div>
