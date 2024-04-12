@@ -41,9 +41,9 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const xfansCheckRetweet = urlParams.get(XFANS_CHECK_RETWEET);
 
-  const checkTasksStatus = async () => {
+  const checkTasksStatus = async (toast: boolean) => {
     try {
-      const activateData = (await http.post2(`api/user/activate/check-task`, false)) as ResultData;
+      const activateData = (await http.post2(`api/user/activate/check-task`, toast)) as ResultData;
       if (activateData.code === 0 && activateData.data.finished === true) {
         useGlobalStore.setState({
           isGoRetwittesVerify: true,
@@ -80,7 +80,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
 
   useEffect(() => {
     if (!xfansCheckRetweet) {
-      checkTasksStatus();
+      checkTasksStatus(false);
     }
   }, []);
 
@@ -170,7 +170,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
                 break;
 
               case XFANS_VERIFY:
-                checkTasksStatus();
+                checkTasksStatus(true);
                 break;
 
               default:

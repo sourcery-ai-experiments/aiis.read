@@ -15,7 +15,7 @@ import { useWalletAccounts } from '../../service/wallet';
 import useGlobalStore from '../../store/useGlobalStore';
 import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useProfileModal from '../../store/useProfileModal';
-
+import { XFANS_NETWORK } from '../../constants';
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
@@ -49,7 +49,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
         <span className="text-xl font-medium">Home</span>
       </div>
       <div className="px-3 py-[30px]">
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-[14px]">
             <img
               onClick={() => openProfile(userInfo)}
@@ -76,7 +76,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
               </CopyToClipboard>
 
               <div className="flex items-center space-x-1">
-                <span className="text-[#919099]">Network:Blast Testnet</span>
+                <span className="text-[#919099]">{`Network:${XFANS_NETWORK}`}</span>
                 <Network />
               </div>
             </div>

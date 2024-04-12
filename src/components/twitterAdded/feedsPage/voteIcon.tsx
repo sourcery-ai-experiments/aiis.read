@@ -13,9 +13,10 @@ dayjs.extend(isBetween);
 interface VoteTwitterProps {
   twitterId: string;
   userName: string;
+  time: string;
 }
 
-export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
+export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName, time }) => {
   const [voted, setVoted] = useState(false);
   const [userInfo, setUserInfo] = useState<any>(null);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -41,7 +42,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName }) => {
 
   const isHover = useHover(ref);
   const { rewardStage } = useTweetStore((state) => ({ ...state }));
-  const isPast = dayjs().isBetween(rewardStage?.startedAt, rewardStage?.endedAt);
+  const isPast = dayjs(time).isBetween(rewardStage?.startedAt, rewardStage?.endedAt);
 
   useEffect(() => {
     batchUserInfo(userInfo);

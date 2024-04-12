@@ -32,3 +32,40 @@ export function getBigNumberString(numStr: string) {
     .toNumber()
     .toLocaleString(undefined, { maximumFractionDigits: 20 });
 }
+
+export function getElementWidthByXPath(xpath: string): number | null {
+  const element = document.evaluate(
+    xpath,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue as HTMLElement;
+
+  if (element) {
+    return element.offsetWidth;
+  } else {
+    console.error('Element not found with the given XPath');
+    return null;
+  }
+}
+
+export function getElementRightByXPath(xpath: string): number | null {
+  const element = document.evaluate(
+    xpath,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue as HTMLElement;
+  if (element) {
+    const rect = element.getBoundingClientRect();
+
+    // 计算元素的右侧绝对位置
+    const rightPosition = rect.right;
+    return rightPosition;
+  } else {
+    console.error('Element not found with the given XPath');
+    return null;
+  }
+}

@@ -7,12 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
 import * as toaster from '../../components/Toaster';
-import {
-  XFANS_CONTENT_WIDTH,
-  XFANS_MIN_WIDTH,
-  XFANS_TWITTER_CONTENT_WIDTH,
-  XFANS_TWITTER_OFFSET,
-} from '../../constants';
+import { XFANS_CONTENT_WIDTH, XFANS_MIN_WIDTH } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -23,22 +18,22 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-
+import { getElementRightByXPath } from '../../utils';
 import LogoButton from './logoButton';
-
+import { XFANS_CHECK_RETWEET, XFANS_TOKEN, OAUTH2, XFANS_TWITTER_HOMEPAGE } from '../../constants';
 import '../../tailwind.css';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-  drawerWidth?: number; // 添加 width 参数
-}>(({ theme, open, drawerWidth }) => ({
+  drawerwidth?: number; // 添加 width 参数
+}>(({ theme, open, drawerwidth }) => ({
   // flexGrow: 1,
   // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -(drawerWidth || 0),
+  marginRight: -(drawerwidth || 0),
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -73,10 +68,17 @@ export default function PersistentDrawerRight() {
   };
 
   const caculateDrawerWidth = () => {
-    return Math.max(
-      (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
-      XFANS_MIN_WIDTH
-    );
+    if (window.location.href.includes(OAUTH2)) {
+      return XFANS_MIN_WIDTH;
+    }
+    // 首页信息流dom
+    const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
+    const right = getElementRightByXPath(xPath);
+
+    if (right === null) {
+      return XFANS_MIN_WIDTH;
+    }
+    return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
   };
 
   const caculateBackWidth = () => {
@@ -106,7 +108,7 @@ export default function PersistentDrawerRight() {
   React.useEffect(() => {
     // 再获取url中的token 作为第一优先级
     const urlParams = new URLSearchParams(window.location.search);
-    const xfansToken = urlParams.get('xfans_token');
+    const xfansToken = urlParams.get(XFANS_TOKEN);
     if (xfansToken) {
       // 登录看是否有效，拿到 invite 状态
       useGlobalStore.setState({ token: xfansToken });
@@ -124,6 +126,14 @@ export default function PersistentDrawerRight() {
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
     setInterval(() => {
+      // 当处于登陆状态中的时候，自动logout不触发。
+      if (
+        window.location.href.includes(XFANS_TOKEN) ||
+        window.location.href.includes(XFANS_CHECK_RETWEET) ||
+        window.location.href.includes(XFANS_TWITTER_HOMEPAGE)
+      ) {
+        return;
+      }
       const userInfo = useGlobalStore.getState().userInfo;
       if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
         // 读取所有的 cookie
@@ -198,7 +208,7 @@ export default function PersistentDrawerRight() {
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={isShowDrawer} drawerWidth={drawerWidth}></Main>
+      <Main open={isShowDrawer} drawerwidth={drawerWidth}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
