@@ -47,7 +47,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
         <span className="text-xl font-medium">Home</span>
       </div>
       <div className="px-3 py-[30px]">
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-[14px]">
             <img
               onClick={() => openProfile(userInfo)}
