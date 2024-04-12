@@ -6,12 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import * as toaster from '../../components/Toaster';
-import {
-  XFANS_CONTENT_WIDTH,
-  XFANS_MIN_WIDTH,
-  XFANS_TWITTER_CONTENT_WIDTH,
-  XFANS_TWITTER_OFFSET,
-} from '../../constants';
+import { XFANS_CONTENT_WIDTH, XFANS_MIN_WIDTH } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -22,22 +17,22 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-
+import { getElementRightByXPath } from '../../utils';
 import LogoButton from './logoButton';
 
 import '../../tailwind.css';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
-  drawerWidth?: number; // 添加 width 参数
-}>(({ theme, open, drawerWidth }) => ({
+  drawerwidth?: number; // 添加 width 参数
+}>(({ theme, open, drawerwidth }) => ({
   // flexGrow: 1,
   // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -(drawerWidth || 0),
+  marginRight: -(drawerwidth || 0),
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -72,10 +67,17 @@ export default function PersistentDrawerRight() {
   };
 
   const caculateDrawerWidth = () => {
-    return Math.max(
-      (window.innerWidth - XFANS_TWITTER_CONTENT_WIDTH) / 2 + XFANS_TWITTER_OFFSET,
-      XFANS_MIN_WIDTH
-    );
+    if (window.location.href.includes('oauth2')) {
+      return XFANS_MIN_WIDTH;
+    }
+    // 首页信息流dom
+    const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
+    const right = getElementRightByXPath(xPath);
+
+    if (right === null) {
+      return XFANS_MIN_WIDTH;
+    }
+    return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
   };
 
   const caculateBackWidth = () => {
@@ -197,7 +199,7 @@ export default function PersistentDrawerRight() {
         {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
         <LogoButton />
       </IconButton>
-      <Main open={isShowDrawer} drawerWidth={drawerWidth}></Main>
+      <Main open={isShowDrawer} drawerwidth={drawerWidth}></Main>
       <Drawer
         sx={{
           width: drawerWidth,
