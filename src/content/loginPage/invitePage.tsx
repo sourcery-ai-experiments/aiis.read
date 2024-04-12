@@ -47,7 +47,7 @@ const InvitePage: FC<InvitePageProps> = ({ handleButtonClick }) => {
     }
   };
   return (
-    <div className="min-h-screen w-full items-center justify-center px-[34px] text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center px-[34px] text-center">
       <p className=" mt-[81px] text-center text-[32px] font-bold leading-[38px] text-[#0F1419]">
         Invite Code
       </p>

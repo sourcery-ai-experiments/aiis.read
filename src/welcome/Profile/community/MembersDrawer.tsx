@@ -7,6 +7,7 @@ import { useRequest } from 'ahooks';
 
 import ArrowBackIcon from '../../../components/icons/ArrowBackIcon';
 import { success } from '../../../components/Toaster';
+import { XFANS_CONTENT_WIDTH } from '../../../constants';
 import { blockUser, getUserList } from '../../../service/community';
 
 import { ToasterMessageType } from './constants';
@@ -32,10 +33,10 @@ export default function MembersDrawer({ isOwner = false, subject, open = false, 
   return (
     <Drawer
       sx={{
-        width: '427px',
+        width: XFANS_CONTENT_WIDTH,
         display: open ? 'block' : 'none',
         '& .MuiDrawer-paper': {
-          width: '427px',
+          width: XFANS_CONTENT_WIDTH,
           overflow: 'hidden',
           border: 'none',
         },

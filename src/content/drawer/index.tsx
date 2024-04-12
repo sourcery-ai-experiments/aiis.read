@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
+
 import * as toaster from '../../components/Toaster';
 import {
   XFANS_CONTENT_WIDTH,
@@ -202,7 +203,7 @@ export default function PersistentDrawerRight() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          '& > .MuiDrawer-paper': {
             width: drawerWidth,
           },
         }}
@@ -210,9 +211,9 @@ export default function PersistentDrawerRight() {
         anchor="right"
         open={isShowDrawer}
       >
-        <div className="flex h-full overflow-hidden">
+        <div className="flex h-full w-full overflow-hidden">
           <div
-            className={`mx-[2px] mt-[37px] flex h-[24px] flex-shrink-0 justify-end`}
+            className={`mx-[2px] mt-[37px] flex h-[24px] flex-1 flex-shrink-0 justify-end`}
             style={{
               width: backWidth,
             }}
@@ -223,31 +224,36 @@ export default function PersistentDrawerRight() {
             />
           </div>
           <Divider orientation="vertical" flexItem />
-          {page === PageType.Login && (
-            <SignInWithXPage
-              showLoading={loginLoading}
-              handleButtonClick={() => {
-                // reset follow status
-                useGlobalStore.setState({
-                  isGoFollow: false,
-                  isGoFollowVerify: false,
-                });
-                clickLogin();
-              }}
-            />
-          )}
-          {page === PageType.Invite && (
-            <InvitePage handleButtonClick={(inviteCode) => clickRegisterInviteCode(inviteCode)} />
-          )}
-          {page === PageType.Congratulation && (
-            <CongratulationPage goProfile={() => goPage(PageType.Profile)} />
-          )}
-          {page === PageType.Profile && (
-            <Profile handleButtonClick={() => goPage(PageType.Wallet)} />
-          )}
-          {page === PageType.Wallet && (
-            <Wallet back={() => goPage(PageType.Profile)} logout={logout} />
-          )}
+          <div
+            className="min-h-screen shrink-0"
+            style={{ width: XFANS_CONTENT_WIDTH + 'px', flexBasis: XFANS_CONTENT_WIDTH + 'px' }}
+          >
+            {page === PageType.Login && (
+              <SignInWithXPage
+                showLoading={loginLoading}
+                handleButtonClick={() => {
+                  // reset follow status
+                  useGlobalStore.setState({
+                    isGoFollow: false,
+                    isGoFollowVerify: false,
+                  });
+                  clickLogin();
+                }}
+              />
+            )}
+            {page === PageType.Invite && (
+              <InvitePage handleButtonClick={(inviteCode) => clickRegisterInviteCode(inviteCode)} />
+            )}
+            {page === PageType.Congratulation && (
+              <CongratulationPage goProfile={() => goPage(PageType.Profile)} />
+            )}
+            {page === PageType.Profile && (
+              <Profile handleButtonClick={() => goPage(PageType.Wallet)} />
+            )}
+            {page === PageType.Wallet && (
+              <Wallet back={() => goPage(PageType.Profile)} logout={logout} />
+            )}
+          </div>
         </div>
       </Drawer>
     </Box>

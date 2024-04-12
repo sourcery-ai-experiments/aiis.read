@@ -41,7 +41,7 @@ const Wallet = (props: { back?: () => void; logout?: () => void }) => {
     getWalletAccounts();
   }, []);
   return (
-    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
+    <div className="flex h-full w-full flex-col">
       <div className="flex items-center space-x-[10px] py-3 pl-4">
         <div className="cursor-pointer" onClick={() => props.back?.()}>
           <GoBack />

@@ -85,7 +85,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full items-center justify-center text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center text-center">
       <p className="mt-[81px] mb-[44px] text-center text-[32px] font-bold leading-[38px] text-[#0F1419]">
         Congratulations!
       </p>

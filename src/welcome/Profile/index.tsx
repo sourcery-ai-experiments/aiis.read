@@ -43,7 +43,7 @@ const Profile = (props: { handleButtonClick?: () => void }) => {
   }, []);
 
   return (
-    <div className="flex min-h-screen w-[433px] max-w-[433px] flex-col">
+    <div className="flex h-full w-full flex-col">
       <div className="flex items-center justify-between px-[15px] py-[10px]">
         <div className="flex items-center space-x-2">
           <img

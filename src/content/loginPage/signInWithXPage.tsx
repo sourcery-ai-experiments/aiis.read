@@ -11,7 +11,7 @@ interface SignInWithXPageProps {
 
 const SignInWithXPage: FC<SignInWithXPageProps> = ({ handleButtonClick, showLoading }) => {
   return (
-    <div className="min-h-screen w-full items-center justify-center text-center">
+    <div className="flex h-full w-full flex-col items-center justify-center text-center">
       <img
         className="mx-auto mt-[81px] mb-[32px] h-[120px] w-[120px] cursor-pointer"
         src="https://cdn-fe.s3.amazonaws.com/xfans/20240328-153101.png"
