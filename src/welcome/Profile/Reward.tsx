@@ -96,8 +96,8 @@ const Reward = () => {
   return (
     <>
       <div className="mx-6 flex items-center justify-between">
-        <div className="flex space-x-[20px]">
-          <div className="flex flex-col items-center space-y-1">
+        <div className="flex space-x-[10px]">
+          <div className="flex min-w-[60px] flex-col items-center space-y-1">
             <div className="flex items-center space-x-1">
               <Icon />
               <NumberDisplayer className="text-xs font-medium text-[#0F1419]" text={poolBalance} />
@@ -131,7 +131,7 @@ const Reward = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-[14px]">
+        <div className="flex items-center space-x-[8px]">
           <Claim price={ethPrice?.price} />
           <History price={ethPrice?.price} />
         </div>
