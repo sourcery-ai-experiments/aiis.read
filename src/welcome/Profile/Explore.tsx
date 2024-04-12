@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import dayjs from 'dayjs';
 
+import ArrowRight from '../../components/icons/ArrowRight';
 import DownIcon from '../../components/icons/DownIcon';
 import ETHIcon from '../../components/icons/ETHIcon';
 import { InfoCircle } from '../../components/icons/InfoCircle';
@@ -273,15 +274,23 @@ const Explore = () => {
                             />
                           </div>
 
-                          <div className="flex items-center space-x-1">
-                            {Number(item.increaseRate24h) >= 0 ? <UpIcon /> : <DownIcon />}
-                            <span
-                              className={`text-[15px] ${
-                                Number(item.increaseRate24h) >= 0
-                                  ? 'text-[#16B364]'
-                                  : 'text-[#D85550]'
-                              }`}
-                            >
+                          <div
+                            className={`flex items-center space-x-1 ${
+                              Number(item.increaseRate24h) > 0
+                                ? 'text-[#16B364]'
+                                : Number(item.increaseRate24h) < 0
+                                ? 'text-[#D85550]'
+                                : 'text-[#A9B9B1]'
+                            }`}
+                          >
+                            {Number(item.increaseRate24h) > 0 ? (
+                              <UpIcon />
+                            ) : Number(item.increaseRate24h) < 0 ? (
+                              <DownIcon />
+                            ) : (
+                              <ArrowRight />
+                            )}
+                            <span className="text-[15px]">
                               {Math.abs(Number(item.increaseRate24h))}%
                             </span>
                           </div>
