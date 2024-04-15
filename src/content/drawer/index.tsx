@@ -154,7 +154,9 @@ export default function PersistentDrawerRight() {
 
   const initURLMonitor = () => {
     // 定义您要监控的 URL
-    const twitterUrl = 'https://api.twitter.com/1.1/account/multi/switch.json';
+    const switchUrl = 'https://api.twitter.com/1.1/account/multi/switch.json';
+    const logoutUrl = 'https://api.twitter.com/1.1/account/logout.json';
+    const taskUrl = 'https://api.twitter.com/1.1/account/task.json';
 
     // 创建 PerformanceObserver
     const observer = new PerformanceObserver((list) => {
@@ -164,7 +166,11 @@ export default function PersistentDrawerRight() {
       // 遍历每个性能条目
       for (const entry of entries) {
         // 检查资源的 URL 是否与您关心的 URL 匹配
-        if (entry.name.includes(twitterUrl)) {
+        if (
+          entry.name.includes(switchUrl) ||
+          entry.name.includes(logoutUrl) ||
+          entry.name.includes(taskUrl)
+        ) {
           console.log('Detected request to switch account:', entry.name);
           console.log('Timing information:', entry);
           // 登出
