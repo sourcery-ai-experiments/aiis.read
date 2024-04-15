@@ -100,6 +100,8 @@ export default function PersistentDrawerRight() {
     window.addEventListener('resize', handleResize);
     window.addEventListener('load', handleResize);
 
+    handleResize();
+
     // 在组件卸载时移除事件监听器
     return () => {
       window.removeEventListener('resize', handleResize);
