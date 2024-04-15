@@ -85,7 +85,7 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
   }, []);
 
   return (
-    <div className="min-h-screen h-full w-full items-center justify-center text-center">
+    <div className="h-full min-h-screen w-full items-center justify-center text-center">
       <p className="mt-[81px] mb-[44px] text-center text-[32px] font-bold leading-[38px] text-[#0F1419]">
         Congratulations!
       </p>
@@ -186,8 +186,8 @@ const CongratulationPage: FC<CongratulationPageProps> = ({ goProfile }) => {
         disableElevation
         style={{
           color: '#fff',
-          backgroundColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
-          borderColor: retweetStatus ? '#9A6CF9' : '#B08DF6',
+          backgroundColor: startStatus ? '#9A6CF9' : '#B08DF6',
+          borderColor: startStatus ? '#9A6CF9' : '#B08DF6',
         }}
         onClick={async () => {
           try {
