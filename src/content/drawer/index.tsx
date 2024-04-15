@@ -98,10 +98,12 @@ export default function PersistentDrawerRight() {
 
     // 添加窗口大小变化时的事件监听器
     window.addEventListener('resize', handleResize);
+    window.addEventListener('load', handleResize);
 
     // 在组件卸载时移除事件监听器
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.addEventListener('load', handleResize);
     };
   }, []);
 
@@ -125,30 +127,57 @@ export default function PersistentDrawerRight() {
 
     // 检查xfans写入localStorage的twitterid跟twitter写在cookie里的twitterid是否匹配，不匹配则退出登录
     // 针对登出或者切换账号的情况
-    setInterval(() => {
-      // 当处于登陆状态中的时候，自动logout不触发。
-      if (
-        window.location.href.includes(XFANS_TOKEN) ||
-        window.location.href.includes(XFANS_CHECK_RETWEET) ||
-        window.location.href.includes(XFANS_TWITTER_HOMEPAGE)
-      ) {
-        return;
-      }
-      const userInfo = useGlobalStore.getState().userInfo;
-      if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
-        // 读取所有的 cookie
-        const cookies = document.cookie;
-        // 将获取的 cookie 字符串转换为对象形式
-        const cookieObj = Object.fromEntries(
-          cookies.split(';').map((cookie) => cookie.trim().split('='))
-        );
-        const cookieTwid = decodeURIComponent(cookieObj.twid)?.split('=')?.[1];
-        if (userInfo?.twitterId !== cookieTwid) {
+    // setInterval(() => {
+    //   // 当处于登陆状态中的时候，自动logout不触发。
+    //   if (
+    //     window.location.href.includes(XFANS_TOKEN) ||
+    //     window.location.href.includes(XFANS_CHECK_RETWEET) ||
+    //     window.location.href.includes(XFANS_TWITTER_HOMEPAGE)
+    //   ) {
+    //     return;
+    //   }
+    //   const userInfo = useGlobalStore.getState().userInfo;
+    //   if (userInfo && userInfo?.twitterId && userInfo?.twitterId?.length > 0) {
+    //     // 读取所有的 cookie
+    //     const cookies = document.cookie;
+    //     // 将获取的 cookie 字符串转换为对象形式
+    //     const cookieObj = Object.fromEntries(
+    //       cookies.split(';').map((cookie) => cookie.trim().split('='))
+    //     );
+    //     const cookieTwid = decodeURIComponent(cookieObj.twid)?.split('=')?.[1];
+    //     if (userInfo?.twitterId !== cookieTwid) {
+    //       logout();
+    //     }
+    //   }
+    // }, 1000);
+  }, []);
+
+  const initURLMonitor = () => {
+    // 定义您要监控的 URL
+    const twitterUrl = 'https://api.twitter.com/1.1/account/multi/switch.json';
+
+    // 创建 PerformanceObserver
+    const observer = new PerformanceObserver((list) => {
+      // 获取所有资源性能条目
+      const entries = list.getEntriesByType('resource');
+
+      // 遍历每个性能条目
+      for (const entry of entries) {
+        // 检查资源的 URL 是否与您关心的 URL 匹配
+        if (entry.name.includes(twitterUrl)) {
+          console.log('Detected request to switch account:', entry.name);
+          console.log('Timing information:', entry);
+          // 登出
           logout();
         }
       }
-    }, 1000);
-  }, []);
+    });
+
+    // 开始观察 performance 对象中的 resource 类型数据
+    observer.observe({ type: 'resource', buffered: true });
+  };
+
+  initURLMonitor();
 
   const checkProfileData = async () => {
     // https://test-xfans-api.d.buidlerdao.xyz/api/user/me
