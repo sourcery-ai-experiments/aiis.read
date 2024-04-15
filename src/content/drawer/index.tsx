@@ -103,7 +103,7 @@ export default function PersistentDrawerRight() {
     // 在组件卸载时移除事件监听器
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.addEventListener('load', handleResize);
+      window.removeEventListener('load', handleResize);
     };
   }, []);
 
