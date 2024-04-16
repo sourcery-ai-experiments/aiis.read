@@ -24,6 +24,7 @@ export interface GlobalStoreProps {
   userInfo: UserInfo | null;
   goPage(page: PageType): void;
   logout(): void;
+  userVote: Record<string, boolean> | null;
 }
 
 const useGlobalStore = create<GlobalStoreProps>()(
@@ -47,6 +48,7 @@ const useGlobalStore = create<GlobalStoreProps>()(
           page: PageType.Login,
         });
       },
+      userVote: null,
     }),
     {
       name: 'xfans-user-config',
