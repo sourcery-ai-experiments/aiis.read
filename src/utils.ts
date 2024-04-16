@@ -82,7 +82,8 @@ export const caculateDrawerWidth = () => {
   if (right === null) {
     return XFANS_MIN_WIDTH;
   }
-  return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
+
+  return Math.max(document.body.clientWidth - right, XFANS_MIN_WIDTH);
 };
 
 export const caculateBackWidth = () => {
