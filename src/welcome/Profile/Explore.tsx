@@ -18,6 +18,7 @@ import UserName from '../../components/User';
 import { useNewList, useRecentList, useShareList, useTopList } from '../../service/share';
 import useProfileModal from '../../store/useProfileModal';
 import useShareStore from '../../store/useShareStore';
+import useUserStore from '../../store/useUserStore';
 import { getTimeDistanceFromDate } from '../../utils';
 
 const Explore = () => {
@@ -27,6 +28,7 @@ const Explore = () => {
   const { run: getNewList, loading: loading2 } = useNewList();
   const { run: getRecentList, loading: loading3 } = useRecentList();
   const { shareList, topList, newList, recentList } = useShareStore((state) => ({ ...state }));
+  const { userInfo } = useUserStore((state) => ({ ...state }));
 
   const [value, setValue] = React.useState('1');
   const [loadingx, setLoadingx] = React.useState(true);
@@ -35,7 +37,7 @@ const Explore = () => {
     1: getTopList,
     2: getNewList,
     3: getRecentList,
-    4: getShareList,
+    4: () => getShareList({ relatedAddress: userInfo?.walletAddress }),
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
