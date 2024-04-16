@@ -5,7 +5,7 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 import useGlobalStore from '../store/useGlobalStore';
-
+import { caculateBackWidth, caculateDrawerWidth } from '../utils';
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
 
@@ -36,6 +36,10 @@ withProxyStore(<Content />, store).then((component) => {
   // 延迟执行的代码 3000毫秒后执行，即3秒
   setTimeout(() => {
     setInterval(() => {
+      useGlobalStore.setState({
+        drawerWidth: caculateDrawerWidth(),
+        backWidth: caculateBackWidth(),
+      });
       // 使用示例
       const userIsOnProfilePage = whereIsUser();
       const { token } = useGlobalStore.getState();

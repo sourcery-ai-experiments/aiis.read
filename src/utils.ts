@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
+import { OAUTH2, XFANS_MIN_WIDTH, XFANS_CONTENT_WIDTH } from './constants';
 
 export function formatTime(seconds: any) {
   if (seconds < 60) {
@@ -69,3 +70,21 @@ export function getElementRightByXPath(xpath: string): number | null {
     return null;
   }
 }
+
+export const caculateDrawerWidth = () => {
+  if (window.location.href.includes(OAUTH2)) {
+    return XFANS_MIN_WIDTH;
+  }
+  // 首页信息流dom
+  const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
+  const right = getElementRightByXPath(xPath);
+
+  if (right === null) {
+    return XFANS_MIN_WIDTH;
+  }
+  return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
+};
+
+export const caculateBackWidth = () => {
+  return caculateDrawerWidth() - XFANS_CONTENT_WIDTH;
+};
