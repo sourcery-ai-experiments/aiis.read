@@ -14,6 +14,7 @@ declare global {
   export interface ShareRequest {
     subject?: string;
     trader?: string;
+    relatedAddress?: string;
   }
   /**
    * xfans-be.api.v1.GetTradesRes
