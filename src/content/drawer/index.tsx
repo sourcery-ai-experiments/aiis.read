@@ -51,11 +51,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 export default function PersistentDrawerRight() {
-  const { isShowDrawer, goPage, page, logout, drawerWidth, backWidth } = useGlobalStore(
-    (state) => ({ ...state })
-  );
+  const { isShowDrawer, goPage, page, logout } = useGlobalStore((state) => ({ ...state }));
 
   const [loginLoading, setLoginLoading] = React.useState(false);
+  const [drawerWidth, setDrawerWidth] = React.useState(caculateDrawerWidth());
+  const [backWidth, setBackWidth] = React.useState(caculateBackWidth());
 
   const handleDrawerOpen = () => {
     useGlobalStore.setState({
@@ -69,15 +69,23 @@ export default function PersistentDrawerRight() {
     });
   };
 
-  React.useEffect(() => {
-    function handleResize() {
-      // 当窗口大小变化时，更新 width 的值
-      useGlobalStore.setState({
-        drawerWidth: caculateDrawerWidth(),
-        backWidth: caculateBackWidth(),
-      });
-    }
+  const handleResize = () => {
+    // 当窗口大小变化时，更新 width 的值
+    setDrawerWidth(caculateDrawerWidth());
+    setBackWidth(caculateBackWidth());
+  };
 
+  // 动态更新width
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      handleResize();
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  React.useEffect(() => {
     // 添加窗口大小变化时的事件监听器
     window.addEventListener('resize', handleResize);
     window.addEventListener('load', handleResize);

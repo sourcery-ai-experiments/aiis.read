@@ -24,8 +24,6 @@ export interface GlobalStoreProps {
   userInfo: UserInfo | null;
   goPage(page: PageType): void;
   logout(): void;
-  drawerWidth: number;
-  backWidth: number;
   userVote: Record<string, boolean> | null;
 }
 
@@ -50,8 +48,6 @@ const useGlobalStore = create<GlobalStoreProps>()(
           page: PageType.Login,
         });
       },
-      drawerWidth: 0,
-      backWidth: 0,
       userVote: null,
     }),
     {
