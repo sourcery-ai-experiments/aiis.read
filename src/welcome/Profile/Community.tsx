@@ -18,28 +18,21 @@ type CommunityWithMessage = Community & {
 };
 
 const Community = () => {
-  const [lockedCommunities, setLockedCommunities] = useState<Community[]>([]);
-  const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[]>([]);
+  const [lockedCommunities, setLockedCommunities] = useState<Community[] | null>(null);
+  const [unlockedCommunities, setUnlockedCommunities] = useState<CommunityWithMessage[] | null>(
+    null
+  );
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
   const { wallet } = useAccount();
-  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    setLoading(true);
-    let p = 0;
     getList(0).then((data) => {
       setLockedCommunities(data);
-      p++;
-      if (p === 2) {
-        setLoading(false);
-      }
     });
     getList(1).then((items: CommunityWithMessage[]) => {
       let len = 0;
-      p++;
       if (items.length === 0) {
         setUnlockedCommunities(items);
-        setLoading(false);
         return;
       }
       items.forEach((item) => {
@@ -49,9 +42,6 @@ const Community = () => {
           len++;
           if (len === items.length) {
             setUnlockedCommunities(items);
-            if (p === 2) {
-              setLoading(false);
-            }
           }
         });
       });
@@ -68,9 +58,10 @@ const Community = () => {
   }
 
   function renderUnlocked() {
+    if (unlockedCommunities == null) return null;
     if (unlockedCommunities.length === 0)
       return (
-        <div className="flex flex-col items-center">
+        <div className="flex h-[250px] flex-col items-center">
           <ListEmpty className="mt-[50px]" />
           <p className="xfans-font-sf mt-[10px] text-[#00000080]">
             No unlocked communities available.
@@ -79,7 +70,7 @@ const Community = () => {
       );
 
     return (
-      <ul>
+      <ul className="h-[250px]">
         {unlockedCommunities.map((item, i) => (
           <li
             key={i}
@@ -116,11 +107,12 @@ const Community = () => {
   }
 
   function renderLocked() {
+    if (lockedCommunities == null) return null;
     if (lockedCommunities.length === 0) return null;
 
     return (
       <>
-        <div className="mt-[100px] flex items-center justify-center text-center text-[15px] font-medium text-[#9A6CF9]">
+        <div className="flex items-center justify-center text-center text-[15px] font-medium text-[#9A6CF9]">
           The Following Are Locked Communities
           <Tooltip title="To unlock the community features, fans need to collectively pledge more than 3 shares. Pledges can be revoked at any time, but if the total falls below 3 shares, the community will lock again while keeping chat data.">
             <span className="ml-[6px]">
@@ -160,7 +152,7 @@ const Community = () => {
       </>
     );
   }
-  if (loading) {
+  if (lockedCommunities == null || unlockedCommunities == null) {
     return (
       <div className=" flex flex-1 flex-col items-center justify-center overflow-x-hidden px-4">
         <Loading />
@@ -188,7 +180,10 @@ const Community = () => {
         <ChatRoomDrawer
           community={selectedCommunity && selectedCommunity.status === 1 ? selectedCommunity : null}
           open={selectedCommunity?.status === 1}
-          onClose={() => setSelectedCommunity(null)}
+          onClose={() => {
+            setSelectedCommunity(null);
+            refresh();
+          }}
         />
       }
     </div>

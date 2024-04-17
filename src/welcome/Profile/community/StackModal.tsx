@@ -223,8 +223,11 @@ function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired:
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
       <div
-        className={`item-center absolute left-0 top-0 flex h-[20px] rounded-full bg-[#9A6CF969] pl-[10px] pr-[10px]`}
-        style={{ width: `calc(${Math.min(percentage, 100)}%)` }}
+        className={`item-center absolute left-0 top-0 flex h-[20px] rounded-full pl-[10px] pr-[10px]`}
+        style={{
+          width: `calc(${Math.min(percentage, 100)}%)`,
+          background: 'linear-gradient(92.17deg, #BD95FF 1.19%, #9A6CF9 98.18%)',
+        }}
       />
       <div className="absolute right-0 top-[1px] flex h-[18px] items-center justify-center rounded-full border border-[#9A6CF9] bg-white px-[5px] text-xs text-[#2E2E32]">
         {stakeRequired / 100}
