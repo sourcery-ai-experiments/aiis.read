@@ -46,7 +46,6 @@ export function getElementWidthByXPath(xpath: string): number | null {
   if (element) {
     return element.offsetWidth;
   } else {
-    console.error('Element not found with the given XPath');
     return null;
   }
 }
@@ -66,7 +65,6 @@ export function getElementRightByXPath(xpath: string): number | null {
     const rightPosition = rect.right;
     return rightPosition;
   } else {
-    console.error('Element not found with the given XPath');
     return null;
   }
 }
