@@ -121,12 +121,6 @@ export default function ChatRoomDrawer({ open = false, community, onClose }: Pro
   );
 
   function renderMessages() {
-    if (messages.length === 0)
-      return (
-        <div className="flex flex-1 items-center justify-center">
-          <Loading />
-        </div>
-      );
     if (members.length === 0)
       return (
         <div className="flex flex-1 items-center justify-center">

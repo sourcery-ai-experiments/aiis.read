@@ -146,7 +146,7 @@ const Reward = () => {
         }}
       />
 
-      <div className="mx-4">
+      <div className="mx-4 flex h-0 flex-1 flex-col">
         <TabContext value={value}>
           <Box>
             <TabList
@@ -194,12 +194,7 @@ const Reward = () => {
               />
             </TabList>
           </Box>
-          <TabPanel
-            value="1"
-            sx={{
-              padding: 0,
-            }}
-          >
+          <TabPanel value="1" className="xfans-scrollbar h-0 flex-1 overflow-y-auto p-0">
             {loadingTweetList || loadingx ? (
               <CenterLoading />
             ) : tweetList == null || tweetList.length === 0 ? (
@@ -259,12 +254,7 @@ const Reward = () => {
               </ul>
             )}
           </TabPanel>
-          <TabPanel
-            value="2"
-            sx={{
-              padding: 0,
-            }}
-          >
+          <TabPanel value="2" className="xfans-scrollbar h-0 flex-1 overflow-y-auto p-0">
             {loadingTweetYourRank || loadingx ? (
               <CenterLoading />
             ) : tweetYourRank == null || tweetYourRank.length === 0 ? (

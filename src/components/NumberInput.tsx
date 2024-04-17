@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { TextField } from '@mui/material';
 import { debounce } from 'lodash';
 
-const pattern = /^(0|[1-9][0-9]*)(\.[0-9]{0,2})?$/;
+const pattern = /^(0|[1-9][0-9]*)(\.[0-9]{0,1})?$/;
 
 export type NumberInputRef = {
   reset(): void;

@@ -246,7 +246,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
 
         <div className="mt-4 flex items-center space-x-1 self-end text-black">
           <span className="text-sm">Minimum unit: </span>
-          <span className="text-sm font-medium">0.01 </span>
+          <span className="text-sm font-medium">0.1 </span>
         </div>
 
         <Divider

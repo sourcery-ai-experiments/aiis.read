@@ -51,7 +51,7 @@ const ProfileModal = () => {
         <span className="text-xs text-[#0F1419]">{item.holderUser?.username}</span>
       </div>
     ),
-    shares: Number(item.shares) / 100,
+    shares: Number(item.shares) / 10,
     value: (
       <div className="flex items-center space-x-1">
         <Icon />
@@ -72,7 +72,7 @@ const ProfileModal = () => {
         <span className="text-xs text-[#0F1419]">{item.subjectUser?.username}</span>
       </div>
     ),
-    shares: Number(item.shares) / 100,
+    shares: Number(item.shares) / 10,
     value: (
       <div className="flex items-center space-x-1">
         <Icon />
