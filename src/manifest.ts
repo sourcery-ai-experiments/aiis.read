@@ -12,6 +12,7 @@ const manifest: ManifestV3Export = {
     {
       matches: ['https://twitter.com/*'],
       js: ['src/content/index.tsx'],
+      run_at: 'document_end',
     },
   ],
   host_permissions: ['https://twitter.com/*', 'https://x.com/*'],

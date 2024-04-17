@@ -5,7 +5,6 @@ import { Store } from '@eduardoac-skimlinks/webext-redux';
 
 import { proxyStore as store } from '../app/proxyStore';
 import useGlobalStore from '../store/useGlobalStore';
-
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
 import Content from './Content';
 

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 
 import * as toaster from '../../components/Toaster';
-import { XFANS_CONTENT_WIDTH, XFANS_MIN_WIDTH } from '../../constants';
+import { XFANS_CONTENT_WIDTH } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
@@ -18,9 +18,9 @@ import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-import { getElementRightByXPath } from '../../utils';
+import { caculateBackWidth, caculateDrawerWidth } from '../../utils';
 import LogoButton from './logoButton';
-import { XFANS_CHECK_RETWEET, XFANS_TOKEN, OAUTH2, XFANS_TWITTER_HOMEPAGE } from '../../constants';
+import { XFANS_TOKEN } from '../../constants';
 import '../../tailwind.css';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -54,6 +54,8 @@ export default function PersistentDrawerRight() {
   const { isShowDrawer, goPage, page, logout } = useGlobalStore((state) => ({ ...state }));
 
   const [loginLoading, setLoginLoading] = React.useState(false);
+  const [drawerWidth, setDrawerWidth] = React.useState(caculateDrawerWidth());
+  const [backWidth, setBackWidth] = React.useState(caculateBackWidth());
 
   const handleDrawerOpen = () => {
     useGlobalStore.setState({
@@ -67,35 +69,23 @@ export default function PersistentDrawerRight() {
     });
   };
 
-  const caculateDrawerWidth = () => {
-    if (window.location.href.includes(OAUTH2)) {
-      return XFANS_MIN_WIDTH;
-    }
-    // 首页信息流dom
-    const xPath = '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div';
-    const right = getElementRightByXPath(xPath);
-
-    if (right === null) {
-      return XFANS_MIN_WIDTH;
-    }
-    return Math.max(window.innerWidth - right, XFANS_MIN_WIDTH);
+  const handleResize = () => {
+    // 当窗口大小变化时，更新 width 的值
+    setDrawerWidth(caculateDrawerWidth());
+    setBackWidth(caculateBackWidth());
   };
 
-  const caculateBackWidth = () => {
-    return caculateDrawerWidth() - XFANS_CONTENT_WIDTH;
-  };
-
-  const [drawerWidth, setDrawerWidth] = React.useState(caculateDrawerWidth());
-
-  const [backWidth, setBackWidth] = React.useState(caculateBackWidth());
+  // 动态更新width
+  // React.useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     handleResize();
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
 
   React.useEffect(() => {
-    function handleResize() {
-      // 当窗口大小变化时，更新 width 的值
-      setBackWidth(caculateBackWidth());
-      setDrawerWidth(caculateDrawerWidth());
-    }
-
     // 添加窗口大小变化时的事件监听器
     window.addEventListener('resize', handleResize);
     window.addEventListener('load', handleResize);
