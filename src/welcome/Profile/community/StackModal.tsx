@@ -54,11 +54,9 @@ export default function StackModal({ onClose, subject }: ModalProps) {
           stakeRequired={+(community?.requiredStakedShares ?? 0)}
         />
         <p className="mt-[14px] w-full text-right text-sm text-[#919099]">
-          Community total staked: {+(community?.stakedShares ?? 0) / 100}
+          Community total staked: {+(community?.stakedShares ?? 0) / 10}
         </p>
-        <p className="w-full text-right text-sm text-[#919099]">
-          you staked: {+stakeBalance / 100}
-        </p>
+        <p className="w-full text-right text-sm text-[#919099]">you staked: {+stakeBalance / 10}</p>
 
         {/* tab bar */}
         <div className="flex w-full justify-start">
@@ -116,8 +114,8 @@ function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
     <>
       <div className="mt-[25px] w-full">
         <p className="flex justify-between text-base font-medium text-[#0F1419]">
-          <span>Shares you hold: {+sharesBalance / 100}</span>
-          <span>Max stake: {+sharesBalance / 100}</span>
+          <span>Shares you hold: {+sharesBalance / 10}</span>
+          <span>Max stake: {+sharesBalance / 10}</span>
         </p>
         <NumberInput
           className="!mt-[16px]"
@@ -125,7 +123,7 @@ function StackPanel({ sharesBalance, onClose, address }: StackPanelProps) {
           fullWidth
           label="Amount"
           min={0}
-          max={+sharesBalance / 100}
+          max={+sharesBalance / 10}
           onChange={(v) => setAmount(v ?? 0)}
         />
       </div>
@@ -178,8 +176,8 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
     <>
       <div className="mt-[25px] w-full">
         <p className="flex justify-between text-base font-medium text-[#0F1419]">
-          <span>Shares you staked: {+stakeBalance / 100}</span>
-          <span>Max unstake: {+stakeBalance / 100}</span>
+          <span>Shares you staked: {+stakeBalance / 10}</span>
+          <span>Max unstake: {+stakeBalance / 10}</span>
         </p>
         <NumberInput
           className="!mt-[16px]"
@@ -187,7 +185,7 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
           fullWidth
           label="Amount"
           min={0}
-          max={+stakeBalance / 100}
+          max={+stakeBalance / 10}
           onChange={(v) => setAmount(v ?? 0)}
         />
       </div>
@@ -218,7 +216,7 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
 }
 
 function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired: number }) {
-  const percentage = Number.isNaN(staked / stakeRequired) ? 0 : (staked / stakeRequired) * 100;
+  const percentage = Number.isNaN(staked / stakeRequired) ? 0 : (staked / stakeRequired) * 10;
   return (
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
@@ -230,7 +228,7 @@ function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired:
         }}
       />
       <div className="absolute right-0 top-[1px] flex h-[18px] items-center justify-center rounded-full border border-[#9A6CF9] bg-white px-[5px] text-xs text-[#2E2E32]">
-        {stakeRequired / 100}
+        {stakeRequired / 10}
       </div>
     </div>
   );

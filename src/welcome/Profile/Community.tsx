@@ -136,10 +136,10 @@ const Community = () => {
                   </span>
                   <div className="flex items-start justify-between">
                     <span className="text-xs text-[#5B7083]">
-                      Unlock Requires Staking: {+item.requiredStakedShares / 100}
+                      Unlock Requires Staking: {+item.requiredStakedShares / 10}
                     </span>
                     <span className="text-xs text-[#5B7083]">
-                      Staked: {+item.stakedShares / 100}
+                      Staked: {+item.stakedShares / 10}
                     </span>
                   </div>
                 </div>

@@ -96,7 +96,7 @@ function MemberItem({
         <div className="font-bold text-[#0F1419]">{user.username}</div>
         <div className="text-[#919099]">
           <span className="text-sm">Holding</span>
-          <span className="font- ml-[6px] text-base">{+user.shares / 100}</span>
+          <span className="font- ml-[6px] text-base">{+user.shares / 10}</span>
         </div>
       </div>
       <div className="">

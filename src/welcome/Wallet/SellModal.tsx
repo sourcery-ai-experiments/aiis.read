@@ -253,7 +253,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
               {loadingSharesBalance ? (
                 <CircularProgress size={12} sx={{ marginTop: '6px' }} />
               ) : (
-                +shareBalance / 100
+                +shareBalance / 10
               )}
             </span>
           </div>
@@ -264,7 +264,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
           className="!mt-6"
           fullWidth
           label="Amount"
-          max={+shareBalance / 100}
+          max={+shareBalance / 10}
           disabled={isSelling}
           onChange={(v) => {
             setAmount(v ?? 0);
@@ -273,7 +273,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
 
         <div className="mt-4 flex items-center space-x-1 self-end text-black">
           <span className="text-sm">Minimum unit: </span>
-          <span className="text-sm font-medium">0.01 </span>
+          <span className="text-sm font-medium">0.1 </span>
         </div>
 
         <Divider

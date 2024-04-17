@@ -353,7 +353,7 @@ const Explore = () => {
                             }`}
                           >
                             {item.isBuy ? '+' : '-'}
-                            {Number(item.shareAmount) / 100} Shares
+                            {Number(item.shareAmount) / 10} Shares
                           </span>
                           <div className="flex items-center space-x-1">
                             <ETHIcon />
