@@ -76,14 +76,14 @@ export default function PersistentDrawerRight() {
   };
 
   // 动态更新width
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      handleResize();
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     handleResize();
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
 
   React.useEffect(() => {
     // 添加窗口大小变化时的事件监听器
