@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 
 import { useTweetBatchUserInfo, useTweetVote } from '../../../service/tweet';
+import useGlobalStore from '../../../store/useGlobalStore';
 import useTweetStore from '../../../store/useTweetStore';
 import * as toaster from '../../Toaster';
 
@@ -17,7 +18,8 @@ interface VoteTwitterProps {
 }
 
 export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName, time }) => {
-  const [voted, setVoted] = useState(false);
+  // const [voted, setVoted] = useState(false);
+  const { userVote } = useGlobalStore((state) => ({ ...state }));
   const [userInfo, setUserInfo] = useState<any>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const { run: batchUserInfo } = useTweetBatchUserInfo(
@@ -31,11 +33,22 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName, time })
     twitterId,
     userName,
     () => {
-      setVoted(true);
+      // setVoted(true);
+      useGlobalStore.setState({
+        userVote: {
+          ...userVote,
+          [twitterId]: true,
+        },
+      });
       toaster.success(toaster.ToastMessage.VOTE_SUCCESS);
     },
     () => {
-      setVoted(false);
+      useGlobalStore.setState({
+        userVote: {
+          ...userVote,
+          [twitterId]: false,
+        },
+      });
       toaster.success(toaster.ToastMessage.VOTE_FAILED);
     }
   );
@@ -61,7 +74,7 @@ export const VoteTwitter: FC<VoteTwitterProps> = ({ twitterId, userName, time })
             e.stopPropagation();
           }}
         >
-          {voted || isHover ? <VoidedIcon /> : <VoidIcon />}
+          {userVote?.[twitterId] || isHover ? <VoidedIcon /> : <VoidIcon />}
         </div>
       ) : null}
     </>

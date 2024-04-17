@@ -26,6 +26,7 @@ export interface GlobalStoreProps {
   logout(): void;
   drawerWidth: number;
   backWidth: number;
+  userVote: Record<string, boolean> | null;
 }
 
 const useGlobalStore = create<GlobalStoreProps>()(
@@ -51,6 +52,7 @@ const useGlobalStore = create<GlobalStoreProps>()(
       },
       drawerWidth: 0,
       backWidth: 0,
+      userVote: null,
     }),
     {
       name: 'xfans-user-config',
