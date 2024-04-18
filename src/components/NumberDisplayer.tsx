@@ -9,6 +9,11 @@ type NumberDisplayerProps = {
    * @default false
    */
   loading?: boolean;
+  /**
+   * 有很多个零的情况下最后数字的精度
+   * @default 4
+   */
+  longZeroCasePrecision?: number;
 };
 
 /**
@@ -16,7 +21,12 @@ type NumberDisplayerProps = {
  *
  * eg. 0.0{4}5252
  */
-export function NumberDisplayer({ text = '0', className, loading = false }: NumberDisplayerProps) {
+export function NumberDisplayer({
+  text = '0',
+  className,
+  loading = false,
+  longZeroCasePrecision = 4,
+}: NumberDisplayerProps) {
   // 防止不会使用，或者错误传错类型，有助于开发阶段尽早发现问题
   if (typeof text !== 'string') throw new Error('text should be string');
   // 转成处理过后的字符串形式
@@ -46,11 +56,13 @@ export function NumberDisplayer({ text = '0', className, loading = false }: Numb
       const lastZeroIndex = getLastZero(valueAfterDot);
       const zeroCount = valueAfterDot.substring(0, lastZeroIndex + 1).length;
       const noneZeroValue = valueAfterDot.substring(lastZeroIndex + 1);
-      const [, noneZeroRealValue] = BigNumber(`0.${noneZeroValue}`).toFixed(4).split('.');
+      const [, noneZeroRealValue] = BigNumber(`0.${noneZeroValue}`)
+        .toFixed(longZeroCasePrecision)
+        .split('.');
       value = `0{${zeroCount}}${noneZeroRealValue}`;
     }
     return value;
-  }, [valueAfterDot, valueBeforeDot]);
+  }, [longZeroCasePrecision, valueAfterDot, valueBeforeDot]);
   // 拆分成2部分
 
   return (

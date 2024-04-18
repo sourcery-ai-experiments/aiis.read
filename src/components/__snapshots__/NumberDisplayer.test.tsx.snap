@@ -8,6 +8,14 @@ exports[`bignumber should work well 1`] = `
 </div>
 `;
 
+exports[`if decimal part less than 0.0001, decimal part should round into 3 decimals 1`] = `
+<div>
+  <span>
+    0.0{13}125
+  </span>
+</div>
+`;
+
 exports[`if decimal part less than 0.0001, decimal part should round into 4 decimals 1`] = `
 <div>
   <span>
