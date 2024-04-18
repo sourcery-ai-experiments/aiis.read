@@ -7,9 +7,9 @@ import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import NumberInput, { NumberInputRef } from '../../components/NumberInput';
 import * as toaster from '../../components/Toaster';
-import TruncateText from '../../components/TruncateText';
 import { ContractError } from '../../constants';
 import useAccount from '../../hooks/useAccount';
+import { useETHPrice } from '../../hooks/useETHPrice';
 import {
   buyShares,
   getBuyPrice,
@@ -18,7 +18,7 @@ import {
 } from '../../service/contract/shares';
 import { getBalance } from '../../service/contract/user';
 import useProfileModal from '../../store/useProfileModal';
-import useShareStore from '../../store/useShareStore';
+import { formatDollar } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="24" viewBox="0 0 15 24" fill="none">
@@ -77,7 +77,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const [loadingPirceAfterFee, setLoadingPirceAfterFee] = useState<boolean>(false);
   const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
 
-  const { ethPrice } = useShareStore((state) => ({ ...state }));
+  const ethPrice = useETHPrice();
 
   useEffect(() => {
     if (amount === 0) {
@@ -127,18 +127,6 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
   }, [wallet]);
 
-  const totalPriceUSD = useMemo(() => {
-    if (price !== '0' && priceAfterFee !== '0') {
-      const _totalPriceUSD = new BigNumber(price)
-        .dividedBy(new BigNumber(Math.pow(10, 18)))
-        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
-        .toFixed(5);
-      return _totalPriceUSD.toString();
-    } else {
-      return '0';
-    }
-  }, [price, priceAfterFee, ethPrice?.price]);
-
   // Transaction fee
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
@@ -149,19 +137,6 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     }
   }, [price, priceAfterFee]);
 
-  const transactionFeeUSD = useMemo(() => {
-    if (price !== '0' && priceAfterFee !== '0') {
-      const _transactionFee = new BigNumber(priceAfterFee)
-        .minus(new BigNumber(price))
-        .dividedBy(new BigNumber(Math.pow(10, 18)))
-        .multipliedBy(new BigNumber(ethPrice?.price ?? 0))
-        .toFixed(5);
-      return _transactionFee.toString();
-    } else {
-      return '0';
-    }
-  }, [price, priceAfterFee, ethPrice?.price]);
-
   // total
   const total = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
@@ -171,22 +146,6 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
       return '0';
     }
   }, [gasFee, priceAfterFee]);
-
-  const gasFeeUSD = useMemo(() => {
-    if (priceAfterFee !== '0' && gasFee !== '0') {
-      const _gasFee = new BigNumber(gasFee)
-        .dividedBy(new BigNumber(Math.pow(10, 18)))
-        .multipliedBy(new BigNumber(ethPrice?.price ?? 0));
-
-      if (_gasFee.comparedTo(new BigNumber(0.00001)) >= 0) {
-        return _gasFee.toFixed(5).toString();
-      } else {
-        return 0.00001;
-      }
-    } else {
-      return '0';
-    }
-  }, [gasFee, priceAfterFee, ethPrice?.price]);
 
   // 刷新数据, 可能有顺序问题
   function refresh() {
@@ -268,7 +227,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
                   <NumberDisplayer text={price} loading={loadingPrice || loadingPirceAfterFee} />
                 </span>
               </div>
-              <span className="text-[#919099]">≈${totalPriceUSD}</span>
+              <span className="text-[#919099]">{formatDollar(price, ethPrice)}</span>
             </div>
           </div>
         </div>
@@ -295,7 +254,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
                   />
                 </span>
               </div>
-              <span className="text-[#919099]">≈${transactionFeeUSD}</span>
+              <span className="text-[#919099]">{formatDollar(transactionFee, ethPrice)}</span>
             </div>
           </div>
           <div className="flex items-center justify-between">
@@ -307,9 +266,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
                   <NumberDisplayer text={gasFee} loading={loadingPrice} />
                 </span>
               </div>
-              <span className="text-[#919099]">
-                {gasFeeUSD === '0' || gasFeeUSD !== 0.00001 ? `≈$${gasFeeUSD}` : '<$0.00001'}
-              </span>
+              <span className="text-[#919099]">{formatDollar(gasFee, ethPrice)}</span>
             </div>
           </div>
         </div>

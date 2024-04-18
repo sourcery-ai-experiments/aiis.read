@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton } from '../../components/Button';
@@ -15,8 +14,10 @@ import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import { ROWS_PER_PAGE } from '../../constants';
+import { useETHPrice } from '../../hooks/useETHPrice';
 import { useTweetRewardHistory } from '../../service/tweet';
 import useTweetStore from '../../store/useTweetStore';
+import { formatDollar } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -41,6 +42,7 @@ const History = (props: { price?: number }) => {
   const { rewardHistoryList, rewardHistoryListTotal, rewardHistoryTotalRewardAmount } =
     useTweetStore((state) => ({ ...state }));
   const [page, setPage] = useState(0);
+  const ethPrice = useETHPrice();
 
   const { run: getRewardHistory, loading } = useTweetRewardHistory();
 
@@ -76,11 +78,7 @@ const History = (props: { price?: number }) => {
               </span>
               <div className="flex flex-col space-y-[6px]">
                 <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
-                  $
-                  {new BigNumber(rewardHistoryTotalRewardAmount)
-                    .dividedBy(new BigNumber(Math.pow(10, 18)))
-                    .multipliedBy(new BigNumber(props.price ?? 0))
-                    .toNumber()}
+                  {formatDollar(rewardHistoryTotalRewardAmount, ethPrice)}
                 </span>
                 <div className="flex items-center space-x-1">
                   <Icon />
