@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
-import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 
 import { BasicButton, PrimaryLoadingButton } from '../../components/Button';
@@ -15,9 +14,11 @@ import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { NumberDisplayer } from '../../components/NumberDisplayer';
 import * as toaster from '../../components/Toaster';
+import { useETHPrice } from '../../hooks/useETHPrice';
 import { useTweetReward } from '../../service/tweet';
 import { useWalletClaimReward } from '../../service/wallet';
 import useTweetStore from '../../store/useTweetStore';
+import { formatDollar } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -43,10 +44,7 @@ const Claim = (props: { price?: number }) => {
     ...state,
   }));
   const { run: getReward } = useTweetReward();
-
-  const rewardUSD = new BigNumber(tweetRewardTotalRewardAmount)
-    .dividedBy(new BigNumber(Math.pow(10, 18)))
-    .multipliedBy(new BigNumber(props.price ?? 0));
+  const ethPrice = useETHPrice();
 
   const { loading, run: claimReward } = useWalletClaimReward(
     tweetRewardList,
@@ -90,7 +88,7 @@ const Claim = (props: { price?: number }) => {
               </span>
               <div className="flex flex-col space-y-2">
                 <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
-                  ${rewardUSD.toString()}
+                  {formatDollar(tweetRewardTotalRewardAmount, ethPrice)}
                 </span>
                 <div className="flex items-center space-x-1">
                   <Icon />
@@ -109,7 +107,7 @@ const Claim = (props: { price?: number }) => {
               onClick={() => {
                 claimReward();
               }}
-              disabled={loading || rewardUSD.isZero()}
+              disabled={loading || tweetRewardTotalRewardAmount === '0'}
               loading={loading}
               loadingPosition="end"
               endIcon={<span />}

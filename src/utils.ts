@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import { OAUTH2, XFANS_MIN_WIDTH, XFANS_CONTENT_WIDTH } from './constants';
+
+import { OAUTH2, XFANS_CONTENT_WIDTH, XFANS_MIN_WIDTH } from './constants';
 
 export function formatTime(seconds: any) {
   if (seconds < 60) {
@@ -15,6 +16,20 @@ export function formatTime(seconds: any) {
     return Math.floor(seconds / 2592000) + 'M';
   } else {
     return Math.floor(seconds / 31536000) + 'y';
+  }
+}
+
+export function formatDollar(amount: string, ethPrice: number) {
+  const number = new BigNumber(amount)
+    .dividedBy(new BigNumber(Math.pow(10, 18)))
+    .multipliedBy(new BigNumber(ethPrice ?? 0));
+
+  if (number.gte(0.00001)) {
+    return `≈$${number.toFixed(5)}`;
+  } else if (number.isGreaterThan(0)) {
+    return `<$0.00001`;
+  } else {
+    return '≈$0';
   }
 }
 
