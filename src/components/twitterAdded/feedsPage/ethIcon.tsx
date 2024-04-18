@@ -94,7 +94,7 @@ export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
         </defs>
       </svg>
       <p className="mx-auto text-[12px] font-medium">
-        <NumberDisplayer text={userInfo?.price} />
+        <NumberDisplayer text={userInfo?.price} longZeroCasePrecision={3} />
       </p>
     </div>
   ) : null;
