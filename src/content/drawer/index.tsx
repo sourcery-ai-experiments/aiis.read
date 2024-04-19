@@ -75,6 +75,13 @@ export default function PersistentDrawerRight() {
     setBackWidth(caculateBackWidth());
   };
 
+  const firstLoginTask = () => {
+    if (localStorage.getItem('xfans_first_install')) {
+      useGlobalStore.getState().logout();
+      localStorage.removeItem('xfans_first_install');
+    }
+  };
+
   // 动态更新width
   // React.useEffect(() => {
   //   const timer = setInterval(() => {
@@ -176,6 +183,7 @@ export default function PersistentDrawerRight() {
   };
 
   initURLMonitor();
+  // firstLoginTask();
 
   const checkProfileData = async () => {
     // https://test-xfans-api.d.buidlerdao.xyz/api/user/me

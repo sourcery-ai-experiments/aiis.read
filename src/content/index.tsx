@@ -58,3 +58,14 @@ async function withProxyStore(children: ReactElement, proxyStore: Store): Promis
     return <Provider store={proxyStore}>{children}</Provider>;
   });
 }
+
+// 监听来自 Background 脚本的消息
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('监听来自 Background 脚本的消息');
+  localStorage.setItem('xfans_first_install', '1');
+  console.log('useGlobalStore', useGlobalStore);
+
+  useGlobalStore.getState().logout();
+  // 如果消息不需要异步处理，直接返回 true
+  return true; // 如果异步处理，需要调用 sendResponse
+});
