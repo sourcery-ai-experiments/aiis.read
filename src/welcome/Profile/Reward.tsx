@@ -215,19 +215,14 @@ const Reward = () => {
                           className="w-[44px] cursor-pointer rounded-full"
                         />
                         <div className="flex flex-col space-y-[2px]">
-                          <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                            {item.author?.username}
-                          </span>
-                          <span
-                            className="text-xs text-[#919099]"
-                            style={{ fontVariant: 'small-caps' }}
-                          >
+                          <span className="text-sm font-bold">{item.author?.username}</span>
+                          <span className="text-xs text-[#919099]">
                             {dayjs(item.createdAt).locale('en').format('MMM DD YYYY, HH:mm')}
                           </span>
                         </div>
                       </div>
 
-                      <span className="text-sm font-medium">#{item.rank}</span>
+                      <span className="text-sm font-medium text-[#0F1419]">#{item.rank}</span>
                     </div>
 
                     <p
@@ -275,19 +270,14 @@ const Reward = () => {
                           className="w-[44px] cursor-pointer rounded-full"
                         />
                         <div className="flex flex-col space-y-[2px]">
-                          <span className="text-sm font-bold" style={{ fontVariant: 'small-caps' }}>
-                            {item.author?.username}
-                          </span>
-                          <span
-                            className="text-xs text-[#919099]"
-                            style={{ fontVariant: 'small-caps' }}
-                          >
+                          <span className="text-sm font-bold">{item.author?.username}</span>
+                          <span className="text-xs text-[#919099]">
                             {dayjs(item.createdAt).locale('en').format('MMM DD YYYY, HH:mm')}
                           </span>
                         </div>
                       </div>
 
-                      <span className="text-sm font-medium">#{item.rank}</span>
+                      <span className="text-sm font-medium text-[#0F1419]">#{item.rank}</span>
                     </div>
 
                     <p

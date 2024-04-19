@@ -19,6 +19,23 @@
   font-family: 'SF Pro Display', sans-serif !important;
 }
 
+/* tailwind 的 text size 都是根据 rem 计算的，防止 twitter 的根节点不是 16px 的，我们设置为固定大小 */
+#xfans-root .text-xs {
+  font-size: 12px;
+}
+
+#xfans-root .text-sm {
+  font-size: 14px;
+}
+
+#xfans-root .text-base {
+  font-size: 16px;
+}
+
+#xfans-root .text-lg {
+  font-size: 18px;
+}
+
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
