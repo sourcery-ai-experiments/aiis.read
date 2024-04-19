@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { Store } from '@eduardoac-skimlinks/webext-redux';
-
+import { XFANS_TOKEN } from '../constants';
 import { proxyStore as store } from '../app/proxyStore';
 import useGlobalStore from '../store/useGlobalStore';
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
@@ -61,11 +61,18 @@ async function withProxyStore(children: ReactElement, proxyStore: Store): Promis
 
 // 监听来自 Background 脚本的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('监听来自 Background 脚本的消息');
-  localStorage.setItem('xfans_first_install', '1');
-  console.log('useGlobalStore', useGlobalStore);
-
+  console.log('monitoring Background script messages');
   useGlobalStore.getState().logout();
+  const url = new URL(window.location.href); // 获取当前URL
+  url.searchParams.delete(XFANS_TOKEN); // 删除指定的查询参数
+  // 使用 history.replaceState 更新 URL
+  window.history.replaceState(null, '', url.toString());
   // 如果消息不需要异步处理，直接返回 true
   return true; // 如果异步处理，需要调用 sendResponse
+});
+
+// content_script.js
+chrome.runtime.sendMessage({ type: 'content_script_loaded' }, function (response) {
+  // 其他逻辑...
+  console.log('content script loaded');
 });
