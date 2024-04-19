@@ -7,7 +7,7 @@ export const OAUTH2 = 'oauth2';
 export const XFANS_DONE = 'Done';
 export const XFANS_VERIFY = 'Verify';
 export const XFANS_GO = 'GO';
-
+export const FIRST_INSTALL_TASK = 'FIRST_INSTALL_TASK';
 // table
 export const ROWS_PER_PAGE = 5;
 

@@ -6,6 +6,7 @@ import { XFANS_TOKEN } from '../constants';
 import { proxyStore as store } from '../app/proxyStore';
 import useGlobalStore from '../store/useGlobalStore';
 import { addTwitterComponent, addUserPagePriceComponent } from './addToTwitterHome';
+import { FIRST_INSTALL_TASK } from '../constants';
 import Content from './Content';
 
 import '../tailwind.css';
@@ -61,12 +62,20 @@ async function withProxyStore(children: ReactElement, proxyStore: Store): Promis
 
 // 监听来自 Background 脚本的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('monitoring Background script messages');
-  useGlobalStore.getState().logout();
-  const url = new URL(window.location.href); // 获取当前URL
-  url.searchParams.delete(XFANS_TOKEN); // 删除指定的查询参数
-  // 使用 history.replaceState 更新 URL
-  window.history.replaceState(null, '', url.toString());
+  if (message === FIRST_INSTALL_TASK) {
+    console.log('monitoring Background script messages');
+    useGlobalStore.getState().logout();
+    /*
+    说明：
+    1. 如果在用户删除插件的时候，刚刚登陆过了插件，插件上会残留xfans_token的值，在我们的登录流程中，我们正是通过这个值，写入到globalStore的token值中。
+    2. 首次登录的时候，需要移除这个上一次登录产生的xfans_token的值，不然的话会触发自动登录逻辑。
+    */
+    const url = new URL(window.location.href); // 获取当前URL
+    url.searchParams.delete(XFANS_TOKEN); // 删除指定的查询参数
+    // 使用 history.replaceState 更新 URL
+    window.history.replaceState(null, '', url.toString());
+  }
+
   // 如果消息不需要异步处理，直接返回 true
   return true; // 如果异步处理，需要调用 sendResponse
 });

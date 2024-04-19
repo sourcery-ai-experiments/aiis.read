@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-
+import { FIRST_INSTALL_TASK } from '../constants';
 import store from '../app/store';
 import { isDev } from '../shared/utils';
 
@@ -25,7 +25,7 @@ browser.runtime.onInstalled.addListener(async (details) => {
 });
 
 // background.js
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
   if (request.type === 'content_script_loaded') {
     console.log('Content script loaded ');
     if (firstInstall == true) {
@@ -37,13 +37,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
           if (activeTab) {
             // 发送消息到 Content 脚本, 处理首次安装的事物
-            chrome.tabs.sendMessage(
-              activeTab.id ?? 0,
-              { greeting: 'Please do task while first install' },
-              (response) => {
-                console.log('Received response from content script:', response);
-              }
-            );
+            chrome.tabs.sendMessage(activeTab.id ?? 0, FIRST_INSTALL_TASK, (response) => {
+              console.log('Received response from content script:', response);
+            });
           }
         });
     }
