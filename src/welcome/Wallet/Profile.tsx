@@ -62,7 +62,7 @@ const ProfileModal = () => {
     holder: (
       <div className="flex items-center space-x-1">
         <img
-          onClick={() => openProfile(item)}
+          onClick={() => openProfile(item.holderUser)}
           src={item.subjectUser?.avatar}
           alt=""
           className="w-5 cursor-pointer rounded-full"
