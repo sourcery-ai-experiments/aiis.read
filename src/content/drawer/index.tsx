@@ -3,52 +3,25 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
 
 import * as toaster from '../../components/Toaster';
 import { XFANS_CONTENT_WIDTH } from '../../constants';
+import { XFANS_TOKEN } from '../../constants';
 import { ProfileData } from '../../service/login/me';
 import { TwitterOauth2Data } from '../../service/login/twiterOuth2';
 import http, { ResultData } from '../../service/request';
 import useGlobalStore, { PageType } from '../../store/useGlobalStore';
+import { caculateBackWidth, caculateDrawerWidth } from '../../utils';
 import Profile from '../../welcome/Profile';
 import Wallet from '../../welcome/Wallet';
 import ProfileModal from '../../welcome/Wallet/Profile';
 import CongratulationPage from '../loginPage/congratulationPage';
 import InvitePage from '../loginPage/invitePage';
 import SignInWithXPage from '../loginPage/signInWithXPage';
-import { caculateBackWidth, caculateDrawerWidth } from '../../utils';
-import LogoButton from './logoButton';
-import { XFANS_TOKEN } from '../../constants';
-import '../../tailwind.css';
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
-  open?: boolean;
-  drawerwidth?: number; // 添加 width 参数
-}>(({ theme, open, drawerwidth }) => ({
-  // flexGrow: 1,
-  // padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginRight: -(drawerwidth || 0),
-  ...(open && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
-  }),
-  /**
-   * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
-   * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
-   * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
-   * proper interaction with the underlying content.
-   */
-  position: 'relative',
-}));
+import LogoButton from './logoButton';
+
+import '../../tailwind.css';
 
 export default function PersistentDrawerRight() {
   const { isShowDrawer, goPage, page, logout } = useGlobalStore((state) => ({ ...state }));
@@ -224,18 +197,7 @@ export default function PersistentDrawerRight() {
   return (
     <Box sx={{ display: 'flex' }}>
       <ProfileModal />
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        edge="start"
-        onClick={handleDrawerOpen}
-        disableRipple
-        sx={{ ...(isShowDrawer && { display: 'none' }) }}
-      >
-        {/* <MenuIcon className="rounded-full m-0 w-[24px] h-[24px] cursor-pointer" /> */}
-        <LogoButton />
-      </IconButton>
-      <Main open={isShowDrawer} drawerwidth={drawerWidth}></Main>
+      <LogoButton aria-label="open xfans" onClick={handleDrawerOpen} />
       <Drawer
         sx={{
           width: drawerWidth,
