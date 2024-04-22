@@ -122,7 +122,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
       setLoadingBalance(true);
       getBalance().then((balance) => {
         setLoadingBalance(false);
-        setBalance(balance.toString());
+        setBalance(balance);
       });
     }
   }, [wallet]);
@@ -131,7 +131,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
       const _transactionFee = new BigNumber(priceAfterFee).minus(new BigNumber(price));
-      return _transactionFee.toString();
+      return _transactionFee.toFixed();
     } else {
       return '0';
     }
@@ -141,7 +141,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   const total = useMemo(() => {
     if (priceAfterFee !== '0' && gasFee !== '0') {
       const _total = new BigNumber(priceAfterFee).plus(new BigNumber(gasFee));
-      return _total.toString();
+      return _total.toFixed();
     } else {
       return '0';
     }
@@ -154,7 +154,7 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
     setLoadingBalance(true);
     getBalance().then((balance) => {
       setLoadingBalance(false);
-      setBalance(balance.toString());
+      setBalance(balance);
     });
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     setLoadingFloorPrice(true);
@@ -165,17 +165,20 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
   }
 
   function handleBuyClick() {
-    if (new BigNumber(total).dividedBy(Math.pow(10, 18)).isGreaterThan(new BigNumber(balance))) {
+    if (new BigNumber(total).isGreaterThan(new BigNumber(balance))) {
       toaster.error(ContractError.InsufficientBalance);
       return;
     }
     setIsBuying(true);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    buyShares(currentInfo!.walletAddress!, amount).then(() => {
-      setIsBuying(false);
-      refresh();
-      toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
-    });
+    buyShares(currentInfo!.walletAddress!, amount)
+      .then(() => {
+        refresh();
+        toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
+      })
+      .finally(() => {
+        setIsBuying(false);
+      });
   }
 
   return (
@@ -308,7 +311,14 @@ const BuyModal = ({ onClose }: BuyModalProps) => {
               contained: '!py-[10px] !px-[38px] !w-[170px]',
             }}
             onClick={handleBuyClick}
-            disabled={isBuying || amount === 0}
+            disabled={
+              isBuying ||
+              amount === 0 ||
+              loadingPrice ||
+              loadingPirceAfterFee ||
+              loadingBalance ||
+              loadingFloorPrice
+            }
             startIcon={isBuying && <CircularProgress color="inherit" size={15} />}
           >
             <span className="text-[15px] font-medium">Buy</span>

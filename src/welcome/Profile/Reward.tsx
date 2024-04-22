@@ -182,7 +182,7 @@ const Reward = () => {
                 }}
               />
               <Tab
-                label="Your rank"
+                label="Your creators"
                 value="2"
                 sx={{
                   width: '50%',
