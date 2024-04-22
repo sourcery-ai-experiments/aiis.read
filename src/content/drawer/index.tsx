@@ -44,19 +44,23 @@ export default function PersistentDrawerRight() {
 
   const handleResize = () => {
     // 当窗口大小变化时，更新 width 的值
-    setDrawerWidth(caculateDrawerWidth());
-    setBackWidth(caculateBackWidth());
+    if (drawerWidth !== caculateDrawerWidth()) {
+      setDrawerWidth(caculateDrawerWidth());
+    }
+    if (backWidth !== caculateBackWidth()) {
+      setBackWidth(caculateBackWidth());
+    }
   };
 
   // 动态更新width
-  // React.useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     handleResize();
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      handleResize();
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   React.useEffect(() => {
     // 添加窗口大小变化时的事件监听器
