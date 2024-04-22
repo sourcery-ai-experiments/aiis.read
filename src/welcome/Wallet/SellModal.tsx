@@ -114,7 +114,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
   const transactionFee = useMemo(() => {
     if (price !== '0' && priceAfterFee !== '0') {
       const _transactionFee = new BigNumber(price).minus(new BigNumber(priceAfterFee));
-      return _transactionFee.toString();
+      return _transactionFee.toFixed();
     } else {
       return '0';
     }
@@ -136,7 +136,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
       setLoadingBalance(true);
       getBalance().then((balance) => {
         setLoadingBalance(false);
-        setBalance(balance.toString());
+        setBalance(balance);
       });
     }
   }, [wallet]);
@@ -165,7 +165,7 @@ const SellModal = ({ onClose }: SellModalProps) => {
       setLoadingBalance(true);
       getBalance().then((balance) => {
         setLoadingBalance(false);
-        setBalance(balance.toString());
+        setBalance(balance);
       });
 
       setLoadingFloorPrice(true);
@@ -177,16 +177,19 @@ const SellModal = ({ onClose }: SellModalProps) => {
   }
 
   function handleSellClick() {
-    if (new BigNumber(gasFee).dividedBy(Math.pow(10, 18)).isGreaterThan(new BigNumber(balance))) {
+    if (new BigNumber(gasFee).isGreaterThan(new BigNumber(balance))) {
       toaster.error(ContractError.InsufficientBalance);
       return;
     }
     setIsSelling(true);
-    sellShares(currentInfo!.walletAddress!, amount).then(() => {
-      setIsSelling(false);
-      refresh();
-      toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
-    });
+    sellShares(currentInfo!.walletAddress!, amount)
+      .then(() => {
+        refresh();
+        toaster.success(toaster.ToastMessage.TRAMSACTION_COMPLETED);
+      })
+      .finally(() => {
+        setIsSelling(false);
+      });
   }
 
   return (
@@ -338,7 +341,14 @@ const SellModal = ({ onClose }: SellModalProps) => {
               contained: '!py-[10px] !px-[38px] !w-[170px]',
             }}
             onClick={handleSellClick}
-            disabled={isSelling || amount === 0}
+            disabled={
+              isSelling ||
+              amount === 0 ||
+              loadingPrice ||
+              loadingPirceAfterFee ||
+              loadingBalance ||
+              loadingFloorPrice
+            }
             startIcon={isSelling && <CircularProgress color="inherit" size={15} />}
           >
             <span className="text-[15px] font-medium">Sell</span>
