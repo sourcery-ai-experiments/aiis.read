@@ -216,7 +216,7 @@ function UnstackPanel({ stakeBalance, address, onClose }: UnstackPanelProps) {
 }
 
 function ProgressBar({ staked, stakeRequired }: { staked: number; stakeRequired: number }) {
-  const percentage = Number.isNaN(staked / stakeRequired) ? 0 : (staked / stakeRequired) * 10;
+  const percentage = Number.isNaN(staked / stakeRequired) ? 0 : (staked / stakeRequired) * 100;
   return (
     <div className="relative mt-[30px] h-[20px] w-full rounded-[31px] bg-[#F6F5F7]">
       <div className="w-[50%]" />
