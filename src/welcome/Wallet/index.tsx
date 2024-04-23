@@ -1,10 +1,211 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Switch from '@mui/material/Switch';
 
+import { BasicButton } from '../../components/Button';
+import { InfoCircle } from '../../components/icons/InfoCircle';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
+import * as toaster from '../../components/Toaster';
+import TruncateText from '../../components/TruncateText';
+import useAccount from '../../hooks/useAccount';
+import { useUserInfo } from '../../service/user';
+import { useWalletAccounts } from '../../service/wallet';
+import useGlobalStore from '../../store/useGlobalStore';
+import useGlobalUserStore from '../../store/useGlobalUserStore';
 import useProfileModal from '../../store/useProfileModal';
-
+import { XFANS_NETWORK } from '../../constants';
 import Deposit from './Deposit';
 import InviteFriends from './InviteFriends';
 import WithDraw from './WithDraw';
+
+const Wallet = (props: { back?: () => void; logout?: () => void }) => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+
+  const { isShowPrice } = useGlobalStore((state) => ({ ...state }));
+  const { userInfo } = useAccount();
+  const { run: getUserInfo } = useUserInfo();
+  const [isWithDrawOpen, setIsWithDrawOpen] = useState(false);
+
+  const { run: getWalletAccounts } = useWalletAccounts();
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const { balance, accounts } = useGlobalUserStore((state) => ({
+    ...state,
+  }));
+
+  useEffect(() => {
+    getWalletAccounts();
+  }, []);
+  return (
+    <div className="flex h-full w-full flex-col">
+      <div className="flex items-center space-x-[10px] py-3 pl-4">
+        <div className="cursor-pointer" onClick={() => props.back?.()}>
+          <GoBack />
+        </div>
+        <span className="text-xl font-medium">Home</span>
+      </div>
+      <div className="px-3 py-[30px]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-[14px]">
+            <img
+              onClick={() => openProfile(userInfo)}
+              src={userInfo?.avatar}
+              alt="avatar"
+              className="h-[70px] w-[70px] cursor-pointer rounded-full"
+            />
+            <div className="flex flex-col">
+              <span className="#0F1419 text-[20px] font-bold leading-[20px]">
+                @{userInfo?.twitterUsername}
+              </span>
+              <CopyToClipboard
+                text={accounts[0] ?? '0x0'}
+                onCopy={() => {
+                  toaster.success(toaster.ToastMessage.COPY_SUCCESS);
+                }}
+              >
+                <div className="flex cursor-pointer items-center space-x-2">
+                  <span className="text-base font-medium text-[#919099]">
+                    <TruncateText text={accounts[0] ?? ''} />
+                  </span>
+                  <Copy />
+                </div>
+              </CopyToClipboard>
+
+              <div className="flex items-center space-x-1">
+                <span className="text-[#919099]">{`Network:${XFANS_NETWORK}`}</span>
+                <Network />
+              </div>
+            </div>
+          </div>
+          <InviteFriends />
+        </div>
+
+        <div className="mt-10">
+          <div className="space-y-[15px]">
+            <div
+              className="flex cursor-pointer items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]"
+              onClick={() => openProfile(userInfo, 1)}
+            >
+              <div className="flex items-center space-x-3">
+                <UserIcon />
+                <span className="xfans-font-sf text-base font-medium">Portfolio Value</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.holdValue}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <WalletIcon />
+                <span className="xfans-font-sf text-base font-medium">Wallet Balance</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+
+                <NumberDisplayer className="text-base font-bold text-[#9A6CF9]" text={balance} />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Fire />
+                <span className="flex items-center text-base font-medium">
+                  Trading Fee Earned
+                  <Tooltip title="If fans trade your shares, you can earn a 2.5% transaction fee from each transaction.">
+                    <span className="ml-[6px]">
+                      <InfoCircle />
+                    </span>
+                  </Tooltip>
+                </span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.tradingFeeEarned}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Gift />
+                <span className="flex items-center text-base font-medium">
+                  Reward Earned
+                  <Tooltip title="If the creator you've invested in produces tweets that rank among the top 100, you can earn bonuses based on the number of shares you hold.">
+                    <span className="ml-[6px]">
+                      <InfoCircle />
+                    </span>
+                  </Tooltip>
+                </span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Icon />
+                <NumberDisplayer
+                  className="text-base font-bold text-[#9A6CF9]"
+                  text={userInfo?.rewardEarned}
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-[8px] border border-[#EBECED] p-4 hover:border-[#9A6CF9]">
+              <div className="flex items-center space-x-3">
+                <Setting />
+                <span className="xfans-font-sf text-base font-medium">Hide Twitter Price Tags</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <PurpleSwitch
+                  checked={isShowPrice}
+                  onChange={(_e, checked) => {
+                    useGlobalStore.setState({
+                      isShowPrice: checked,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          {/* <div className="flex items-center justify-between">
+            <InviteFriends />
+            <ProfileModal />
+          </div> */}
+          <div className="flex items-center justify-between">
+            <Deposit />
+            <BasicButton
+              classes={{
+                outlined:
+                  '!py-[10px] !px-[38px] !w-[170px] !text-[#0F1419] !border-[#0F1419] hover:!border-[#9A6CF9]',
+              }}
+              onClick={() => setIsWithDrawOpen(true)}
+            >
+              <span className="xfans-font-sf text-base font-medium">Withdraw</span>
+            </BasicButton>
+            {isWithDrawOpen && <WithDraw onClose={() => setIsWithDrawOpen(false)} />}
+          </div>
+
+          <div
+            className="xfans-font-sf mt-6 flex cursor-pointer items-center justify-center rounded-full border border-[#0F1419] px-[38px] py-[14px] text-base font-medium leading-[18px] text-[#0F1419] hover:border-[#9A6CF9]"
+            onClick={() => props.logout?.()}
+          >
+            Log Out
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Copy = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -37,6 +238,25 @@ const Network = () => (
         <rect width="14" height="14" fill="white" />
       </clipPath>
     </defs>
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M12 10C14.2091 10 16 8.20914 16 6C16 3.79086 14.2091 2 12 2C9.79086 2 8 3.79086 8 6C8 8.20914 9.79086 10 12 10Z"
+      stroke="#2E2E32"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M21 22C21 17.0294 16.9706 13 12 13C7.02945 13 3 17.0294 3 22"
+      stroke="#2E2E32"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -112,6 +332,23 @@ const Gift = () => (
   </svg>
 );
 
+const Setting = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M9.1419 21.5854C7.46635 21.0866 5.9749 20.1604 4.79393 18.9333C5.2345 18.4111 5.5 17.7365 5.5 16.9998C5.5 15.343 4.15685 13.9998 2.5 13.9998C2.39977 13.9998 2.3007 14.0048 2.203 14.0144C2.0699 13.3636 2 12.6899 2 11.9998C2 10.9545 2.16039 9.94666 2.4579 8.99951C2.47191 8.99971 2.48594 8.99981 2.5 8.99981C4.15685 8.99981 5.5 7.65666 5.5 5.99981C5.5 5.52416 5.3893 5.07441 5.1923 4.67481C6.34875 3.59951 7.76025 2.79477 9.32605 2.36133C9.8222 3.33385 10.8333 3.99982 12 3.99982C13.1667 3.99982 14.1778 3.33385 14.674 2.36133C16.2398 2.79477 17.6512 3.59951 18.8077 4.67481C18.6107 5.07441 18.5 5.52416 18.5 5.99981C18.5 7.65666 19.8432 8.99981 21.5 8.99981C21.5141 8.99981 21.5281 8.99971 21.5421 8.99951C21.8396 9.94666 22 10.9545 22 11.9998C22 12.6899 21.9301 13.3636 21.797 14.0144C21.6993 14.0048 21.6002 13.9998 21.5 13.9998C19.8432 13.9998 18.5 15.343 18.5 16.9998C18.5 17.7365 18.7655 18.4111 19.2061 18.9333C18.0251 20.1604 16.5336 21.0866 14.8581 21.5854C14.4714 20.3758 13.338 19.4998 12 19.4998C10.662 19.4998 9.5286 20.3758 9.1419 21.5854Z"
+      stroke="#333333"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 15.5C13.933 15.5 15.5 13.933 15.5 12C15.5 10.067 13.933 8.5 12 8.5C10.067 8.5 8.5 10.067 8.5 12C8.5 13.933 10.067 15.5 12 15.5Z"
+      stroke="#333333"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
     <g clipPath="url(#clip0_450_22004)">
@@ -149,95 +386,16 @@ const GoBack = () => (
   </svg>
 );
 
-const Wallet = (props: { handleButtonClick?: () => void }) => {
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
-
-  return (
-    <div className="flex flex-col w-[433px] max-w-[433px] min-h-screen">
-      <div className="pl-4 py-3 space-x-[10px] flex items-center">
-        <div className="cursor-pointer" onClick={() => props.handleButtonClick?.()}>
-          <GoBack />
-        </div>
-        <span className="text-xl font-medium">Home</span>
-      </div>
-      <div className="px-3 py-[30px]">
-        <div className="flex items-start justify-between">
-          <div className="flex space-x-[14px] items-center">
-            <img
-              onClick={openProfile}
-              src="https://cdn.oasiscircle.xyz/circle/4A5E15E2-2210-40AC-9778-FB5D7CC664A1.1706768249263.0xA0B5B5"
-              alt="avatar"
-              className="w-[70px] h-[70px] rounded-full cursor-pointer"
-            />
-            <div className="flex flex-col">
-              <span className="#0F1419 text-[20px] leading-[20px] font-bold">@Deovokoejhdnad</span>
-              <div className="flex space-x-2 items-center">
-                <span className="font-medium text-base text-[#919099]">0x41...64fd</span>
-                <Copy />
-              </div>
-              <div className="flex space-x-1 items-center">
-                <span className="text-[#919099]">Network:Blast</span>
-                <Network />
-              </div>
-            </div>
-          </div>
-          <InviteFriends />
-        </div>
-
-        <div className="mt-10">
-          <div className="space-y-[15px]">
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
-                <WalletIcon />
-                <span className="text-base font-medium">Wallet Balance</span>
-              </div>
-              <div className="flex space-x-1 items-center">
-                <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">30.24</span>
-              </div>
-            </div>
-
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
-                <Fire />
-                <span className="text-base font-medium">Transaction Fee Earned</span>
-              </div>
-              <div className="flex space-x-1 items-center">
-                <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">0.289</span>
-              </div>
-            </div>
-
-            <div className="p-4 flex items-center justify-between border border-[#EBECED] rounded-[8px] hover:border-[#9A6CF9]">
-              <div className="flex space-x-3 items-center">
-                <Gift />
-                <span className="text-base font-medium">Reward Earned</span>
-              </div>
-              <div className="flex space-x-1 items-center">
-                <Icon />
-                <span className="text-base text-[#9A6CF9] font-bold">22.9092</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10">
-          {/* <div className="flex items-center justify-between">
-            <InviteFriends />
-            <ProfileModal />
-          </div> */}
-          <div className="flex items-center justify-between">
-            <Deposit />
-            <WithDraw />
-          </div>
-
-          <div className="mt-6 flex items-center justify-center px-[38px] py-[14px] cursor-pointer border border-[#0F1419] rounded-full text-[15px] leading-[18px] text-[#0F1419] font-medium hover:border-[#9A6CF9]">
-            Log Out
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+const PurpleSwitch = styled(Switch)(({ theme }) => ({
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#9A6CF9',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#C5A9FF',
+  },
+}));
 
 export default Wallet;

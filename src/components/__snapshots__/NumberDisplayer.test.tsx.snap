@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bignumber should work well 1`] = `
+<div>
+  <span>
+    0.0034
+  </span>
+</div>
+`;
+
+exports[`if decimal part less than 0.0001, decimal part should round into 3 decimals 1`] = `
+<div>
+  <span>
+    0.0{13}125
+  </span>
+</div>
+`;
+
+exports[`if decimal part less than 0.0001, decimal part should round into 4 decimals 1`] = `
+<div>
+  <span>
+    0.0{13}1246
+  </span>
+</div>
+`;
+
+exports[`if integer part less than 1, decimal part should have 4 decimals 1`] = `
+<div>
+  <span>
+    0.1450
+  </span>
+</div>
+`;
+
+exports[`if interer part great than 1, decimal part should have 2 decimals 1`] = `
+<div>
+  <span>
+    3.15
+  </span>
+</div>
+`;
+
+exports[`integer should be append two zero to tail 1`] = `
+<div>
+  <span>
+    3.00
+  </span>
+</div>
+`;
+
+exports[`should throw error if text is not string 1`] = `"text should be string"`;

@@ -1,14 +1,40 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+
+import { useTweetBatchUserInfo } from '../../../service/tweet';
+import useGlobalStore from '../../../store/useGlobalStore';
+import useProfileModal from '../../../store/useProfileModal';
+import { NumberDisplayer } from '../../NumberDisplayer';
 
 import '../../../tailwind.css';
-
 interface FriendPriceProps {
-  price: number; // 假设价格是一个数字
+  twitterUsername: string; // 假设价格是一个数字
 }
 
-export const FriendPrice: FC<FriendPriceProps> = ({ price }) => {
-  return (
-    <div className="justify-center items-center text-center w-auto">
+export const FriendPrice: FC<FriendPriceProps> = ({ twitterUsername }) => {
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
+  const { isShowPrice } = useGlobalStore((state) => ({ ...state }));
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [twitterUsername],
+    (result) => {
+      setUserInfo(result?.data?.items?.[0]);
+    },
+    () => undefined
+  );
+
+  useEffect(() => {
+    batchUserInfo(userInfo);
+  }, []);
+
+  return !isShowPrice && userInfo?.isActive ? (
+    <div
+      className="w-auto items-center justify-center text-center"
+      onClick={(e) => {
+        openProfile(userInfo);
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <svg
         className="mx-auto mt-[10px] mb-[4px]"
         width="12"
@@ -67,7 +93,9 @@ export const FriendPrice: FC<FriendPriceProps> = ({ price }) => {
           </clipPath>
         </defs>
       </svg>
-      <p className="font-medium text-[12px] mx-auto">{price}</p>
+      <p className="mx-auto text-[12px] font-medium">
+        <NumberDisplayer text={userInfo?.price} longZeroCasePrecision={3} />
+      </p>
     </div>
-  );
+  ) : null;
 };

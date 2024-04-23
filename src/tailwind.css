@@ -4,15 +4,85 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf');
+
+  /* src: url('https://cdn-xfans.buidlerdao.xyz/SF-Pro-Display-Regular.otf'); */
+
+  /* https://cloudconvert.com/otf-to-woff2 */
+  src: url('../public/SF-Pro-Display-Regular.woff2');
 
   /* src: url('./welcome/assets/SF-Pro-Display-Thin.otf'); */
 
   /* src: url('./welcome/assets/SF-Pro-Display-Medium.otf'); */
 }
 
-html,
-body {
+#xfans-root * {
+  font-family: 'SF Pro Display', sans-serif !important;
+}
+
+/* tailwind 的 text size 都是根据 rem 计算的，防止 twitter 的根节点不是 16px 的，我们设置为固定大小 */
+#xfans-root .text-xs {
+  font-size: 12px;
+}
+
+#xfans-root .text-sm {
+  font-size: 14px;
+}
+
+#xfans-root .text-base {
+  font-size: 16px;
+}
+
+#xfans-root .text-lg {
+  font-size: 18px;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* styles.css */
+.xfans-left-icon {
+  transition: transform 0.3s ease;
+}
+
+.xfans-basic-button:hover .xfans-left-icon {
+  transform: translateX(-4px);
+}
+
+.xfans-scrollbar {
+  /* twiter body 上有个 scrollbar-color 这里重置下; */
+  scrollbar-color: initial;
+}
+
+/* width */
+.xfans-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.xfans-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+
+/* Handle */
+.xfans-scrollbar::-webkit-scrollbar-thumb {
+  background: #eaecf0;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+.xfans-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #eaecf0;
+}
+
+.xfans-font-sf {
   font-family: 'SF Pro Display', sans-serif;
-  font-size: 16px !important;
 }
