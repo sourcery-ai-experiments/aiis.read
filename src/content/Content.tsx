@@ -1,8 +1,13 @@
 import React, { ReactElement } from 'react';
 
+import Toaster from '../components/Toaster';
+import { useTweetRewardStage } from '../service/tweet';
+
 import PersistentDrawerRight from './drawer';
 
 const Content = (): ReactElement => {
+  useTweetRewardStage();
+
   return (
     <div
       style={{
@@ -13,6 +18,7 @@ const Content = (): ReactElement => {
       }}
     >
       <PersistentDrawerRight />
+      <Toaster />
     </div>
   );
 };

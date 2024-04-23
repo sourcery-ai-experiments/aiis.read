@@ -14,7 +14,9 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2020,
-    "ecmaFeatures": { "jsx": true }
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "plugins": [
     "import",
@@ -29,9 +31,9 @@
     "@typescript-eslint/no-unused-expressions": 2,
     "@typescript-eslint/triple-slash-reference": "off",
     "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error"
+    "simple-import-sort/exports": "error",
+    "react/react-in-jsx-scope": "off"
   },
-
   "overrides": [
     {
       "files": [".*rc.js", "*.config.js"],
@@ -42,6 +44,12 @@
     {
       "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
       "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ],
         "simple-import-sort/imports": [
           "warn",
           {

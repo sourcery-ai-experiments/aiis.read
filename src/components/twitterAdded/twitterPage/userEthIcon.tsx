@@ -1,34 +1,31 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { useTweetBatchUserInfo } from '../../../service/tweet';
 import useProfileModal from '../../../store/useProfileModal';
-
+import { NumberDisplayer } from '../../NumberDisplayer';
+import { getElementWidthByXPath } from '../../../utils';
 import '../../../tailwind.css';
 
 interface UserPagePriceProps {
-  price: string;
-  id: string;
+  twitterUsername: string;
 }
 
-export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
+export const UserPagePrice: FC<UserPagePriceProps> = ({ twitterUsername }) => {
   const [elementWidth, setElementWidth] = useState<number | null>(null);
+  const { openProfile } = useProfileModal((state) => ({ ...state }));
+  const [userInfo, setUserInfo] = useState<any>({ price: '0' });
+  const useWidth = elementWidth != null ? elementWidth : 0;
+
+  const { run: batchUserInfo } = useTweetBatchUserInfo(
+    [twitterUsername],
+    (result) => {
+      setUserInfo(result?.data?.items?.[0]);
+    },
+    () => undefined
+  );
 
   useEffect(() => {
-    const getElementWidthByXPath = (xpath: string): number | null => {
-      const element = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue as HTMLElement;
-
-      if (element) {
-        return element.offsetWidth;
-      } else {
-        console.error('Element not found with the given XPath');
-        return null;
-      }
-    };
+    batchUserInfo(userInfo);
 
     const xpath =
       '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div';
@@ -37,17 +34,15 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
     setElementWidth(width);
   }, []); // This effect runs only once after the initial render
 
-  console.log(elementWidth);
-
-  const useWidth = elementWidth != null ? elementWidth : 0;
-  const { openProfile } = useProfileModal((state) => ({ ...state }));
-
-  return (
+  return userInfo?.isActive ? (
     <span
-      id={id}
-      onClick={openProfile}
+      onClick={(e) => {
+        openProfile(userInfo);
+        e.preventDefault();
+        e.stopPropagation();
+      }}
       style={{ left: `${useWidth + 12}px` }}
-      className="absolute top-[-1px] flex w-[110px] h-[25px] grow-0 justify-center items-center text-center cursor-pointer !px-[17px] bg-[#9A6CF9] rounded-full"
+      className="absolute top-[-1px] flex h-[25px] w-[110px] grow-0 cursor-pointer items-center justify-center rounded-full bg-[#9A6CF9] !px-[17px] text-center"
     >
       <svg
         width="11"
@@ -74,7 +69,9 @@ export const UserPagePrice: FC<UserPagePriceProps> = ({ price, id }) => {
         </defs>
       </svg>
 
-      <p className="font-medium text-[12px] text-white ml-[4px]">{price}</p>
+      <p className="ml-[4px] text-[12px] font-medium text-white">
+        <NumberDisplayer text={userInfo?.price} />
+      </p>
     </span>
-  );
+  ) : null;
 };

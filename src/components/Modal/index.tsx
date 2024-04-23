@@ -3,6 +3,7 @@ import { Modal as MModal, ModalProps } from '@mui/material';
 
 interface ExtraModalProps extends ModalProps {
   width?: number | string;
+  closebuttonstyle?: React.CSSProperties;
 }
 
 const Close = () => (
@@ -26,7 +27,7 @@ const Close = () => (
 
 const Modal = (props: ExtraModalProps) => {
   return (
-    <MModal {...props}>
+    <MModal disableScrollLock={true} {...props}>
       <div
         style={{
           position: 'absolute',
@@ -36,6 +37,7 @@ const Modal = (props: ExtraModalProps) => {
           width: props.width,
           backgroundColor: '#FFFFFF',
           borderRadius: 12,
+          outline: 'none',
         }}
       >
         <div
@@ -47,7 +49,8 @@ const Modal = (props: ExtraModalProps) => {
         >
           <div
             onClick={(e) => props.onClose?.(e, 'backdropClick')}
-            className="absolute right-[30px] cursor-pointer z-50"
+            className="absolute right-[30px] z-50 cursor-pointer"
+            style={props.closebuttonstyle}
           >
             <Close />
           </div>

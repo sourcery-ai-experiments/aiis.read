@@ -1,5 +1,5 @@
-import React from 'react';
-import { Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Divider, TableFooter, TablePagination } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,9 +7,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useToggle } from 'ahooks';
+import dayjs from 'dayjs';
 
 import { BasicButton } from '../../components/Button';
+import TableEmptyWidget from '../../components/Empty';
 import Modal from '../../components/Modal';
+import { NumberDisplayer } from '../../components/NumberDisplayer';
+import { ROWS_PER_PAGE } from '../../constants';
+import { useETHPrice } from '../../hooks/useETHPrice';
+import { useTweetRewardHistory } from '../../service/tweet';
+import useTweetStore from '../../store/useTweetStore';
+import { formatDollar } from '../../utils';
 
 const Icon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16" fill="none">
@@ -29,62 +37,22 @@ const Icon = () => (
   </svg>
 );
 
-const rows = [
-  {
-    date: '2023/02/01',
-    creator: 'Devon Lane',
-    rank: '#2',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.234</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">0.001</span>
-      </div>
-    ),
-  },
-  {
-    date: '2023/01/18',
-    creator: 'Steven Garcia',
-    rank: '#45',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">1.452</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">5.01</span>
-      </div>
-    ),
-  },
-  {
-    date: '2022/12/25',
-    creator: 'Patricia Smith',
-    rank: '#2',
-    total: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">3.24</span>
-      </div>
-    ),
-    reward: (
-      <div className="flex items-center space-x-1">
-        <Icon />
-        <span className="text-[#0F1419] text-xs">1.35</span>
-      </div>
-    ),
-  },
-];
-
-const History = () => {
+const History = (props: { price?: number }) => {
   const [isOpen, { setLeft: close, setRight: open }] = useToggle(false);
+  const { rewardHistoryList, rewardHistoryListTotal, rewardHistoryTotalRewardAmount } =
+    useTweetStore((state) => ({ ...state }));
+  const [page, setPage] = useState(0);
+  const ethPrice = useETHPrice();
+
+  const { run: getRewardHistory, loading } = useTweetRewardHistory();
+
+  useEffect(() => {
+    getRewardHistory({ offset: page * ROWS_PER_PAGE, limit: ROWS_PER_PAGE });
+  }, [getRewardHistory, page]);
+
+  function handlePageChange(nextPage: number) {
+    setPage(nextPage);
+  }
 
   return (
     <>
@@ -98,21 +66,26 @@ const History = () => {
       >
         History
       </BasicButton>
-      <Modal onClose={close} open={isOpen} width={626}>
+      <Modal onClose={close} open={isOpen} width={626} closebuttonstyle={{ marginTop: '5px' }}>
         <div className="relative flex flex-col items-center">
           <h2 className="text-[24px] font-medium text-[#2E2E32]">Claim History</h2>
-          <div className="mt-[15px] w-[438px] bg-[#EBEEF0] h-[1px]"></div>
+          <div className="mt-[15px] h-[1px] w-[438px] bg-[#EBEEF0]"></div>
 
-          <div className="mt-6 flex items-center w-full">
+          <div className="mt-6 flex w-full items-center">
             <div className="flex items-center space-x-[10px]">
-              <span className="text-[#2E2E32] text-xl font-bold" style={{ letterSpacing: 1 }}>
+              <span className="text-xl font-bold text-[#2E2E32]" style={{ letterSpacing: 1 }}>
                 Reward claimed:
               </span>
               <div className="flex flex-col space-y-[6px]">
-                <span className="text-xl leading-[20px] font-medium">$294.3</span>
+                <span className="text-xl font-medium leading-[20px] text-[#0F1419]">
+                  {formatDollar(rewardHistoryTotalRewardAmount, ethPrice)}
+                </span>
                 <div className="flex items-center space-x-1">
                   <Icon />
-                  <span className="text-[#919099] text-sm font-medium">0.2</span>
+                  <NumberDisplayer
+                    className="text-sm font-medium text-[#919099]"
+                    text={rewardHistoryTotalRewardAmount}
+                  />
                 </div>
               </div>
             </div>
@@ -131,95 +104,128 @@ const History = () => {
               marginTop: 0,
             }}
           >
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Date
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Creator
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Rank
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Total Reward
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderColor: '#EBEEF0',
-                    }}
-                  >
-                    Your Reward
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, i) => (
-                  <TableRow
-                    key={i}
-                    sx={{
-                      '&:last-child td, &:last-child th': { border: 0 },
-                    }}
-                  >
+            {rewardHistoryList == null || rewardHistoryList.length === 0 ? (
+              <TableEmptyWidget
+                containerClassName="pt-[80px] pb-[80px]"
+                label="No claim history found."
+              />
+            ) : (
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
                     <TableCell
-                      component="th"
-                      scope="row"
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.date}
+                      Date
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.creator}
+                      Creator
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.rank}
+                      Rank
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.total}
+                      Total Reward
                     </TableCell>
                     <TableCell
                       sx={{
                         borderColor: '#EBEEF0',
                       }}
                     >
-                      {row.reward}
+                      Your Reward
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {rewardHistoryList?.map((row, i) => (
+                    <TableRow
+                      key={i}
+                      sx={{
+                        '&:last-child td, &:last-child th': { border: 0 },
+                      }}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {dayjs(row.claimedAt).format('YYYY/MM/DD HH:mm')}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {row.creator}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        {row.rank}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <Icon />
+                          <NumberDisplayer
+                            className="text-xs text-[#0F1419]"
+                            text={row.totalRewardAmount}
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderColor: '#EBEEF0',
+                        }}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <Icon />
+                          <NumberDisplayer
+                            className="text-xs text-[#0F1419]"
+                            text={row.ethAmount}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                {rewardHistoryListTotal > ROWS_PER_PAGE && (
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        disabled={loading}
+                        count={rewardHistoryListTotal}
+                        page={page}
+                        onPageChange={(_, nextPage) => handlePageChange(nextPage)}
+                        rowsPerPage={ROWS_PER_PAGE}
+                        rowsPerPageOptions={[]}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                )}
+              </Table>
+            )}
           </TableContainer>
         </div>
       </Modal>
